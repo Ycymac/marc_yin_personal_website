@@ -1,0 +1,231 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+:root.dark {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  overflow-x: hidden;
+  font-family:
+    Inter,
+    "Noto Sans SC",
+    "PingFang SC",
+    "Microsoft YaHei",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-weight: 500;
+  text-rendering: geometricPrecision;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+@layer components {
+  .site-shell {
+    background:
+      linear-gradient(135deg, rgba(238, 242, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 42%, rgba(255, 241, 242, 0.9) 100%);
+    isolation: isolate;
+  }
+
+  .dark .site-shell {
+    background: #0b1020;
+  }
+
+  .ambient-background {
+    @apply pointer-events-none fixed inset-0 z-0 overflow-hidden;
+  }
+
+  .ambient-background__veil,
+  .ambient-background__mesh,
+  .ambient-background__grid {
+    @apply absolute inset-0;
+  }
+
+  .ambient-background__veil {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(248, 250, 252, 0.85) 76%),
+      radial-gradient(ellipse at 48% -8%, rgba(111, 126, 255, 0.24), transparent 58%),
+      radial-gradient(ellipse at 76% 4%, rgba(244, 114, 130, 0.2), transparent 48%);
+  }
+
+  .dark .ambient-background__veil {
+    background:
+      linear-gradient(180deg, rgba(8, 12, 27, 0.04), rgba(11, 16, 32, 0.98) 78%),
+      radial-gradient(ellipse at 40% -8%, rgba(98, 107, 190, 0.5), transparent 58%),
+      radial-gradient(ellipse at 73% 1%, rgba(173, 84, 83, 0.35), transparent 50%),
+      radial-gradient(ellipse at 50% 62%, rgba(24, 35, 67, 0.72), transparent 66%);
+  }
+
+  .ambient-background__mesh {
+    inset: -24%;
+    background:
+      conic-gradient(from 160deg at 46% 28%, transparent 0deg, rgba(108, 116, 255, 0.28) 54deg, rgba(244, 114, 130, 0.22) 116deg, transparent 186deg, rgba(80, 205, 191, 0.12) 254deg, transparent 360deg),
+      linear-gradient(112deg, transparent 8%, rgba(99, 102, 241, 0.16) 35%, rgba(244, 114, 182, 0.12) 54%, transparent 74%);
+    filter: blur(48px);
+    opacity: 0.72;
+    transform-origin: center;
+    animation: ambientDrift 16s ease-in-out infinite alternate;
+  }
+
+  .dark .ambient-background__mesh {
+    opacity: 0.95;
+  }
+
+  .ambient-background__grid {
+    background-image:
+      linear-gradient(rgba(15, 23, 42, 0.065) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 23, 42, 0.065) 1px, transparent 1px);
+    background-position: center top;
+    background-size: 48px 48px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), transparent 76%);
+    opacity: 0.42;
+    animation: gridShift 18s linear infinite;
+  }
+
+  .dark .ambient-background__grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+    opacity: 0.55;
+  }
+
+  .borderBlack {
+    @apply border border-black/10;
+  }
+
+  .profile-orbit {
+    @apply absolute h-40 w-40 rounded-full sm:h-52 sm:w-52;
+    background:
+      conic-gradient(from 90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.76), rgba(125, 211, 252, 0.18), rgba(244, 114, 182, 0.34), rgba(255, 255, 255, 0));
+    filter: drop-shadow(0 26px 48px rgba(15, 23, 42, 0.2));
+    opacity: 0.78;
+    animation: orbitSpin 13s linear infinite;
+  }
+
+  .profile-orbit::after {
+    @apply absolute inset-[3px] rounded-full;
+    content: "";
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .dark .profile-orbit {
+    filter: drop-shadow(0 26px 52px rgba(0, 0, 0, 0.34));
+    opacity: 0.92;
+  }
+
+  .hero-action {
+    @apply flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-white/70 text-slate-700 shadow-lg shadow-slate-950/10 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-white hover:text-slate-950 active:scale-95 dark:border-white/10 dark:bg-white/10 dark:text-white/70 dark:shadow-black/20 dark:hover:bg-white/20 dark:hover:text-white;
+  }
+
+  .bio-section {
+    @apply text-slate-700 dark:text-white/75;
+  }
+
+  .bio-copy {
+    @apply space-y-4 border-l-2 border-slate-300/80 pl-5 text-[1.03rem] font-semibold dark:border-white/20 sm:pl-7 sm:text-lg;
+  }
+
+  .bio-copy strong {
+    @apply font-black text-slate-950 dark:text-white;
+  }
+
+  .bio-lead {
+    @apply text-xl font-extrabold leading-9 text-slate-900 dark:text-white sm:text-2xl;
+  }
+
+  .motion-surface {
+    @apply opacity-0 translate-y-16 transition-all duration-700 ease-out;
+  }
+
+  .motion-surface.is-visible {
+    @apply opacity-100 translate-y-0;
+  }
+
+  .timeline-line {
+    @apply absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gray-200 dark:bg-slate-700 sm:block;
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(6rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ambientDrift {
+  from {
+    transform: translate3d(-1.5%, -1%, 0) rotate(-4deg) scale(1.02);
+  }
+  to {
+    transform: translate3d(1.5%, 1%, 0) rotate(4deg) scale(1.08);
+  }
+}
+
+@keyframes gridShift {
+  from {
+    background-position: center top;
+  }
+  to {
+    background-position: calc(50% + 48px) 48px;
+  }
+}
+
+@keyframes orbitSpin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes floatArrow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(0.45rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
