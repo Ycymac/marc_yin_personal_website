@@ -128,10 +128,10 @@ export const experiencesDataZh = [
     date: "2025.11 - 2026.1",
   },
   {
-    title: "JAVIS",
+    title: "JAVIS智能面试知识库平台",
     location: "Codex 辅助开发项目",
     description:
-      "2026 年 2 月至 4 月，结合 GitHub 开源项目经验，使用 Codex 进行辅助，开发个人第二个项目 JAVIS。",
+      "2026 年 2 月至 4 月，结合 GitHub 开源项目经验，使用 Codex 进行辅助，开发个人第二个项目 JAVIS只能面试知识库平台。",
     iconUrl: javisIcon,
     date: "2026.2 - 2026.4",
   },
@@ -157,8 +157,8 @@ export const projectsData = [
     imageUrl: getCouponIcon,
   },
   {
-    title: "JAVIS",
-    title_zh: "JAVIS",
+    title: "JAVIS Intelligent Interview Knowledge Base Platform",
+    title_zh: "JAVIS智能面试知识库平台",
     description:
       "My second personal project, developed from February to April 2026. It was built with reference to GitHub open-source projects and assisted by Codex, with RAG-related function materials included on this site.",
     desc_zh:
