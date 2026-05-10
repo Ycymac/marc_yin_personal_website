@@ -1,9 +1,9 @@
-import avatarImage from "@/photos/avatar.jpg"
 import getCouponIcon from "@/photos/getcoupon_icon.png"
 import javaIcon from "@/photos/java_icon.jpg"
 import javisFunction1 from "@/photos/jvais_function1.png"
 import javisFunction2 from "@/photos/javis_function2.png"
 import javisIcon from "@/photos/javis_icon.png"
+import portfolioImage from "@/photos/portfolio.png"
 import staLabIcon from "@/photos/sta_lab_icon.jpg"
 import ragFunctionVideo from "@/assets/videos/rag_function_show.mp4"
 
@@ -176,7 +176,7 @@ export const projectsData = [
     desc_zh:
       "当前个人介绍网站，2026 年 5 月使用 Codex 辅助开发，用于展示个人介绍、后端学习路径、项目、技能与时间线内容。",
     tags: ["Codex", "Vue", "Tailwind CSS"],
-    imageUrl: avatarImage,
+    imageUrl: portfolioImage,
   },
 ]
 
