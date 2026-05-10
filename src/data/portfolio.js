@@ -131,7 +131,7 @@ export const experiencesDataZh = [
     title: "JAVIS智能面试知识库平台",
     location: "Codex 辅助开发项目",
     description:
-      "2026 年 2 月至 4 月，结合 GitHub 开源项目经验，使用 Codex 进行辅助，开发个人第二个项目 JAVIS只能面试知识库平台。",
+      "2026 年 2 月至 4 月，结合 GitHub 开源项目经验，使用 Codex 进行辅助，开发个人第二个项目 JAVIS智能面试知识库平台。",
     iconUrl: javisIcon,
     date: "2026.2 - 2026.4",
   },
