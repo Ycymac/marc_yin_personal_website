@@ -9,7 +9,7 @@
     >
       <div class="flex h-full flex-col items-start gap-4 px-6 py-7 sm:px-8 sm:py-9">
         <img
-          :src="project.imageUrl"
+          :src="project.iconUrl || project.imageUrl"
           :alt="`${title} icon`"
           class="h-14 w-14 rounded-2xl object-cover shadow-lg shadow-slate-950/10 ring-1 ring-black/5 dark:ring-white/15"
           loading="lazy"
