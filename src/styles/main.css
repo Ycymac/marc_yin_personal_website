@@ -150,6 +150,124 @@ body {
     @apply text-xl font-extrabold leading-9 text-slate-900 dark:text-white sm:text-2xl;
   }
 
+  .project-card {
+    --project-accent: #0284c7;
+    --project-accent-soft: rgba(56, 189, 248, 0.2);
+  }
+
+  .project-card__surface {
+    isolation: isolate;
+    outline: none;
+    transition:
+      border-color 260ms ease,
+      background-color 260ms ease,
+      box-shadow 360ms ease;
+  }
+
+  .project-card__surface::after {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    content: "";
+    opacity: 0;
+    background:
+      linear-gradient(110deg, rgba(56, 189, 248, 0.22), transparent 34%),
+      linear-gradient(270deg, rgba(37, 99, 235, 0.14), transparent 42%);
+    transition: opacity 260ms ease;
+  }
+
+  .project-card__surface > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .project-card__icon,
+  .project-card__title,
+  .project-card__tag,
+  .project-card__media,
+  .project-card__gallery-image {
+    transition:
+      color 260ms ease,
+      background-color 260ms ease,
+      border-color 260ms ease,
+      box-shadow 360ms ease,
+      filter 360ms ease;
+  }
+
+  .project-card__media {
+    transform-origin: center;
+  }
+
+  .project-card__gallery-image {
+    transform-origin: bottom center;
+  }
+
+  .project-card:hover .project-card__surface,
+  .project-card__surface:focus-visible,
+  .project-card__surface:focus-within {
+    border-color: rgba(56, 189, 248, 0.72);
+    box-shadow:
+      0 0 0 1px rgba(56, 189, 248, 0.28),
+      0 20px 50px rgba(14, 165, 233, 0.16);
+  }
+
+  .dark .project-card:hover .project-card__surface,
+  .dark .project-card__surface:focus-visible,
+  .dark .project-card__surface:focus-within {
+    background-color: rgba(30, 41, 59, 0.82);
+    border-color: rgba(56, 189, 248, 0.8);
+    box-shadow:
+      0 0 0 1px rgba(56, 189, 248, 0.32),
+      0 20px 54px rgba(14, 165, 233, 0.2);
+  }
+
+  .project-card:hover .project-card__surface::after,
+  .project-card__surface:focus-visible::after,
+  .project-card__surface:focus-within::after {
+    opacity: 1;
+  }
+
+  .project-card:hover .project-card__title,
+  .project-card__surface:focus-visible .project-card__title,
+  .project-card__surface:focus-within .project-card__title {
+    color: #0284c7;
+  }
+
+  .dark .project-card:hover .project-card__title,
+  .dark .project-card__surface:focus-visible .project-card__title,
+  .dark .project-card__surface:focus-within .project-card__title {
+    color: #7dd3fc;
+  }
+
+  .project-card:hover .project-card__icon,
+  .project-card__surface:focus-visible .project-card__icon,
+  .project-card__surface:focus-within .project-card__icon {
+    box-shadow:
+      0 14px 28px rgba(14, 165, 233, 0.18),
+      0 0 0 3px rgba(56, 189, 248, 0.22);
+  }
+
+  .project-card:hover .project-card__tag,
+  .project-card__surface:focus-visible .project-card__tag,
+  .project-card__surface:focus-within .project-card__tag {
+    background-color: #0369a1;
+    color: #f8fafc;
+    box-shadow: 0 10px 22px rgba(14, 165, 233, 0.2);
+  }
+
+  .project-card:hover .project-card__media--image,
+  .project-card__surface:focus-visible .project-card__media--image,
+  .project-card__surface:focus-within .project-card__media--image {
+    filter: saturate(1.08) contrast(1.04);
+  }
+
+  .project-card:hover .project-card__gallery-image,
+  .project-card__surface:focus-visible .project-card__gallery-image,
+  .project-card__surface:focus-within .project-card__gallery-image {
+    border-color: rgba(125, 211, 252, 0.88);
+  }
+
   .motion-surface {
     @apply opacity-0 translate-y-16 transition-all duration-700 ease-out;
   }
