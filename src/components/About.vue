@@ -16,7 +16,7 @@
         2024 年 9 月，我进入
         <strong>西安邮电大学软件工程专业</strong>
         学习，从 C 语言开始建立编程基础📟。同年 10 月，我通过选拔进入校级实验室
-        <strong>软件工程协会</strong>
+        <strong>软件科技协会</strong>
         ，开始在更浓厚的技术氛围里补充自己的工程能力。
       </p>
       <p>
@@ -56,7 +56,7 @@
       <p>
         In September 2024, I started studying
         <strong>Software Engineering at Xi'an University of Posts & Telecommunications</strong>
-        and began building programming fundamentals through C language. In October 2024, I passed the selection process and joined the school-level Software Engineering Association laboratory.
+        and began building programming fundamentals through C language. In October 2024, I passed the selection process and joined the school-level Software Technology Association laboratory.
       </p>
       <p>
         In the lab, I continued learning

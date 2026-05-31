@@ -20,6 +20,6 @@
     "skills": "Skills"
   },
   "AboutSection": {
-    "desc": "I am Marc, also known as Yin Chenyan, a backend developer. In September 2024, I started studying Software Engineering at Xi'an University of Posts & Telecommunications and built programming fundamentals through C language. In October 2024, I passed the selection process and joined the school-level Software Engineering Association laboratory, where I studied data structures and algorithms. Since then, I have continued learning Java fundamentals, SSM, MySQL, JUC, JVM, RocketMQ, Redis and other backend topics. My project practice includes GetCoupon and JAVIS, with Codex used as an assistant during later development work. I also record learning notes and project practice on my CSDN blog."
+    "desc": "I am Marc, also known as Yin Chenyan, a backend developer. In September 2024, I started studying Software Engineering at Xi'an University of Posts & Telecommunications and built programming fundamentals through C language. In October 2024, I passed the selection process and joined the school-level Software Technology Association laboratory, where I studied data structures and algorithms. Since then, I have continued learning Java fundamentals, SSM, MySQL, JUC, JVM, RocketMQ, Redis and other backend topics. My project practice includes GetCoupon and JAVIS, with Codex used as an assistant during later development work. I also record learning notes and project practice on my CSDN blog."
   }
 }

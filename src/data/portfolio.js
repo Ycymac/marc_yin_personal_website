@@ -54,10 +54,10 @@ export const experiencesData = [
     date: "Sep 2024",
   },
   {
-    title: "STA Software Engineering Association",
+    title: "STA Software Technology Association",
     location: "University-level laboratory",
     description:
-      "Passed the selection process in October 2024 and joined the school-level software engineering association, where I continued learning data structures and algorithms.",
+      "Passed the selection process in October 2024 and joined the school-level software technology association, where I continued learning data structures and algorithms.",
     iconUrl: staLabIcon,
     date: "Oct 2024",
   },
@@ -105,10 +105,10 @@ export const experiencesDataZh = [
     date: "2024.9",
   },
   {
-    title: "进入软件工程协会",
+    title: "进入软件科技协会",
     location: "校级实验室",
     description:
-      "2024 年 10 月通过选拔进入校级实验室软件工程协会，并在实验室中继续学习数据结构与算法。",
+      "2024 年 10 月通过选拔进入校级实验室软件科技协会，并在实验室中继续学习数据结构与算法。",
     iconUrl: staLabIcon,
     date: "2024.10",
   },
