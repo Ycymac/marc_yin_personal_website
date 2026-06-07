@@ -7,11 +7,11 @@
     <SectionHeading>
       {{ locale === "zh" ? headerLanguageMap.Skills : "My Skills" }}
     </SectionHeading>
-    <ul class="flex flex-wrap justify-center gap-2 text-lg text-slate-800">
+    <ul class="flex flex-wrap justify-center gap-2 text-lg">
       <li
         v-for="(skill, index) in skillsData"
         :key="skill"
-        class="rounded-xl border border-white/60 bg-white/70 px-5 py-3 font-black opacity-0 shadow-lg shadow-slate-950/5 backdrop-blur-xl transition-all duration-500 ease-out dark:border-white/10 dark:bg-white/10 dark:text-white/80"
+        class="construct-chip rounded-xl px-5 py-3 font-black opacity-0 transition-all duration-500 ease-out"
         :class="{ 'translate-y-0 opacity-100': isVisible, 'translate-y-16': !isVisible }"
         :style="{ transitionDelay: `${index * 50}ms` }"
       >

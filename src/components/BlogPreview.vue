@@ -10,20 +10,20 @@
     </SectionHeading>
 
     <div
-      class="overflow-hidden rounded-lg border border-white/60 bg-white/70 shadow-xl shadow-slate-950/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:shadow-black/20"
+      class="construct-panel overflow-hidden rounded-xl"
     >
-      <div class="flex flex-col gap-3 border-b border-slate-900/10 px-5 py-4 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex flex-col gap-3 border-b border-[var(--construct-line)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 class="text-xl font-black text-slate-950 dark:text-white">
+          <h3 class="text-xl font-black text-[var(--construct-text)]">
             {{ locale === "zh" ? "CSDN 博客实时预览" : "CSDN Blog Preview" }}
           </h3>
-          <p class="mt-1 text-sm font-semibold text-slate-600 dark:text-white/60">
+          <p class="mt-1 text-sm font-semibold text-[var(--construct-muted)]">
             {{ locale === "zh" ? "如果预览受站点策略影响，可直接打开博客查看。" : "If the preview is blocked by the site, open the blog directly." }}
           </p>
         </div>
 
         <a
-          class="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-4 py-2 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-white/85"
+          class="construct-button inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-black transition hover:-translate-y-0.5"
           :href="blogUrl"
           target="_blank"
           rel="noreferrer"

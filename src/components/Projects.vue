@@ -11,7 +11,7 @@
         :locale="locale"
       />
     </div>
-    <p class="mt-8 text-center text-sm font-bold text-slate-500 dark:text-white/50">
+    <p class="mt-8 text-center text-sm font-bold text-[var(--construct-muted)]">
       {{ locale === "zh" ? "项目内容会随着后端学习与实践持续补充。" : "Project notes will keep growing with backend learning and practice." }}
     </p>
   </section>

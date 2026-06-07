@@ -1,6 +1,6 @@
 <template>
   <a
-    class="mb-20 mt-4 hidden h-8 w-8 rounded-full text-slate-500 transition-transform hover:scale-125 dark:text-white/50 sm:block"
+    class="mb-20 mt-4 hidden h-8 w-8 rounded-full text-[var(--construct-gold)] transition-transform hover:scale-125 sm:block"
     href="#about"
     aria-label="Scroll to about section"
   >

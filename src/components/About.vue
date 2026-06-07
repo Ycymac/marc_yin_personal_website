@@ -9,7 +9,7 @@
 
     <div v-if="locale === 'zh'" class="bio-copy">
       <p class="bio-lead">
-        <strong>大家好！😘 我是殷晨晏，也可以叫我 Marc。</strong>
+        <strong>大家好!我是殷晨晏，也可以叫我 Marc。</strong>
         我是一位正在成长中的后端开发者，热爱学习新技术，也喜欢把学到的内容放进真实项目里反复验证。
       </p>
       <p>
@@ -32,7 +32,7 @@
         。从需求梳理到功能落地，每一步都在帮我缩短“看懂技术”和“做出项目”之间的距离✌。
       </p>
       <p>
-        目前，我也在用 Codex 辅助完善这个个人介绍网站，希望把自己的学习路径、项目经验和 AI 辅助开发实践持续整理下来😌。为了留住成长轨迹，我会在
+        目前，我也在用 Codex 辅助完善这个个人介绍网站，希望把自己的学习路径、项目经验和 AI 辅助开发实践持续整理下来。为了留住成长轨迹，我会在
         <a
           class="font-black underline underline-offset-4"
           href="https://blog.csdn.net/Ycy06721"
@@ -50,7 +50,7 @@
 
     <div v-else class="bio-copy">
       <p class="bio-lead">
-        <strong>Hi, I am Marc, also known as Yin Chenyan.</strong>
+        <strong>Hi, I am Marc.</strong>
         I am a growing backend developer who enjoys learning new technologies and turning study notes into real project practice.
       </p>
       <p>

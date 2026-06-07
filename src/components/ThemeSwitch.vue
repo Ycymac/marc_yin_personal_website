@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex h-[2.5rem] w-[2.5rem] items-center justify-center bg-opacity-80 transition-all hover:scale-[1.15] active:scale-105"
+    class="flex h-[2.5rem] w-[2.5rem] items-center justify-center text-[var(--construct-muted)] transition-all hover:scale-[1.15] hover:text-[var(--construct-gold)] active:scale-105"
     type="button"
     @click="$emit('toggle')"
   >

@@ -4,10 +4,31 @@
 
 :root {
   color-scheme: light;
+  --construct-space: #07142d;
+  --construct-navy: #0b1f3f;
+  --construct-navy-soft: rgba(8, 28, 58, 0.1);
+  --construct-black: #020308;
+  --construct-gold: #f2d27a;
+  --construct-gold-strong: #ffe6a3;
+  --construct-white: #f8fafc;
+  --construct-gray: #c7ccd6;
+  --construct-dark-gray: #1f2733;
+  --construct-text: #07142d;
+  --construct-muted: #5e6876;
+  --construct-panel: rgba(248, 250, 252, 0.78);
+  --construct-panel-strong: rgba(255, 255, 255, 0.88);
+  --construct-line: rgba(7, 20, 45, 0.15);
+  --construct-shadow: 0 24px 70px rgba(7, 20, 45, 0.16);
 }
 
 :root.dark {
   color-scheme: dark;
+  --construct-text: #f8fafc;
+  --construct-muted: #b6bfcc;
+  --construct-panel: rgba(8, 21, 45, 0.66);
+  --construct-panel-strong: rgba(13, 32, 62, 0.78);
+  --construct-line: rgba(248, 250, 252, 0.16);
+  --construct-shadow: 0 28px 80px rgba(0, 0, 0, 0.44);
 }
 
 html {
@@ -40,12 +61,15 @@ body {
 @layer components {
   .site-shell {
     background:
-      linear-gradient(135deg, rgba(238, 242, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 42%, rgba(255, 241, 242, 0.9) 100%);
+      linear-gradient(135deg, rgba(248, 250, 252, 0.96) 0%, rgba(232, 236, 243, 0.98) 54%, rgba(245, 229, 178, 0.22) 100%);
+    color: var(--construct-text);
     isolation: isolate;
   }
 
   .dark .site-shell {
-    background: #000;
+    background:
+      linear-gradient(180deg, rgba(2, 3, 8, 0.96), rgba(1, 7, 18, 0.98)),
+      #000;
   }
 
   .ambient-background {
@@ -60,32 +84,45 @@ body {
 
   .ambient-background__veil {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(248, 250, 252, 0.85) 76%),
-      radial-gradient(ellipse at 48% -8%, rgba(111, 126, 255, 0.24), transparent 58%),
-      radial-gradient(ellipse at 76% 4%, rgba(244, 114, 130, 0.2), transparent 48%);
+      linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(248, 250, 252, 0.84) 76%),
+      linear-gradient(118deg, transparent 0 18%, rgba(7, 20, 45, 0.07) 18% 18.28%, transparent 18.28% 100%),
+      linear-gradient(38deg, transparent 0 68%, rgba(242, 210, 122, 0.2) 68% 68.35%, transparent 68.35% 100%),
+      radial-gradient(ellipse at 52% -8%, rgba(11, 31, 63, 0.2), transparent 55%);
   }
 
   .dark .ambient-background__veil {
     background:
-      linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.98) 78%),
-      radial-gradient(ellipse at 50% 62%, rgba(0, 0, 0, 0.72), transparent 66%);
+      linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.96) 78%),
+      linear-gradient(118deg, transparent 0 19%, rgba(255, 255, 255, 0.08) 19% 19.25%, transparent 19.25% 100%),
+      linear-gradient(38deg, transparent 0 68%, rgba(242, 210, 122, 0.22) 68% 68.35%, transparent 68.35% 100%),
+      radial-gradient(ellipse at 42% -12%, rgba(12, 42, 86, 0.78), transparent 58%),
+      radial-gradient(ellipse at 76% 6%, rgba(242, 210, 122, 0.12), transparent 42%);
   }
 
   .ambient-background__mesh {
-    inset: -14%;
-    background: none;
-    opacity: 0;
+    inset: -10%;
+    background:
+      linear-gradient(112deg, transparent 0 28%, rgba(7, 20, 45, 0.08) 28% 44%, transparent 44% 100%),
+      linear-gradient(160deg, transparent 0 62%, rgba(242, 210, 122, 0.2) 62% 66%, transparent 66% 100%),
+      linear-gradient(90deg, transparent 0 79%, rgba(7, 20, 45, 0.08) 79% 85%, transparent 85% 100%);
+    filter: blur(18px);
+    opacity: 0.7;
+    transform-origin: center;
+    animation: ambientDrift 18s ease-in-out infinite alternate;
   }
 
   .dark .ambient-background__mesh {
-    background: none;
-    opacity: 0;
+    background:
+      linear-gradient(112deg, transparent 0 28%, rgba(18, 52, 99, 0.42) 28% 45%, transparent 45% 100%),
+      linear-gradient(160deg, transparent 0 62%, rgba(242, 210, 122, 0.18) 62% 66%, transparent 66% 100%),
+      linear-gradient(90deg, transparent 0 79%, rgba(255, 255, 255, 0.055) 79% 85%, transparent 85% 100%);
+    opacity: 0.95;
   }
 
   .ambient-background__grid {
     background-image:
-      linear-gradient(rgba(15, 23, 42, 0.065) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15, 23, 42, 0.065) 1px, transparent 1px);
+      linear-gradient(rgba(7, 20, 45, 0.065) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(7, 20, 45, 0.065) 1px, transparent 1px);
     background-position: center top;
     background-size: 48px 48px;
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), transparent 76%);
@@ -95,9 +132,51 @@ body {
 
   .dark .ambient-background__grid {
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+      linear-gradient(rgba(248, 250, 252, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(248, 250, 252, 0.055) 1px, transparent 1px);
+    opacity: 0.5;
+  }
+
+  .site-nav-construct,
+  .construct-panel {
+    position: relative;
+    border: 1px solid var(--construct-line);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.035)),
+      var(--construct-panel);
+    box-shadow: var(--construct-shadow);
+    backdrop-filter: blur(22px) saturate(128%);
+    -webkit-backdrop-filter: blur(22px) saturate(128%);
+  }
+
+  .site-nav-construct {
+    border-radius: 1rem;
+  }
+
+  .construct-panel::after {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    top: 0.65rem;
+    height: 1px;
+    content: "";
+    pointer-events: none;
+    background: linear-gradient(90deg, var(--construct-gold), transparent 42%, rgba(255, 255, 255, 0.28));
     opacity: 0.55;
+  }
+
+  .utility-panel-construct::after,
+  .nav-link-construct.is-active::after {
+    display: none;
+  }
+
+  .nav-link-construct {
+    color: var(--construct-muted);
+  }
+
+  .nav-link-construct:hover,
+  .nav-link-construct.is-active {
+    color: var(--construct-text);
   }
 
   .borderBlack {
@@ -107,8 +186,8 @@ body {
   .profile-orbit {
     @apply absolute h-40 w-40 rounded-full sm:h-52 sm:w-52;
     background:
-      conic-gradient(from 90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.76), rgba(125, 211, 252, 0.18), rgba(244, 114, 182, 0.34), rgba(255, 255, 255, 0));
-    filter: drop-shadow(0 26px 48px rgba(15, 23, 42, 0.2));
+      conic-gradient(from 90deg, transparent, rgba(242, 210, 122, 0.7), rgba(248, 250, 252, 0.34), rgba(11, 31, 63, 0.28), transparent);
+    filter: drop-shadow(0 26px 48px rgba(7, 20, 45, 0.28));
     opacity: 0.78;
     animation: orbitSpin 13s linear infinite;
   }
@@ -125,23 +204,36 @@ body {
   }
 
   .hero-action {
-    @apply flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-white/70 text-slate-700 shadow-lg shadow-slate-950/10 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-white hover:text-slate-950 active:scale-95 dark:border-white/10 dark:bg-white/10 dark:text-white/70 dark:shadow-black/20 dark:hover:bg-white/20 dark:hover:text-white;
+    @apply flex h-12 w-12 items-center justify-center rounded-full border shadow-lg backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:scale-110 active:scale-95;
+    border-color: var(--construct-line);
+    background: var(--construct-panel);
+    color: var(--construct-muted);
+    box-shadow: 0 18px 42px rgba(7, 20, 45, 0.16);
+  }
+
+  .hero-action:hover {
+    border-color: rgba(242, 210, 122, 0.72);
+    color: var(--construct-gold-strong);
+    background: var(--construct-panel-strong);
   }
 
   .bio-section {
-    @apply text-slate-700 dark:text-white/75;
+    color: var(--construct-muted);
   }
 
   .bio-copy {
-    @apply space-y-4 border-l-2 border-slate-300/80 pl-5 text-[1.03rem] font-semibold dark:border-white/20 sm:pl-7 sm:text-lg;
+    @apply space-y-4 pl-5 text-[1.03rem] font-semibold sm:pl-7 sm:text-lg;
+    border-left: 2px solid rgba(242, 210, 122, 0.55);
   }
 
   .bio-copy strong {
-    @apply font-black text-slate-950 dark:text-white;
+    color: var(--construct-text);
+    font-weight: 900;
   }
 
   .bio-lead {
-    @apply text-xl font-extrabold leading-9 text-slate-900 dark:text-white sm:text-2xl;
+    @apply text-xl font-extrabold leading-9 sm:text-2xl;
+    color: var(--construct-text);
   }
 
   .project-card {
@@ -152,6 +244,11 @@ body {
   .project-card__surface {
     isolation: isolate;
     outline: none;
+    border-color: var(--construct-line) !important;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.035)),
+      var(--construct-panel) !important;
+    box-shadow: var(--construct-shadow);
     transition:
       border-color 260ms ease,
       background-color 260ms ease,
@@ -166,7 +263,7 @@ body {
     content: "";
     opacity: 0;
     background:
-      linear-gradient(110deg, rgba(255, 255, 255, 0.24), transparent 34%),
+      linear-gradient(110deg, rgba(242, 210, 122, 0.18), transparent 34%),
       linear-gradient(270deg, rgba(255, 255, 255, 0.12), transparent 42%);
     transition: opacity 260ms ease;
   }
@@ -202,18 +299,18 @@ body {
   .project-card__surface:focus-within {
     border-color: rgba(255, 255, 255, 0.82);
     box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.38),
-      0 20px 50px rgba(255, 255, 255, 0.14);
+      0 0 0 1px rgba(242, 210, 122, 0.42),
+      0 20px 50px rgba(242, 210, 122, 0.14);
   }
 
   .dark .project-card:hover .project-card__surface,
   .dark .project-card__surface:focus-visible,
   .dark .project-card__surface:focus-within {
     background-color: rgba(30, 41, 59, 0.82);
-    border-color: rgba(255, 255, 255, 0.86);
+    border-color: rgba(242, 210, 122, 0.72);
     box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.34),
-      0 20px 54px rgba(255, 255, 255, 0.14);
+      0 0 0 1px rgba(242, 210, 122, 0.34),
+      0 20px 54px rgba(242, 210, 122, 0.12);
   }
 
   .project-card:hover .project-card__surface::after,
@@ -226,7 +323,7 @@ body {
   .project-card__surface:focus-visible .project-card__title,
   .project-card__surface:focus-within .project-card__title {
     color: #f8fafc;
-    text-shadow: 0 1px 12px rgba(15, 23, 42, 0.28);
+    text-shadow: 0 1px 12px rgba(7, 20, 45, 0.38);
   }
 
   .dark .project-card:hover .project-card__title,
@@ -249,7 +346,7 @@ body {
   .project-card__surface:focus-within .project-card__tag {
     background-color: #f8fafc;
     color: #0f172a;
-    box-shadow: 0 10px 22px rgba(255, 255, 255, 0.18);
+    box-shadow: 0 10px 22px rgba(242, 210, 122, 0.22);
   }
 
   .project-card:hover .project-card__media--image,
@@ -264,6 +361,49 @@ body {
     border-color: rgba(255, 255, 255, 0.9);
   }
 
+  .construct-chip {
+    border: 1px solid var(--construct-line);
+    background: var(--construct-panel);
+    color: var(--construct-text);
+    box-shadow: 0 16px 42px rgba(7, 20, 45, 0.12);
+    backdrop-filter: blur(18px) saturate(128%);
+    -webkit-backdrop-filter: blur(18px) saturate(128%);
+  }
+
+  .construct-button {
+    border: 1px solid rgba(242, 210, 122, 0.48);
+    background: rgba(242, 210, 122, 0.92);
+    color: #07142d;
+    box-shadow: 0 12px 30px rgba(242, 210, 122, 0.22);
+  }
+
+  .construct-button:hover {
+    background: var(--construct-gold-strong);
+  }
+
+  .section-heading-construct {
+    position: relative;
+    color: var(--construct-text);
+    letter-spacing: 0;
+  }
+
+  .section-heading-construct::after {
+    display: block;
+    width: 4.5rem;
+    height: 2px;
+    margin: 0.85rem auto 0;
+    content: "";
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, var(--construct-gold), transparent);
+  }
+
+  .timeline-node-construct {
+    border: 1px solid var(--construct-line);
+    background: var(--construct-panel-strong);
+    color: var(--construct-text);
+    box-shadow: 0 14px 34px rgba(7, 20, 45, 0.18);
+  }
+
   .motion-surface {
     @apply opacity-0 translate-y-16 transition-all duration-700 ease-out;
   }
@@ -273,7 +413,8 @@ body {
   }
 
   .timeline-line {
-    @apply absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gray-200 dark:bg-slate-700 sm:block;
+    @apply absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 sm:block;
+    background: linear-gradient(to bottom, transparent, var(--construct-gold), var(--construct-line), transparent);
   }
 }
 

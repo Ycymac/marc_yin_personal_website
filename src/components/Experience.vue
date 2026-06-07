@@ -26,7 +26,7 @@
           :ref="(el) => setItemRef(el, index)"
         >
           <article
-            class="relative rounded-lg border border-white/60 bg-white/70 px-8 py-5 shadow-xl shadow-slate-950/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/10"
+            class="construct-panel relative rounded-xl px-8 py-5"
           >
             <span
               class="absolute top-7 h-0 w-0 border-y-[0.4rem] border-y-transparent"
@@ -36,27 +36,27 @@
                   : '-left-[0.4rem] border-r-[0.4rem] border-r-white/70 dark:border-r-white/10'
               "
             />
-            <h3 class="font-black capitalize text-slate-950 dark:text-white">{{ item.title }}</h3>
-            <p class="!mt-0 font-bold text-slate-600 dark:text-white/60">
+            <h3 class="font-black capitalize text-[var(--construct-text)]">{{ item.title }}</h3>
+            <p class="!mt-0 font-bold text-[var(--construct-muted)]">
               <a
                 v-if="item.locationUrl"
                 :href="item.locationUrl"
                 target="_blank"
                 rel="noreferrer"
-                class="underline"
+                class="underline decoration-[var(--construct-gold)] underline-offset-4"
               >
                 {{ item.location }}
               </a>
               <span v-else>{{ item.location }}</span>
             </p>
-            <p class="!mt-2 !font-semibold text-slate-700 dark:text-white/75">
+            <p class="!mt-2 !font-semibold text-[var(--construct-muted)]">
               {{ item.description }}
             </p>
           </article>
         </div>
 
         <div
-          class="absolute left-1/2 top-5 flex h-12 w-12 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full bg-white text-xl shadow-lg shadow-slate-950/10 ring-1 ring-black/5 dark:bg-white/15 dark:ring-white/15"
+          class="timeline-node-construct absolute left-1/2 top-5 flex h-12 w-12 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full text-xl"
         >
           <img
             v-if="item.iconUrl"
@@ -68,7 +68,7 @@
         </div>
 
         <div
-          class="absolute top-8 text-sm font-bold text-slate-500 dark:text-white/50"
+          class="absolute top-8 text-sm font-bold text-[var(--construct-muted)]"
           :class="index % 2 === 0 ? 'left-[calc(50%+3rem)]' : 'right-[calc(50%+3rem)]'"
         >
           {{ item.date }}
@@ -80,10 +80,10 @@
       <div
         v-for="item in shownExperiences"
         :key="`${item.title}-mobile`"
-        class="flex flex-col items-center gap-4 rounded-lg border border-white/60 bg-white/70 p-6 pb-8 shadow-xl shadow-slate-950/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-slate-100"
+        class="construct-panel flex flex-col items-center gap-4 rounded-xl p-6 pb-8"
       >
         <div
-          class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-white shadow-lg shadow-slate-950/10 ring-1 ring-black/5 dark:bg-white/15 dark:ring-white/15"
+          class="timeline-node-construct flex h-12 w-12 items-center justify-center overflow-hidden rounded-full"
         >
           <img
             v-if="item.iconUrl"
@@ -93,22 +93,22 @@
           />
           <component v-else :is="iconFor(item.icon)" class="h-5 w-5" />
         </div>
-        <span class="font-bold text-slate-500 dark:text-white/50">{{ item.date }}</span>
+        <span class="font-bold text-[var(--construct-muted)]">{{ item.date }}</span>
         <div class="flex flex-col gap-2">
-          <h3 class="font-black capitalize text-slate-950 dark:text-white">{{ item.title }}</h3>
-          <p class="!mt-0 font-bold text-slate-600 dark:text-white/60">
+          <h3 class="font-black capitalize text-[var(--construct-text)]">{{ item.title }}</h3>
+          <p class="!mt-0 font-bold text-[var(--construct-muted)]">
             <a
               v-if="item.locationUrl"
               :href="item.locationUrl"
               target="_blank"
               rel="noreferrer"
-              class="underline"
+              class="underline decoration-[var(--construct-gold)] underline-offset-4"
             >
               {{ item.location }}
             </a>
             <span v-else>{{ item.location }}</span>
           </p>
-          <p class="!mt-1 !font-semibold text-slate-700 dark:text-white/75">
+          <p class="!mt-1 !font-semibold text-[var(--construct-muted)]">
             {{ item.description }}
           </p>
         </div>
