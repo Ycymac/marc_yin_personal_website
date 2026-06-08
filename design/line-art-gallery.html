@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>线描候选预览 · Line-art Gallery</title>
+<style>
+  :root { --ink: #1c1c1f; --paper: #eceae6; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 40px 24px 80px;
+    font-family: Georgia, "Noto Serif SC", serif;
+    background: var(--paper); color: var(--ink);
+    transition: background .3s, color .3s;
+  }
+  body.dark { --ink: #e9e9e7; --paper: #141416; }
+  h1 { font-weight: 600; letter-spacing: .04em; font-size: 1.6rem; }
+  .sub { color: gray; font-size: .9rem; margin-bottom: 28px; }
+  .toggle {
+    border: 1px solid currentColor; background: transparent; color: inherit;
+    padding: 8px 18px; border-radius: 3px; cursor: pointer;
+    font-family: inherit; font-size: .85rem; margin-bottom: 32px;
+  }
+  .grid {
+    display: grid; gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  .card {
+    border: 1px solid currentColor; border-radius: 4px;
+    padding: 20px; display: flex; flex-direction: column; align-items: center;
+  }
+  .card svg { width: 160px; height: 160px; }
+  .card .no { font-size: .8rem; opacity: .55; align-self: flex-start; }
+  .card .name { margin-top: 14px; font-weight: 600; font-size: .95rem; }
+  .card .use { font-size: .78rem; color: gray; text-align: center; margin-top: 4px; }
+  svg { stroke: currentColor; fill: none; stroke-width: 1.2; }
+  svg .fillink { fill: currentColor; stroke: none; }
+</style>
+</head>
+<body>
+  <h1>线描候选预览</h1>
+  <div class="sub">黑灰白 · 文艺气质 · 点击右侧按钮切换深浅背景看反相效果。选好后告诉我编号。</div>
+  <button class="toggle" onclick="document.body.classList.toggle('dark')">切换深 / 浅背景</button>
+  <div class="grid" id="grid"></div>
+<script>
+const items = [
+{ no:'01', name:'古典侧脸', use:'Hero 主视觉 / 留白点缀',
+svg:`<svg viewBox="0 0 100 100">
+<path d="M62 18 C50 14 36 20 33 34 C31 44 28 47 25 52 C23 55 26 57 29 57 C30 64 33 72 42 75 C42 80 41 84 40 88"/>
+<path d="M33 38 C37 36 41 37 43 40"/>
+<circle class="fillink" cx="39" cy="41" r="1.6"/>
+<path d="M30 52 C32 53 35 53 37 52"/>
+<path d="M34 60 C38 63 44 63 48 60"/>
+<path d="M62 18 C72 22 74 34 70 44 C67 52 64 60 60 66"/>
+<path d="M40 88 C50 86 60 86 68 88"/>
+</svg>` },
+{ no:'02', name:'飞翼头盔', use:'信使神母题 / 角标 / favicon',
+svg:`<svg viewBox="0 0 100 100">
+<path d="M38 44 C38 32 46 26 54 26 C64 26 70 34 70 44 L70 52 L38 52 Z"/>
+<path d="M38 52 L70 52 L66 60 L42 60 Z"/>
+<path d="M70 38 C78 34 86 33 92 36 C84 38 80 42 76 46"/>
+<path d="M70 44 C79 42 87 43 92 47 C84 47 79 50 74 53"/>
+<path d="M48 60 L48 70 M58 60 L58 70"/>
+</svg>` },
+{ no:'03', name:'月桂枝', use:'章节分隔 / 签名装饰',
+svg:`<svg viewBox="0 0 100 100">
+<path d="M50 88 C48 70 49 48 56 24"/>
+<path d="M53 74 C46 72 42 66 42 60 C49 61 53 66 53 74Z" class="fillink" opacity=".0"/>
+<path d="M53 72 C47 71 43 66 43 60 C49 61 53 66 53 72Z"/>
+<path d="M54 62 C48 61 44 56 44 50 C50 51 54 56 54 62Z"/>
+<path d="M55 52 C49 51 45 46 45 40 C51 41 55 46 55 52Z"/>
+<path d="M54 72 C61 71 65 66 65 60 C59 61 55 66 54 72Z" transform="translate(2,0)"/>
+<path d="M55 62 C62 61 66 56 66 50 C60 51 56 56 55 62Z" transform="translate(1,0)"/>
+<path d="M56 52 C63 51 67 46 67 40 C61 41 57 46 56 52Z"/>
+</svg>` },
+{ no:'04', name:'手持卷轴', use:'About / 博客区图标',
+svg:`<svg viewBox="0 0 100 100">
+<path d="M28 40 C30 38 34 38 38 40 L62 50 C66 52 70 52 73 50"/>
+<path d="M28 40 C24 44 24 50 28 54 C30 56 34 56 38 54"/>
+<path d="M38 40 L38 54 M62 50 L62 64"/>
+<path d="M73 50 C77 46 77 40 73 36 C70 34 66 34 63 36 L40 46"/>
+<path d="M44 62 C50 60 56 60 62 64 C56 68 50 68 44 66"/>
+<path d="M30 58 C36 62 42 62 48 60"/>
+</svg>` },
+{ no:'05', name:'羽毛笔', use:'风格切换图标 / 写作母题',
+svg:`<svg viewBox="0 0 100 100">
+<path d="M70 22 C58 30 44 46 34 64 C32 68 30 72 29 77 C34 76 38 74 42 72 C60 62 76 48 84 36 C80 34 74 30 70 22Z"/>
+<path d="M70 22 C68 30 64 40 56 50 M64 30 C60 38 54 46 47 53 M58 40 C53 47 47 53 41 58"/>
+<path d="M29 77 L23 83 M34 64 C30 66 27 70 26 74"/>
+</svg>` },
+{ no:'06', name:'星象罗盘', use:'背景点缀 / 几何装饰',
+svg:`<svg viewBox="0 0 100 100">
+<circle cx="50" cy="50" r="30"/>
+<circle cx="50" cy="50" r="22"/>
+<path d="M50 14 L54 46 L86 50 L54 54 L50 86 L46 54 L14 50 L46 46 Z"/>
+<circle class="fillink" cx="50" cy="50" r="2.4"/>
+<path d="M50 20 L50 28 M50 72 L50 80 M20 50 L28 50 M72 50 L80 50"/>
+</svg>` },
+{ no:'07', name:'几何分割线', use:'SectionDivider 替代金线',
+svg:`<svg viewBox="0 0 100 100">
+<path d="M10 50 L40 50 M60 50 L90 50"/>
+<path d="M50 42 L58 50 L50 58 L42 50 Z"/>
+<circle class="fillink" cx="50" cy="50" r="1.6"/>
+<path d="M40 50 L44 50 M56 50 L60 50"/>
+</svg>` },
+{ no:'08', name:'石膏像剪影', use:'Hero 备选 / 艺术感主视觉',
+svg:`<svg viewBox="0 0 100 100">
+<path d="M40 86 L40 70 C32 66 28 56 28 46 C28 32 38 22 50 22 C62 22 72 32 72 46 C72 56 68 66 60 70 L60 86"/>
+<path d="M40 86 C46 83 54 83 60 86"/>
+<path d="M44 42 C46 40 49 40 51 42 M44 42 L42 44 M51 42 L53 44"/>
+<path d="M42 52 C46 55 54 55 58 52"/>
+<path d="M50 44 L50 52 M46 58 C49 60 51 60 54 58"/>
+<path d="M36 40 C34 38 32 39 32 42 M64 40 C66 38 68 39 68 42"/>
+</svg>` }
+];
+</script>
+<script>
+  const grid = document.getElementById('grid');
+  grid.innerHTML = items.map(it => `
+    <div class="card">
+      <div class="no">No.${it.no}</div>
+      ${it.svg}
+      <div class="name">${it.name}</div>
+      <div class="use">${it.use}</div>
+    </div>`).join('');
+</script>
+</body>
+</html>

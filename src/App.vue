@@ -25,6 +25,7 @@
     <Footer />
     <WidgetWrapper>
       <ThemeSwitch :theme="theme" @toggle="toggleTheme" />
+      <SkinSwitch :skin="skin" @toggle="toggleSkin" />
       <LanguageSwitch :locale="locale" @toggle="toggleLocale" />
     </WidgetWrapper>
   </div>
@@ -46,11 +47,13 @@ import Experience from "@/components/Experience.vue"
 import Footer from "@/components/Footer.vue"
 import WidgetWrapper from "@/components/WidgetWrapper.vue"
 import ThemeSwitch from "@/components/ThemeSwitch.vue"
+import SkinSwitch from "@/components/SkinSwitch.vue"
 import LanguageSwitch from "@/components/LanguageSwitch.vue"
 
 const activeSection = ref("Home")
 const timeOfLastClick = ref(0)
 const theme = ref("dark")
+const skin = ref("literary")
 const { locale } = useI18n()
 
 function handleNavigate(sectionName) {
@@ -86,6 +89,16 @@ function toggleTheme() {
   }
 }
 
+function applySkin(nextSkin) {
+  skin.value = nextSkin
+  document.documentElement.setAttribute("data-skin", nextSkin)
+  window.localStorage.setItem("skin", nextSkin)
+}
+
+function toggleSkin() {
+  applySkin(skin.value === "literary" ? "glass" : "literary")
+}
+
 function toggleLocale() {
   const nextLocale = locale.value === "en" ? "zh" : "en"
   locale.value = nextLocale
@@ -101,6 +114,8 @@ function toggleLocale() {
 onMounted(() => {
   const savedTheme = window.localStorage.getItem("theme")
   applyTheme(savedTheme || "dark")
+  const savedSkin = window.localStorage.getItem("skin")
+  applySkin(savedSkin || "literary")
   setDocumentLocale(locale.value)
 })
 
