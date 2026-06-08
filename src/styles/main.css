@@ -717,6 +717,7 @@ body {
 }
 
 [data-skin="literary"] #home::before,
+[data-skin="literary"] #home::after,
 [data-skin="literary"] #about::after,
 [data-skin="literary"] #projects::before,
 [data-skin="literary"] #blog::after,
@@ -731,6 +732,7 @@ body {
 }
 
 .dark[data-skin="literary"] #home::before,
+.dark[data-skin="literary"] #home::after,
 .dark[data-skin="literary"] #about::after,
 .dark[data-skin="literary"] #projects::before,
 .dark[data-skin="literary"] #blog::after,
@@ -748,6 +750,17 @@ body {
   right: -8rem;
   transform: translateY(-50%);
   background-position: right center;
+}
+
+/* Hero — daisy balances Hermes on the left, set lower for layered rhythm */
+[data-skin="literary"] #home::after {
+  background-image: url("../photos/daisy_flower_single.webp");
+  width: 10rem;
+  height: 15rem;
+  bottom: 4rem;
+  left: -3rem;
+  background-position: left bottom;
+  opacity: 0.12;
 }
 
 /* About — celestial dancer beside the bio, right margin */
@@ -791,6 +804,7 @@ body {
 /* Decorations are desktop-only — they'd crowd text on small screens */
 @media (max-width: 1024px) {
   [data-skin="literary"] #home::before,
+  [data-skin="literary"] #home::after,
   [data-skin="literary"] #about::after,
   [data-skin="literary"] #projects::before,
   [data-skin="literary"] #blog::after,
