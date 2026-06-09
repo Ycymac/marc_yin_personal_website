@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue"
+import { onMounted, provide, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { assetUrl } from "@/data/assets"
 import { setDocumentLocale } from "@/i18n"
@@ -55,6 +55,9 @@ const timeOfLastClick = ref(0)
 const theme = ref("dark")
 const skin = ref("literary")
 const { locale } = useI18n()
+
+// Expose the active skin so sections can branch their layout (modern vs literary).
+provide("skin", skin)
 
 function handleNavigate(sectionName) {
   activeSection.value = sectionName

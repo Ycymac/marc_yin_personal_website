@@ -23,6 +23,7 @@
         </div>
 
         <a
+          ref="blogButton"
           class="construct-button inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-black transition hover:-translate-y-0.5"
           :href="blogUrl"
           target="_blank"
@@ -50,6 +51,7 @@ import { useI18n } from "vue-i18n"
 import { ExternalLink } from "lucide-vue-next"
 import { headerLanguageMap } from "@/data/portfolio"
 import { useObservedSection } from "@/composables/useInView"
+import { useMagnetic } from "@/composables/useMagnetic"
 import SectionHeading from "./SectionHeading.vue"
 
 const props = defineProps({
@@ -61,6 +63,7 @@ const props = defineProps({
 
 const blogUrl = "https://blog.csdn.net/Ycy06721"
 const { locale } = useI18n()
+const blogButton = useMagnetic(0.4)
 const { target: sectionRef, isVisible } = useObservedSection(
   "Blog",
   props.onVisible,

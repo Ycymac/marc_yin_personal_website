@@ -20,6 +20,8 @@
   --construct-line: rgba(7, 20, 45, 0.15);
   --construct-shadow: 0 24px 70px rgba(7, 20, 45, 0.16);
   --construct-serif: "Fraunces Variable", "Noto Serif SC", "Songti SC", "SimSun", Georgia, "Times New Roman", serif;
+  --modern-display: "Space Grotesk", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
+  --modern-mono: "Space Mono", ui-monospace, "SFMono-Regular", "Cascadia Code", "Noto Sans SC", monospace;
 }
 
 :root.dark {
@@ -836,6 +838,287 @@ body {
   filter: invert(1);
   opacity: 0.4;
 }
+
+/* ============================================================
+   MODERN SKIN (glass) — three-font system + navy accent.
+   Display = Space Grotesk, micro-labels/mono = Space Mono,
+   body stays Inter. Gold retired in favour of deep navy.
+   Scoped to [data-skin="glass"] so literary is untouched.
+   ============================================================ */
+:root[data-skin="glass"] {
+  --construct-gold: #1b3a6b;
+  --construct-gold-strong: #2c5599;
+}
+
+:root[data-skin="glass"].dark {
+  --construct-gold: #3a6bb5;
+  --construct-gold-strong: #5b8de0;
+}
+
+/* Display typography — section headings, hero name, project titles */
+[data-skin="glass"] .section-heading-construct,
+[data-skin="glass"] h1,
+[data-skin="glass"] .project-card__title {
+  font-family: var(--modern-display);
+  letter-spacing: -0.02em;
+}
+
+/* Mono micro-labels — nav, tags, dates, eyebrow text */
+[data-skin="glass"] .nav-link-construct,
+[data-skin="glass"] .project-card__tag,
+[data-skin="glass"] .construct-chip {
+  font-family: var(--modern-mono);
+}
+
+/* ---- Modern skin: project focus list ---- */
+.focus-list {
+  max-width: 58rem;
+  margin: 0 auto;
+  border-top: 1px solid var(--construct-line);
+}
+
+.focus-row {
+  position: relative;
+  border-bottom: 1px solid var(--construct-line);
+  transition: opacity 360ms ease, filter 360ms ease;
+}
+
+.focus-row.is-dimmed {
+  opacity: 0.32;
+  filter: grayscale(0.4);
+}
+
+.focus-row__head {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  padding: 1.4rem 0.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--construct-text);
+  text-align: left;
+}
+
+.focus-row__no {
+  font-family: var(--modern-mono);
+  font-size: 0.85rem;
+  color: var(--construct-muted);
+}
+
+.focus-row__title {
+  flex: 1;
+  font-family: var(--modern-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1), color 300ms ease;
+}
+
+.focus-row:not(.is-dimmed):hover .focus-row__title {
+  transform: translateX(0.75rem);
+  color: var(--construct-gold-strong);
+}
+
+.focus-row__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--construct-line);
+  border-radius: 999px;
+  color: var(--construct-muted);
+  transition: border-color 300ms ease, color 300ms ease;
+}
+
+.focus-row:hover .focus-row__icon {
+  border-color: var(--construct-gold-strong);
+  color: var(--construct-gold-strong);
+}
+
+.focus-row__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0 0.25rem 1.1rem 3.6rem;
+  margin: -0.4rem 0 0;
+}
+
+.focus-row__tag {
+  font-family: var(--modern-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--construct-line);
+  border-radius: 0.25rem;
+  color: var(--construct-muted);
+}
+
+/* Floating thumbnail follows the hovered row (desktop) */
+.focus-row__thumb {
+  position: absolute;
+  top: 50%;
+  right: 4rem;
+  width: 13rem;
+  height: 8rem;
+  object-fit: cover;
+  border-radius: 0.4rem;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-50%) scale(0.9) rotate(-3deg);
+  transition: opacity 320ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+  z-index: 2;
+}
+
+.focus-row:not(.is-dimmed):not(.is-open):hover .focus-row__thumb {
+  opacity: 1;
+  transform: translateY(-50%) scale(1) rotate(-2deg);
+}
+
+/* Expandable detail */
+.focus-row__detail {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.focus-row__desc {
+  padding: 0 0.25rem 1.2rem 3.6rem;
+  max-width: 42rem;
+  color: var(--construct-muted);
+  line-height: 1.7;
+}
+
+.focus-row__media {
+  position: relative;
+  margin: 0 0.25rem 1.6rem 3.6rem;
+  aspect-ratio: 16 / 9;
+  max-width: 44rem;
+  overflow: hidden;
+  border-radius: 0.4rem;
+  border: 1px solid var(--construct-line);
+}
+
+.focus-row__media-img {
+  margin: 0 0.25rem 1.6rem 3.6rem;
+  max-width: 44rem;
+  width: calc(100% - 3.85rem);
+  border-radius: 0.4rem;
+  border: 1px solid var(--construct-line);
+}
+
+.focus-row__hint {
+  position: absolute;
+  bottom: 0.6rem;
+  right: 0.7rem;
+  font-family: var(--modern-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.55rem;
+  border-radius: 0.25rem;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .focus-row__thumb { display: none; }
+  .focus-row__title { font-size: 1.5rem; }
+  .focus-row__tags,
+  .focus-row__desc { padding-left: 0.25rem; }
+  .focus-row__media,
+  .focus-row__media-img { margin-left: 0.25rem; width: auto; }
+}
+
+/* ============================================================
+   MODERN SKIN — everything stays centred EXCEPT the project list,
+   whose rows zigzag left / right for an asymmetric rhythm.
+   Literary skin is untouched. Desktop only; mobile = single column.
+   ============================================================ */
+@media (min-width: 1024px) {
+  /* Widen the list so the left/right stagger has room to read */
+  [data-skin="glass"] .focus-list {
+    max-width: 64rem;
+  }
+
+  /* Each row takes ~80% width and alternates which side it hugs */
+  [data-skin="glass"] .focus-row {
+    width: 80%;
+    transition: opacity 360ms ease, filter 360ms ease, transform 360ms ease;
+  }
+
+  [data-skin="glass"] .focus-row:nth-child(odd) {
+    margin-right: auto;
+  }
+
+  [data-skin="glass"] .focus-row:nth-child(even) {
+    margin-left: auto;
+  }
+}
+
+
+/* ---- Modern skin: nav "+" prefix (designer micro-detail) ---- */
+[data-skin="glass"] .nav-link-construct::before {
+  content: "+ ";
+  color: var(--construct-gold-strong);
+  font-family: var(--modern-mono);
+}
+
+/* ---- Modern skin: skills keyword marquee ---- */
+.skills-marquee {
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  border-top: 1px solid var(--construct-line);
+  border-bottom: 1px solid var(--construct-line);
+  padding: 0.7rem 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.skills-marquee__track {
+  display: inline-flex;
+  gap: 2.5rem;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marqueeScroll 24s linear infinite;
+}
+
+.skills-marquee__item {
+  font-family: var(--modern-mono);
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--construct-muted);
+}
+
+.skills-marquee__item::after {
+  content: "✦";
+  margin-left: 2.5rem;
+  color: var(--construct-gold-strong);
+}
+
+@keyframes marqueeScroll {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skills-marquee__track { animation: none; }
+}
+
+
+
+
+
+
 
 
 
