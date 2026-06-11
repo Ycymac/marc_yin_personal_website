@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "serve": "vite --host 0.0.0.0",
+    "fetch:blog": "node scripts/fetch-csdn-blog.mjs",
+    "prebuild": "node scripts/fetch-csdn-blog.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

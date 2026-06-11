@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - master
+  # Re-fetch CSDN blog data and redeploy daily (07:17 UTC ≈ 15:17 Beijing).
+  # The build's prebuild hook pulls fresh stats/articles each run.
+  schedule:
+    - cron: "17 7 * * *"
+  # Allow manual "Run workflow" from the Actions tab.
+  workflow_dispatch:
 
 permissions:
   contents: read
