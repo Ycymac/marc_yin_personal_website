@@ -840,19 +840,31 @@ body {
 }
 
 /* ============================================================
-   MODERN SKIN (glass) — three-font system + navy accent.
+   MODERN SKIN (glass) — three-font system + Klein Blue accent.
    Display = Space Grotesk, micro-labels/mono = Space Mono,
-   body stays Inter. Gold retired in favour of deep navy.
+   body stays Inter. Swiss/Carbon language: IKB #002FA7 is the
+   single accent; marble white (light) / near-black (dark) base.
    Scoped to [data-skin="glass"] so literary is untouched.
    ============================================================ */
 :root[data-skin="glass"] {
-  --construct-gold: #1b3a6b;
-  --construct-gold-strong: #2c5599;
+  --construct-gold: #002fa7;        /* Klein Blue (IKB) */
+  --construct-gold-strong: #002fa7;
+  --klein: #002fa7;
+  --klein-bright: #5b7bff;          /* on dark: brightened IKB */
+  --klein-on: #ffffff;              /* text on a Klein-filled surface */
+  --marble: #fafaf8;                /* high-grey white base */
+  --particle: rgba(0, 47, 167, 0.55);  /* ASCII field on light = blue-ish */
+  --particle-accent: rgba(0, 47, 167, 0.55);
 }
 
 :root[data-skin="glass"].dark {
-  --construct-gold: #3a6bb5;
-  --construct-gold-strong: #5b8de0;
+  --construct-gold: #5b7bff;
+  --construct-gold-strong: #5b7bff;
+  --klein: #5b7bff;
+  --klein-bright: #5b7bff;
+  --klein-on: #ffffff;
+  --particle: rgba(91, 123, 255, 0.6);        /* dark = all Klein blue */
+  --particle-accent: rgba(123, 150, 255, 0.72); /* slightly brighter blue dots */
 }
 
 /* Display typography — section headings, hero name, project titles */
@@ -868,6 +880,97 @@ body {
 [data-skin="glass"] .project-card__tag,
 [data-skin="glass"] .construct-chip {
   font-family: var(--modern-mono);
+}
+
+/* Swiss base surfaces — marble white (light) / near-black (dark) */
+[data-skin="glass"] .site-shell {
+  background: var(--marble);
+}
+
+.dark[data-skin="glass"] .site-shell,
+[data-skin="glass"] .dark .site-shell {
+  background: #0a0a0b;
+}
+
+/* ASCII breathing field — blend per theme so it sits in the surface */
+[data-skin="glass"] .ascii-field {
+  mix-blend-mode: multiply;
+  opacity: 0.9;
+}
+
+.dark[data-skin="glass"] .ascii-field,
+[data-skin="glass"] .dark .ascii-field {
+  mix-blend-mode: screen;
+  opacity: 0.55;
+}
+
+/* Quiet the legacy veil/mesh/grid in glass so the field dominates */
+[data-skin="glass"] .ambient-background__mesh {
+  display: none;
+}
+
+[data-skin="glass"] .ambient-background__veil {
+  background: none;
+}
+
+[data-skin="glass"] .ambient-background__grid {
+  opacity: 0.08;
+  animation: none;
+}
+
+/* ---- Glass: lighter display weights + italic accent (Swiss feel) ---- */
+[data-skin="glass"] h1,
+[data-skin="glass"] .section-heading-construct {
+  font-weight: 300;
+}
+
+/* Hero name second word + typed role lean into italic for emphasis */
+[data-skin="glass"] #home h1 {
+  font-style: italic;
+  font-weight: 300;
+}
+
+[data-skin="glass"] #name {
+  font-style: italic;
+}
+
+/* ---- Glass: avatar orbit → Swiss geometric ring ---- */
+[data-skin="glass"] .profile-orbit {
+  background: none;
+  border: 1px solid var(--construct-line);
+  border-radius: 50%;
+  filter: none;
+  opacity: 1;
+  animation: orbitSpin 38s linear infinite;
+}
+
+[data-skin="glass"] .profile-orbit::after {
+  content: "";
+  background:
+    radial-gradient(var(--klein) 1px, transparent 1.4px) 0 0 / 11px 11px;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+/* Klein crosshair ticks around the ring */
+[data-skin="glass"] .profile-orbit::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  background:
+    linear-gradient(var(--klein), var(--klein)) 50% 0 / 1px 10px no-repeat,
+    linear-gradient(var(--klein), var(--klein)) 50% 100% / 1px 10px no-repeat,
+    linear-gradient(var(--klein), var(--klein)) 0 50% / 10px 1px no-repeat,
+    linear-gradient(var(--klein), var(--klein)) 100% 50% / 10px 1px no-repeat;
+  opacity: 0.85;
+}
+
+/* Windows 雅黑 lacks ExtraLight 200/300 — nudge weight so it doesn't snap to 400 */
+body.is-win [data-skin="glass"] h1,
+body.is-win [data-skin="glass"] .section-heading-construct {
+  font-weight: 400;
+  letter-spacing: -0.02em;
 }
 
 /* ---- Modern skin: project focus list ---- */
@@ -1065,9 +1168,21 @@ body {
 
 /* ---- Modern skin: nav "+" prefix (designer micro-detail) ---- */
 [data-skin="glass"] .nav-link-construct::before {
-  content: "+ ";
+  content: "+";
+  margin-right: 0.2em;
   color: var(--construct-gold-strong);
   font-family: var(--modern-mono);
+}
+
+/* Mono is wide — tighten glass nav so 6 English labels + "+" fit the bar.
+   English only: Chinese labels are compact and keep the original width. */
+/* English labels keep their original size; only the bar widens with
+   comfortable padding so the mono "+" labels aren't cramped.
+   Chinese keeps the original 36rem width untouched. */
+@media (min-width: 640px) {
+  [data-skin="glass"]:lang(en) .site-nav-construct {
+    width: 46rem;
+  }
 }
 
 /* ---- Modern skin: skills keyword marquee ---- */

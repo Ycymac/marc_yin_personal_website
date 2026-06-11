@@ -4,6 +4,7 @@
       <div class="ambient-background__veil" />
       <div class="ambient-background__mesh" />
       <div class="ambient-background__grid" />
+      <AsciiField v-if="skin === 'glass'" />
     </div>
 
     <Header
@@ -49,11 +50,12 @@ import WidgetWrapper from "@/components/WidgetWrapper.vue"
 import ThemeSwitch from "@/components/ThemeSwitch.vue"
 import SkinSwitch from "@/components/SkinSwitch.vue"
 import LanguageSwitch from "@/components/LanguageSwitch.vue"
+import AsciiField from "@/components/AsciiField.vue"
 
 const activeSection = ref("Home")
 const timeOfLastClick = ref(0)
 const theme = ref("dark")
-const skin = ref("literary")
+const skin = ref("glass")
 const { locale } = useI18n()
 
 // Expose the active skin so sections can branch their layout (modern vs literary).
@@ -115,10 +117,14 @@ function toggleLocale() {
 }
 
 onMounted(() => {
+  // Windows 雅黑 lacks ExtraLight — flag for weight compensation in CSS.
+  if (/Win/i.test(navigator.platform || navigator.userAgent || "")) {
+    document.body.classList.add("is-win")
+  }
   const savedTheme = window.localStorage.getItem("theme")
   applyTheme(savedTheme || "dark")
   const savedSkin = window.localStorage.getItem("skin")
-  applySkin(savedSkin || "literary")
+  applySkin(savedSkin || "glass")
   setDocumentLocale(locale.value)
 })
 

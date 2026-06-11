@@ -192,4 +192,5 @@ export const skillsData = [
   "RAG",
   "AI",
   "Codex",
+  "Claude Code",
 ]
