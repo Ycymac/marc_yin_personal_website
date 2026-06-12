@@ -1185,6 +1185,19 @@ body.is-win [data-skin="glass"] .section-heading-construct {
   }
 }
 
+/* Glass: primary button (e.g. CSDN "Open Blog") — Klein blue, no gold */
+[data-skin="glass"] .construct-button {
+  border: 1px solid var(--klein);
+  background: var(--klein);
+  color: var(--klein-on);
+  box-shadow: none;
+}
+
+[data-skin="glass"] .construct-button:hover {
+  background: transparent;
+  color: var(--klein);
+}
+
 /* ---- Modern skin: skills keyword marquee ---- */
 .skills-marquee {
   position: relative;
