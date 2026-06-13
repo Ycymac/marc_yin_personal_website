@@ -892,16 +892,16 @@ body {
   background: #0a0a0b;
 }
 
-/* ASCII breathing field — blend per theme so it sits in the surface */
+/* ASCII pixel field — multi-colour sprites render true on normal blend */
 [data-skin="glass"] .ascii-field {
-  mix-blend-mode: multiply;
-  opacity: 0.9;
+  mix-blend-mode: normal;
+  opacity: 0.55;
 }
 
 .dark[data-skin="glass"] .ascii-field,
 [data-skin="glass"] .dark .ascii-field {
-  mix-blend-mode: screen;
-  opacity: 0.55;
+  mix-blend-mode: normal;
+  opacity: 0.72;
 }
 
 /* Quiet the legacy veil/mesh/grid in glass so the field dominates */
