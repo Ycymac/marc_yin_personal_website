@@ -452,16 +452,6 @@ export function useAsciiField() {
     return 0.18 + 0.82 * v
   }
 
-  function errorFlicker(seed, t) {
-    const gate = Math.sin(t * (2.8 + seed * 0.09) + seed * 2.1)
-    const spark = Math.sin(t * (24 + seed * 0.55) + seed * 4.7)
-    const micro = Math.sin(t * (41 + seed * 0.8) + seed * 0.6)
-    if (gate < 0.88) return 0
-    const burst = Math.pow((gate - 0.88) / 0.12, 3.2)
-    const crackle = Math.max(0, spark * 0.72 + micro * 0.28)
-    return Math.min(0.42, burst * (0.08 + crackle * 0.34))
-  }
-
   function hoverErrorFlicker(seed, t) {
     const pulse = Math.sin(t * (38 + seed * 0.6) + seed * 3.2) * 0.5 + 0.5
     const scan = Math.sin(t * (12 + seed * 0.23) + seed * 1.1) * 0.5 + 0.5
@@ -476,7 +466,6 @@ export function useAsciiField() {
       // Stagger by index so neighbouring terms breathe out of phase.
       const isHovered = hoveredTerm === i
       const glow = Math.min(1, wordBreath(i * 2 + 1, t) + (isHovered ? 0.18 : 0))
-      const glitch = reduced ? 0 : errorFlicker(i * 3 + 2, t)
       const hoverGlitch = isHovered && !reduced ? hoverErrorFlicker(i * 5 + 7, t) : 0
       drawLayeredWord(
         term.text,
@@ -487,7 +476,7 @@ export function useAsciiField() {
         glow,
         i + t,
         darkMode,
-        Math.max(glitch, hoverGlitch),
+        hoverGlitch,
       )
     })
     CRABS.forEach((crab, i) => {
