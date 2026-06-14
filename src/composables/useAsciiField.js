@@ -118,6 +118,8 @@ export function useAsciiField() {
   let t0 = 0
   let running = false
   let reduced = false
+  let hoveredTerm = -1
+  const pointer = { active: false, x: -1, y: -1 }
 
   function setup() {
     const c = canvas.value
@@ -166,6 +168,65 @@ export function useAsciiField() {
     return rows
   }
 
+  function glyphUnits(block) {
+    return {
+      unitX: Math.max(2, Math.round(block * 0.78)),
+      unitY: Math.max(2, Math.round(block * 0.62)),
+    }
+  }
+
+  function measureWord(text, block) {
+    const { unitX, unitY } = glyphUnits(block)
+    let width = 0
+    let height = 0
+
+    for (const ch of text) {
+      if (ch === " ") {
+        width += Math.max(8, Math.round(block * 4.8))
+        continue
+      }
+      const rows = chunkyGlyph(ch)
+      width += rows[0].length * unitX + Math.max(2, Math.round(unitX * 1.7))
+      height = Math.max(height, rows.length * unitY)
+    }
+
+    return { width, height }
+  }
+
+  function termBounds(term) {
+    const x = term.x * w
+    const y = term.y * h
+    const { width, height } = measureWord(term.text, term.size)
+    const margin = Math.max(8, Math.round(term.size * 2.4))
+    return {
+      left: x - margin,
+      top: y - margin,
+      right: x + width + margin,
+      bottom: y + height + margin,
+    }
+  }
+
+  function findHoveredTerm() {
+    if (!pointer.active) return -1
+    for (let i = TERMS.length - 1; i >= 0; i--) {
+      const b = termBounds(TERMS[i])
+      if (
+        pointer.x >= b.left &&
+        pointer.x <= b.right &&
+        pointer.y >= b.top &&
+        pointer.y <= b.bottom
+      ) {
+        return i
+      }
+    }
+    return -1
+  }
+
+  function updateHoveredTerm() {
+    hoveredTerm = findHoveredTerm()
+    if (reduced) draw(0)
+  }
+
   function fillMask(rows, x0, y0, unitX, unitY, rgb, alpha, expand = 0, offsetX = 0, offsetY = 0) {
     ctx.fillStyle = `rgba(${rgb},${alpha.toFixed(3)})`
     for (let y = 0; y < rows.length; y++) {
@@ -177,6 +238,23 @@ export function useAsciiField() {
           Math.round(y0 + offsetY + y * unitY - expand),
           Math.ceil(unitX + expand * 2),
           Math.ceil(unitY + expand * 2),
+        )
+      }
+    }
+  }
+
+  function fillMaskRows(rows, x0, y0, unitX, unitY, rgb, alpha, offsetX, offsetY, shouldDrawRow) {
+    ctx.fillStyle = `rgba(${rgb},${alpha.toFixed(3)})`
+    for (let y = 0; y < rows.length; y++) {
+      if (!shouldDrawRow(y)) continue
+      const row = rows[y]
+      for (let x = 0; x < row.length; x++) {
+        if (row[x] !== "1") continue
+        ctx.fillRect(
+          Math.round(x0 + offsetX + x * unitX),
+          Math.round(y0 + offsetY + y * unitY),
+          Math.ceil(unitX + 0.25),
+          Math.ceil(unitY + 0.25),
         )
       }
     }
@@ -234,10 +312,62 @@ export function useAsciiField() {
     }
   }
 
-  function drawLayeredGlyph(ch, px, py, block, rgb, glow, seed, darkMode) {
+  function drawErrorGlitch(rows, x0, y0, unitX, unitY, rgb, intensity, seed, darkMode) {
+    if (intensity <= 0.04) return
+
+    const flash = darkMode ? "248,251,255" : "255,255,255"
+    const cyan = darkMode ? "104,222,255" : "0,94,255"
+    const magenta = darkMode ? "255,139,224" : "217,48,132"
+    const bodyFlash = mixRgb(rgb, flash, 0.72)
+    const rowA = Math.abs(Math.floor(seed * 13)) % rows.length
+    const rowB = (rowA + 4 + Math.floor(seed * 3)) % rows.length
+    const rowC = (rowA + 9) % rows.length
+    const split = Math.max(1, Math.round(unitX * (0.7 + intensity * 1.25)))
+    const jump = Math.max(1, Math.round(unitY * 0.45))
+
+    fillMask(rows, x0, y0, unitX, unitY, bodyFlash, 0.12 + intensity * 0.38, 0)
+
+    fillMaskRows(
+      rows,
+      x0,
+      y0,
+      unitX,
+      unitY,
+      cyan,
+      0.28 + intensity * 0.34,
+      -split,
+      -jump,
+      (y) => y === rowA || y === rowA + 1 || (y + rowA) % 7 === 0,
+    )
+    fillMaskRows(
+      rows,
+      x0,
+      y0,
+      unitX,
+      unitY,
+      magenta,
+      0.24 + intensity * 0.3,
+      split,
+      jump,
+      (y) => y === rowB || y === rowC || (y + rowB) % 9 === 0,
+    )
+    fillMaskRows(
+      rows,
+      x0,
+      y0,
+      unitX,
+      unitY,
+      flash,
+      0.18 + intensity * 0.42,
+      Math.round(split * 0.55),
+      0,
+      (y) => y === rowA || y === rowB || y === rowC,
+    )
+  }
+
+  function drawLayeredGlyph(ch, px, py, block, rgb, glow, seed, darkMode, glitch) {
     const rows = chunkyGlyph(ch)
-    const unitX = Math.max(2, Math.round(block * 0.78))
-    const unitY = Math.max(2, Math.round(block * 0.62))
+    const { unitX, unitY } = glyphUnits(block)
     const x0 = Math.round(px)
     const y0 = Math.round(py)
     const pulse = 0.9 + 0.1 * Math.sin(seed * 1.9 + glow * Math.PI * 2)
@@ -252,11 +382,12 @@ export function useAsciiField() {
     fillMask(rows, x0, y0, unitX, unitY, "0,0,0", 0.72 * glow, outline)
     fillGlyphBody(rows, x0, y0, unitX, unitY, rgb, glow, pulse)
     drawGlyphInline(rows, x0, y0, unitX, unitY, 0.24 + 0.28 * glow)
+    drawErrorGlitch(rows, x0, y0, unitX, unitY, rgb, glitch, seed, darkMode)
 
     return rows[0].length * unitX + Math.max(2, Math.round(unitX * 1.7))
   }
 
-  function drawLayeredWord(text, px, py, block, rgb, glow, seed, darkMode) {
+  function drawLayeredWord(text, px, py, block, rgb, glow, seed, darkMode, glitch) {
     let cx = Math.round(px)
     const y0 = Math.round(py)
     for (let i = 0; i < text.length; i++) {
@@ -265,7 +396,7 @@ export function useAsciiField() {
         cx += Math.max(8, Math.round(block * 4.8))
         continue
       }
-      cx += drawLayeredGlyph(ch, cx, y0, block, rgb, glow, seed + i, darkMode)
+      cx += drawLayeredGlyph(ch, cx, y0, block, rgb, glow, seed + i, darkMode, glitch)
     }
   }
 
@@ -321,14 +452,43 @@ export function useAsciiField() {
     return 0.18 + 0.82 * v
   }
 
+  function errorFlicker(seed, t) {
+    const gate = Math.sin(t * (2.8 + seed * 0.09) + seed * 2.1)
+    const spark = Math.sin(t * (24 + seed * 0.55) + seed * 4.7)
+    const micro = Math.sin(t * (41 + seed * 0.8) + seed * 0.6)
+    if (gate < 0.88) return 0
+    const burst = Math.pow((gate - 0.88) / 0.12, 3.2)
+    const crackle = Math.max(0, spark * 0.72 + micro * 0.28)
+    return Math.min(0.42, burst * (0.08 + crackle * 0.34))
+  }
+
+  function hoverErrorFlicker(seed, t) {
+    const pulse = Math.sin(t * (38 + seed * 0.6) + seed * 3.2) * 0.5 + 0.5
+    const scan = Math.sin(t * (12 + seed * 0.23) + seed * 1.1) * 0.5 + 0.5
+    return Math.min(1, 0.5 + Math.max(pulse, scan) * 0.5)
+  }
+
   function draw(t) {
     if (!ctx) return
     ctx.clearRect(0, 0, w, h)
     const darkMode = document.documentElement.classList.contains("dark")
     TERMS.forEach((term, i) => {
       // Stagger by index so neighbouring terms breathe out of phase.
-      const glow = wordBreath(i * 2 + 1, t)
-      drawLayeredWord(term.text, term.x * w, term.y * h, term.size, term.color, glow, i + t, darkMode)
+      const isHovered = hoveredTerm === i
+      const glow = Math.min(1, wordBreath(i * 2 + 1, t) + (isHovered ? 0.18 : 0))
+      const glitch = reduced ? 0 : errorFlicker(i * 3 + 2, t)
+      const hoverGlitch = isHovered && !reduced ? hoverErrorFlicker(i * 5 + 7, t) : 0
+      drawLayeredWord(
+        term.text,
+        term.x * w,
+        term.y * h,
+        term.size,
+        term.color,
+        glow,
+        i + t,
+        darkMode,
+        Math.max(glitch, hoverGlitch),
+      )
     })
     CRABS.forEach((crab, i) => {
       const glow = firefly(i + 13, t)
@@ -367,17 +527,43 @@ export function useAsciiField() {
 
   function onResize() {
     setup()
+    updateHoveredTerm()
+    if (reduced) draw(0)
+  }
+
+  function onPointerMove(event) {
+    const rect = canvas.value?.getBoundingClientRect()
+    if (!rect) return
+    pointer.x = event.clientX - rect.left
+    pointer.y = event.clientY - rect.top
+    pointer.active =
+      pointer.x >= 0 &&
+      pointer.x <= rect.width &&
+      pointer.y >= 0 &&
+      pointer.y <= rect.height
+    updateHoveredTerm()
+  }
+
+  function onPointerLeave() {
+    pointer.active = false
+    hoveredTerm = -1
     if (reduced) draw(0)
   }
 
   onMounted(() => {
     reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     window.addEventListener("resize", onResize, { passive: true })
+    window.addEventListener("pointermove", onPointerMove, { passive: true })
+    window.addEventListener("blur", onPointerLeave)
+    document.addEventListener("pointerleave", onPointerLeave)
     start()
   })
 
   onBeforeUnmount(() => {
     window.removeEventListener("resize", onResize)
+    window.removeEventListener("pointermove", onPointerMove)
+    window.removeEventListener("blur", onPointerLeave)
+    document.removeEventListener("pointerleave", onPointerLeave)
     stop()
   })
 
