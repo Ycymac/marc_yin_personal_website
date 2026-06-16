@@ -4,7 +4,6 @@
       <div class="ambient-background__veil" />
       <div class="ambient-background__mesh" />
       <div class="ambient-background__grid" />
-      <AsciiField v-if="skin === 'glass'" />
     </div>
 
     <Header
@@ -12,6 +11,8 @@
       :locale="locale"
       @navigate="handleNavigate"
     />
+
+    <HelloIntro />
 
     <main class="relative z-10 flex flex-col items-center justify-center overflow-x-hidden px-4">
       <Intro :on-visible="handleSectionVisible" />
@@ -46,11 +47,11 @@ import BlogPreview from "@/components/BlogPreview.vue"
 import Skills from "@/components/Skills.vue"
 import Experience from "@/components/Experience.vue"
 import Footer from "@/components/Footer.vue"
+import HelloIntro from "@/components/HelloIntro.vue"
 import WidgetWrapper from "@/components/WidgetWrapper.vue"
 import ThemeSwitch from "@/components/ThemeSwitch.vue"
 import SkinSwitch from "@/components/SkinSwitch.vue"
 import LanguageSwitch from "@/components/LanguageSwitch.vue"
-import AsciiField from "@/components/AsciiField.vue"
 
 const activeSection = ref("Home")
 const timeOfLastClick = ref(0)

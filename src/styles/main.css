@@ -881,6 +881,7 @@ body {
   --klein-bright: #5b7bff;          /* on dark: brightened IKB */
   --klein-on: #ffffff;              /* text on a Klein-filled surface */
   --marble: #fafaf8;                /* high-grey white base */
+  --apple-card: #f2f2f4;            /* solid card, a touch off the page */
   --particle: rgba(0, 47, 167, 0.55);  /* ASCII field on light = blue-ish */
   --particle-accent: rgba(0, 47, 167, 0.55);
 }
@@ -891,6 +892,7 @@ body {
   --klein: #5b7bff;
   --klein-bright: #5b7bff;
   --klein-on: #ffffff;
+  --apple-card: #1c1c1e;            /* solid card, a touch above near-black */
   --particle: rgba(91, 123, 255, 0.6);        /* dark = all Klein blue */
   --particle-accent: rgba(123, 150, 255, 0.72); /* slightly brighter blue dots */
 }
@@ -918,18 +920,6 @@ body {
 .dark[data-skin="glass"] .site-shell,
 [data-skin="glass"] .dark .site-shell {
   background: #0a0a0b;
-}
-
-/* ASCII pixel field — multi-colour sprites render true on normal blend */
-[data-skin="glass"] .ascii-field {
-  mix-blend-mode: normal;
-  opacity: 0.55;
-}
-
-.dark[data-skin="glass"] .ascii-field,
-[data-skin="glass"] .dark .ascii-field {
-  mix-blend-mode: normal;
-  opacity: 0.72;
 }
 
 /* Quiet the legacy veil/mesh/grid in glass so the field dominates */
@@ -1386,6 +1376,747 @@ body.is-win [data-skin="glass"] .section-heading-construct {
 @media (prefers-reduced-motion: reduce) {
   .skills-marquee__track { animation: none; }
 }
+
+/* ============================================================
+   HELLO STAGE — modern-skin entry block (Apple-style).
+   A NORMAL full-height section at the very top of the page: it
+   scrolls away like ordinary content, fully ABOVE and SEPARATE
+   from the hero (no overlay, never covers the avatar/intro).
+   Light mode: black hello on white; dark mode: white on black.
+   ============================================================ */
+.hello-stage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.dark .hello-stage {
+  background: #050507;
+}
+
+.hello-stage.is-gone {
+  display: none;
+}
+
+.hello-stage__art {
+  width: min(70vw, 38rem);
+  max-height: 60vh;
+  transform-origin: center;
+  /* Light mode: invert the white-stroke art to black-on-white. */
+  filter: invert(1);
+}
+
+.dark .hello-stage__art {
+  filter: none;
+}
+
+.hello-stage__art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hello-stage__hint {
+  position: absolute;
+  bottom: 2.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  color: rgba(15, 23, 42, 0.5);
+  font-family: var(--modern-mono, inherit);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.dark .hello-stage__hint {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.hello-stage__hint-arrow {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  animation: floatArrow 1.5s ease-in-out infinite;
+}
+
+/* Header stays hidden behind the hello stage, then springs in smoothly
+   once it clears — slight rise, scale and blur settle for a polished entry. */
+.site-header {
+  transition:
+    opacity 720ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 760ms cubic-bezier(0.34, 1.4, 0.5, 1),
+    filter 600ms ease;
+  will-change: opacity, transform;
+}
+.site-header.is-hidden {
+  opacity: 0;
+  transform: translateY(-1.4rem) scale(0.96);
+  filter: blur(6px);
+  pointer-events: none;
+}
+.site-header:not(.is-hidden) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header {
+    transition: opacity 200ms ease;
+  }
+  .site-header.is-hidden {
+    transform: none;
+    filter: none;
+  }
+}
+
+/* ============================================================
+   GLASS / APPLE MODULES — two-tone headings + low-contrast
+   rounded cards that settle into the page background.
+   ============================================================ */
+
+/* Two-tone heading: dark head fading into a Klein-tinted tail,
+   echoing Apple's "Get the highlights." treatment. */
+[data-skin="glass"] .section-heading-construct {
+  background-image: linear-gradient(
+    100deg,
+    var(--construct-text) 0%,
+    var(--construct-text) 42%,
+    color-mix(in srgb, var(--klein) 62%, var(--construct-muted)) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.02em;
+}
+
+/* Soften the underline accent so headings read calm/Apple-clean. */
+[data-skin="glass"] .section-heading-construct::after {
+  opacity: 0.4;
+}
+
+/* Modern italic hero name — replaces the pixel wordmark (clean, light,
+   slightly condensed; the one italic moment on the page). */
+.hero-name-modern {
+  font-family: var(--modern-display);
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: -0.03em;
+}
+body.is-win .hero-name-modern {
+  font-weight: 600;
+}
+
+/* Hero content eases in with the curtain lift (driven by inline style). */
+.hero-stage-content {
+  transition: opacity 360ms ease, transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+/* Apple-style module: distinguished by a solid surface tone (not glass),
+   no border, small radius, whisper-soft shadow. */
+[data-skin="glass"] .construct-panel {
+  border: none;
+  border-radius: 0.85rem;
+  background: var(--apple-card);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.dark[data-skin="glass"] .construct-panel,
+[data-skin="glass"] .dark .construct-panel {
+  background: var(--apple-card);
+  box-shadow: none;
+}
+
+/* Drop the gold hairline highlight in glass — Apple modules are plain. */
+[data-skin="glass"] .construct-panel::after {
+  display: none;
+}
+
+/* ---- Reduce glassmorphism in the modern skin (flat Apple surfaces) ---- */
+/* Nav bar: trade heavy blur + gradient sheen for a light, near-solid bar. */
+[data-skin="glass"] .site-nav-construct {
+  background: color-mix(in srgb, var(--marble) 82%, transparent);
+  border-color: color-mix(in srgb, var(--construct-line) 55%, transparent);
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.07);
+  backdrop-filter: saturate(118%) blur(8px);
+  -webkit-backdrop-filter: saturate(118%) blur(8px);
+}
+
+.dark[data-skin="glass"] .site-nav-construct,
+[data-skin="glass"] .dark .site-nav-construct {
+  background: rgba(20, 20, 22, 0.72);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.34);
+}
+
+/* Skill chips: flat tinted pills, no blur/sheen. */
+[data-skin="glass"] .construct-chip {
+  background: color-mix(in srgb, var(--construct-line) 30%, transparent);
+  border-color: color-mix(in srgb, var(--construct-line) 45%, transparent);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.dark[data-skin="glass"] .construct-chip,
+[data-skin="glass"] .dark .construct-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Small-radius for the modern skin's general cards. */
+[data-skin="glass"] .rounded-xl {
+  border-radius: 0.85rem;
+}
+
+/* Focus-list hover surface → soft, near-bg Apple card (low contrast). */
+[data-skin="glass"] .focus-row::before {
+  border-color: color-mix(in srgb, var(--construct-line) 55%, transparent);
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--marble) 88%, var(--klein) 3%);
+  box-shadow: 0 20px 64px rgba(15, 23, 42, 0.07);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.dark[data-skin="glass"] .focus-row::before,
+[data-skin="glass"] .dark .focus-row::before {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 64px rgba(0, 0, 0, 0.34);
+}
+
+/* ============================================================
+   TIMELINE — scroll-driven reveal (side slide, node pop,
+   date fade) + a centre line that draws as you scroll.
+   Scoped to the modern skin so literary keeps its prior reveal.
+   ============================================================ */
+
+/* Side-aware entrance: panels slide in from their own column. */
+[data-skin="glass"] .tl-panel {
+  transition:
+    opacity 700ms ease,
+    transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-skin="glass"] .tl-panel.tl-from-left:not(.is-visible) {
+  transform: translateX(-2.4rem) translateY(2rem);
+}
+[data-skin="glass"] .tl-panel.tl-from-right:not(.is-visible) {
+  transform: translateX(2.4rem) translateY(2rem);
+}
+[data-skin="glass"] .tl-panel.is-visible {
+  transform: translateX(0) translateY(0);
+}
+
+/* Node pops in with a small overshoot once its row is visible. */
+[data-skin="glass"] .tl-node {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.4);
+  transition:
+    opacity 420ms ease,
+    transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: 160ms;
+}
+[data-skin="glass"] .tl-node.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+/* Date label fades up alongside the panel. */
+[data-skin="glass"] .tl-date {
+  opacity: 0;
+  transform: translateY(0.6rem);
+  transition: opacity 520ms ease, transform 520ms ease;
+  transition-delay: 240ms;
+}
+[data-skin="glass"] .tl-date.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* The drawn progress line overlays the static guide line (glass only). */
+.timeline-line-progress {
+  display: none;
+}
+
+[data-skin="glass"] .timeline-line-progress {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--construct-gold),
+    var(--construct-gold)
+  );
+  border-radius: 2px;
+  will-change: transform;
+}
+
+@media (min-width: 640px) {
+  [data-skin="glass"] .timeline-line-progress {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-skin="glass"] .tl-panel,
+  [data-skin="glass"] .tl-node,
+  [data-skin="glass"] .tl-date {
+    transition: none;
+  }
+  [data-skin="glass"] .timeline-line-progress {
+    display: none;
+  }
+}
+
+/* ============================================================
+   PROJECT SHOWCASE — Apple "Get the highlights" style.
+   Always-visible alternating text/media cards, no accordion.
+   ============================================================ */
+.showcase {
+  max-width: 60rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4.5rem;
+}
+
+.showcase-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 3rem;
+}
+
+.showcase-card.is-reversed .showcase-card__copy {
+  order: 2;
+}
+
+@media (max-width: 768px) {
+  .showcase {
+    gap: 3rem;
+  }
+  .showcase-card {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .showcase-card.is-reversed .showcase-card__copy {
+    order: 0;
+  }
+}
+
+.showcase-card__copy {
+  text-align: left;
+}
+
+.showcase-card__eyebrow {
+  font-family: var(--modern-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--construct-gold);
+}
+
+.showcase-card__title {
+  margin-top: 0.6rem;
+  font-family: var(--modern-display);
+  font-size: 1.7rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--construct-text);
+}
+
+.showcase-card__desc {
+  margin-top: 0.9rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--construct-muted);
+}
+
+.showcase-card__tags {
+  margin-top: 1.1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.showcase-card__tag {
+  font-family: var(--modern-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.32rem 0.7rem;
+  border-radius: 0.5rem;
+  color: var(--construct-muted);
+  background: color-mix(in srgb, var(--construct-line) 38%, transparent);
+}
+
+.showcase-card__media {
+  position: relative;
+  border-radius: 0.85rem;
+  overflow: hidden;
+  background: var(--apple-card);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  aspect-ratio: 16 / 11;
+}
+
+.dark[data-skin="glass"] .showcase-card__media,
+[data-skin="glass"] .dark .showcase-card__media {
+  background: var(--apple-card);
+  box-shadow: none;
+}
+
+.showcase-card__img,
+.showcase-card__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.showcase-card__expand {
+  position: absolute;
+  right: 0.7rem;
+  bottom: 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.5rem;
+  font-family: var(--modern-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(10, 12, 20, 0.55);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: background 200ms ease, transform 200ms ease;
+}
+
+.showcase-card__expand:hover {
+  background: rgba(10, 12, 20, 0.78);
+  transform: translateY(-1px);
+}
+
+.showcase-card__expand:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* ---- Showcase carousel (RAG demo ⇄ video) ---- */
+.showcase-card__media--carousel {
+  aspect-ratio: auto;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.showcase-carousel {
+  position: relative;
+  border-radius: 0.85rem;
+  overflow: hidden;
+  background: var(--apple-card);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  aspect-ratio: 4 / 3;
+}
+
+.dark[data-skin="glass"] .showcase-carousel,
+[data-skin="glass"] .dark .showcase-carousel {
+  background: var(--apple-card);
+  box-shadow: none;
+}
+
+.showcase-carousel__slide {
+  position: absolute;
+  inset: 0;
+}
+
+.showcase-carousel__slide .showcase-card__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.showcase-carousel__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 999px;
+  color: var(--construct-text);
+  background: color-mix(in srgb, var(--marble) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--construct-line) 50%, transparent);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+  transition: background 200ms ease, transform 200ms ease;
+}
+.showcase-carousel__nav:hover {
+  background: var(--marble);
+  transform: translateY(-50%) scale(1.06);
+}
+.showcase-carousel__nav:focus-visible {
+  outline: 2px solid var(--klein);
+  outline-offset: 2px;
+}
+.showcase-carousel__nav--prev { left: 0.6rem; }
+.showcase-carousel__nav--next { right: 0.6rem; }
+
+.dark .showcase-carousel__nav {
+  color: #fff;
+  background: rgba(20, 20, 22, 0.7);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.dark .showcase-carousel__nav:hover {
+  background: rgba(30, 30, 34, 0.92);
+}
+
+.showcase-carousel__dots {
+  position: absolute;
+  left: 50%;
+  bottom: 0.7rem;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.4rem;
+}
+.showcase-carousel__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--construct-muted) 45%, transparent);
+  transition: background 200ms ease, transform 200ms ease;
+}
+.showcase-carousel__dot.is-active {
+  background: var(--klein);
+  transform: scale(1.2);
+}
+
+/* ============================================================
+   RAG CHAT DEMO — streamed Q&A (typewriter, markdown, themed).
+   ============================================================ */
+.rag-demo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  font-size: 0.82rem;
+}
+.dark .rag-demo {
+  background: #161618;
+  color: #e8e8ea;
+}
+
+.rag-demo__feed {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  scroll-behavior: smooth;
+}
+
+.rag-demo__row { display: flex; }
+.rag-demo__row--user { justify-content: flex-end; }
+.rag-demo__row--bot { justify-content: flex-start; }
+
+.rag-demo__bubble {
+  max-width: 78%;
+  padding: 0.55rem 0.85rem;
+  border-radius: 0.9rem 0.9rem 0.2rem 0.9rem;
+  background: var(--klein);
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.rag-demo__answer {
+  max-width: 92%;
+  line-height: 1.65;
+}
+
+.rag-demo__block { margin: 0 0 0.45rem; }
+.rag-demo__block--h3 {
+  margin-top: 0.7rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--klein);
+}
+.dark .rag-demo__block--h3 { color: var(--klein-bright, #5b7bff); }
+.rag-demo__block--li {
+  padding-left: 0.95rem;
+  position: relative;
+}
+.rag-demo__block--li::before {
+  content: "•";
+  position: absolute;
+  left: 0.1rem;
+  color: var(--construct-muted);
+}
+.rag-demo__block--quote {
+  margin-top: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid color-mix(in srgb, var(--klein) 60%, transparent);
+  background: color-mix(in srgb, var(--construct-line) 22%, transparent);
+  border-radius: 0.3rem;
+  font-size: 0.78rem;
+  color: var(--construct-muted);
+}
+.rag-demo__block code {
+  font-family: var(--modern-mono);
+  font-size: 0.78em;
+  padding: 0.05rem 0.3rem;
+  border-radius: 0.3rem;
+  background: color-mix(in srgb, var(--construct-line) 40%, transparent);
+}
+.dark .rag-demo__block code { background: rgba(255, 255, 255, 0.1); }
+
+.rag-demo__caret {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.95rem;
+  vertical-align: -0.15rem;
+  background: var(--klein);
+  border-radius: 1px;
+  animation: blinkCaret 1s steps(2) infinite;
+}
+@keyframes blinkCaret { 50% { opacity: 0; } }
+
+.rag-demo__replay {
+  position: absolute;
+  right: 0.7rem;
+  bottom: 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.5rem;
+  font-family: var(--modern-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--klein);
+  transition: transform 200ms ease, filter 200ms ease;
+}
+.rag-demo__replay:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.rag-demo__replay:focus-visible { outline: 2px solid var(--klein); outline-offset: 2px; }
+
+/* ---- Input bar (types the query, then sends) ---- */
+.rag-demo__inputbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0.8rem 0.8rem;
+  padding: 0.45rem 0.45rem 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid color-mix(in srgb, var(--construct-line) 55%, transparent);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+  flex: 0 0 auto;
+}
+.dark .rag-demo__inputbar {
+  background: #232325;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+
+.rag-demo__input {
+  position: relative;
+  flex: 1;
+  min-height: 1.1rem;
+  font-size: 0.82rem;
+  line-height: 1.3;
+  color: #1d1d1f;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.dark .rag-demo__input { color: #e8e8ea; }
+
+.rag-demo__placeholder { color: var(--construct-muted); }
+
+.rag-demo__caret--input {
+  height: 0.85rem;
+  width: 0.45rem;
+  vertical-align: -0.1rem;
+}
+
+.rag-demo__send {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--klein);
+  transition: transform 200ms ease, filter 200ms ease;
+}
+.rag-demo__send.is-armed {
+  transform: scale(0.86);
+  filter: brightness(1.15);
+}
+
+/* ---- Knowledge-base retrieval loading ---- */
+.rag-demo__retrieve {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.7rem;
+  font-size: 0.78rem;
+  color: var(--construct-muted);
+  background: color-mix(in srgb, var(--construct-line) 22%, transparent);
+}
+.dark .rag-demo__retrieve { background: rgba(255, 255, 255, 0.06); }
+
+.rag-demo__spinner {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--klein) 35%, transparent);
+  border-top-color: var(--klein);
+  animation: ragSpin 0.7s linear infinite;
+}
+@keyframes ragSpin { to { transform: rotate(1turn); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .rag-demo__caret { animation: none; }
+  .rag-demo__feed { scroll-behavior: auto; }
+  .rag-demo__spinner { animation: none; }
+}
+
+
+
+
+
+
 
 
 

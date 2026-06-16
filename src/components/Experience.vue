@@ -10,19 +10,24 @@
       {{ locale === "zh" ? headerLanguageMap.Experiences : "My Experiences" }}
     </SectionHeading>
 
-    <div class="relative hidden sm:block">
+    <div ref="timelineWrap" class="relative hidden sm:block">
       <span class="timeline-line" />
+      <span
+        class="timeline-line-progress"
+        :style="{ transform: `scaleY(${lineProgress})` }"
+      />
       <div
         v-for="(item, index) in shownExperiences"
         :key="`${item.title}-${item.date}`"
         class="relative mb-20 grid grid-cols-2 gap-16"
       >
         <div
-          class="motion-surface"
+          class="motion-surface tl-panel"
           :class="[
             visibleItems[index] ? 'is-visible' : '',
-            index % 2 === 0 ? 'col-start-1 text-left' : 'col-start-2 text-left',
+            index % 2 === 0 ? 'col-start-1 text-left tl-from-left' : 'col-start-2 text-left tl-from-right',
           ]"
+          :style="{ transitionDelay: visibleItems[index] ? '80ms' : '0ms' }"
           :ref="(el) => setItemRef(el, index)"
         >
           <article
@@ -56,7 +61,8 @@
         </div>
 
         <div
-          class="timeline-node-construct absolute left-1/2 top-5 flex h-12 w-12 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full text-xl"
+          class="timeline-node-construct tl-node absolute left-1/2 top-5 flex h-12 w-12 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full text-xl"
+          :class="{ 'is-visible': visibleItems[index] }"
         >
           <img
             v-if="item.iconUrl"
@@ -68,8 +74,11 @@
         </div>
 
         <div
-          class="absolute top-8 text-sm font-bold text-[var(--construct-muted)]"
-          :class="index % 2 === 0 ? 'left-[calc(50%+3rem)]' : 'right-[calc(50%+3rem)]'"
+          class="tl-date absolute top-8 text-sm font-bold text-[var(--construct-muted)]"
+          :class="[
+            visibleItems[index] ? 'is-visible' : '',
+            index % 2 === 0 ? 'left-[calc(50%+3rem)]' : 'right-[calc(50%+3rem)]',
+          ]"
         >
           {{ item.date }}
         </div>
@@ -140,7 +149,10 @@ const { locale } = useI18n()
 const sectionRef = useSectionObserver("Experiences", 0.1, props.onVisible)
 const itemRefs = ref([])
 const visibleItems = ref([])
+const lineProgress = ref(0)
+const timelineWrap = ref(null)
 let observer
+let ticking = false
 
 const shownExperiences = computed(() =>
   locale.value === "zh" ? experiencesDataZh : experiencesData,
@@ -155,6 +167,27 @@ function iconFor(icon) {
 
 function setItemRef(el, index) {
   if (el) itemRefs.value[index] = el
+}
+
+// Draw the centre line as the section scrolls through the viewport:
+// 0 when the timeline top hits the lower third, 1 once its bottom passes mid.
+function computeLineProgress() {
+  ticking = false
+  const wrap = timelineWrap.value
+  if (!wrap) return
+  const rect = wrap.getBoundingClientRect()
+  const vh = window.innerHeight
+  const start = vh * 0.78
+  const end = vh * 0.42
+  const travelled = start - rect.top
+  const span = rect.height + (start - end)
+  lineProgress.value = Math.min(1, Math.max(0, travelled / span))
+}
+
+function onScroll() {
+  if (ticking) return
+  ticking = true
+  window.requestAnimationFrame(computeLineProgress)
 }
 
 onMounted(() => {
@@ -175,9 +208,15 @@ onMounted(() => {
     el.dataset.index = String(index)
     observer.observe(el)
   })
+
+  window.addEventListener("scroll", onScroll, { passive: true })
+  window.addEventListener("resize", onScroll, { passive: true })
+  computeLineProgress()
 })
 
 onBeforeUnmount(() => {
   observer?.disconnect()
+  window.removeEventListener("scroll", onScroll)
+  window.removeEventListener("resize", onScroll)
 })
 </script>

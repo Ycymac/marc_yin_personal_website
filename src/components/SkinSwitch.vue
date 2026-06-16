@@ -8,12 +8,12 @@
   >
     <span class="sr-only">toggle visual style</span>
     <Feather v-if="skin === 'literary'" class="h-4 w-4" />
-    <Gem v-else class="h-4 w-4" />
+    <PenTool v-else class="h-4 w-4" />
   </button>
 </template>
 
 <script setup>
-import { Feather, Gem } from "lucide-vue-next"
+import { Feather, PenTool } from "lucide-vue-next"
 
 defineProps({
   skin: {

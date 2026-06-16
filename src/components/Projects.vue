@@ -4,8 +4,8 @@
       {{ locale === "zh" ? headerLanguageMap.Projects : "Featured Projects" }}
     </SectionHeading>
 
-    <!-- Modern skin: focus list -->
-    <ProjectFocusList
+    <!-- Modern skin: Apple-style showcase (always-visible, no expand) -->
+    <ProjectShowcase
       v-if="skin === 'glass'"
       :projects="projectsData"
       :locale="locale"
@@ -34,7 +34,7 @@ import { headerLanguageMap, projectsData } from "@/data/portfolio"
 import { useSectionObserver } from "@/composables/useInView"
 import SectionHeading from "./SectionHeading.vue"
 import ProjectCard from "./ProjectCard.vue"
-import ProjectFocusList from "./ProjectFocusList.vue"
+import ProjectShowcase from "./ProjectShowcase.vue"
 
 const props = defineProps({
   onVisible: {

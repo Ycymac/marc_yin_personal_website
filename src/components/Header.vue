@@ -1,5 +1,5 @@
 <template>
-  <header class="relative z-[999]">
+  <header class="site-header relative z-[999]" :class="{ 'is-hidden': !isRevealed }">
     <div
       class="site-nav-construct fixed left-1/2 top-2 h-[4.5rem] w-[calc(100%-1rem)] -translate-x-1/2 transition-all duration-500 sm:top-6 sm:h-[3.25rem] sm:w-[36rem]"
     />
@@ -32,6 +32,9 @@
 
 <script setup>
 import { links, headerLanguageMap } from "@/data/portfolio"
+import { useHeroStage } from "@/composables/useHeroStage"
+
+const { isRevealed } = useHeroStage()
 
 const props = defineProps({
   activeSection: {

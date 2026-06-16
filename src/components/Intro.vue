@@ -28,7 +28,16 @@
         {{ t("IntroSection.hello_im") }}
       </p>
 
-      <h1 class="mt-1 text-5xl font-black leading-none tracking-normal text-slate-950 dark:text-white sm:text-7xl">
+      <h1
+        v-if="skin === 'glass'"
+        class="hero-name-modern mt-1 text-6xl leading-[0.95] tracking-[-0.03em] text-slate-950 dark:text-white sm:text-8xl"
+      >
+        {{ t("IntroSection.name") }}
+      </h1>
+      <h1
+        v-else
+        class="mt-1 text-5xl font-black leading-none tracking-normal text-slate-950 dark:text-white sm:text-7xl"
+      >
         {{ t("IntroSection.name") }}
       </h1>
 
@@ -108,6 +117,7 @@
     </div>
 
     <div
+      v-if="skin !== 'glass'"
       class="mt-8 hidden animate-[riseIn_0.65s_0.26s_cubic-bezier(0.22,1,0.36,1)_both] items-center justify-center gap-2 text-xs font-extrabold uppercase tracking-[0.18em] text-slate-500 dark:text-white/50 sm:flex"
       aria-hidden="true"
     >
@@ -121,7 +131,7 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref, watch } from "vue"
+import { inject, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import {
   BookOpenText,
@@ -143,6 +153,7 @@ const props = defineProps({
 })
 
 const { t, locale } = useI18n()
+const skin = inject("skin")
 const sectionRef = useSectionObserver("Home", 0.75, props.onVisible)
 const resumeHref = assetUrl("resume.pdf")
 const rolesByLocale = {

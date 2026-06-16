@@ -150,6 +150,7 @@ export const projectsData = [
   {
     title: "GetCoupon Coupon Management System",
     title_zh: "GetCoupon 捷券优惠券管理系统",
+    period: "2025.11 — 2026.01",
     description:
       "My first personal project, developed between November 2025 and January 2026. The project focuses on coupon management and marks my first complete project practice.",
     desc_zh:
@@ -160,6 +161,7 @@ export const projectsData = [
   {
     title: "JAVIS Intelligent Interview Knowledge Base Platform",
     title_zh: "JAVIS智能面试知识库平台",
+    period: "2026.02 — 2026.04",
     description:
       "My second personal project, developed from February to April 2026. It was built with reference to GitHub open-source projects and assisted by Codex, with RAG-related function materials included on this site.",
     desc_zh:
@@ -172,6 +174,7 @@ export const projectsData = [
   {
     title: "Personal Introduction Website",
     title_zh: "个人介绍网站",
+    period: "2026.05",
     description:
       "The current personal introduction website, developed in May 2026 with Codex assistance to present my profile, backend learning path, projects, skills and timeline.",
     desc_zh:
