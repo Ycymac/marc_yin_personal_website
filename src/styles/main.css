@@ -1659,7 +1659,8 @@ body.is-win .hero-name-modern {
   left: 50%;
   top: 0;
   width: 2px;
-  height: 100%;
+  /* Extend past the last node so the drawn line can overshoot the timeline. */
+  height: calc(100% + 5rem);
   transform: translateX(-50%) scaleY(0);
   transform-origin: top;
   background: linear-gradient(
@@ -1694,11 +1695,11 @@ body.is-win .hero-name-modern {
    Always-visible alternating text/media cards, no accordion.
    ============================================================ */
 .showcase {
-  max-width: 60rem;
+  max-width: 72rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 4.5rem;
+  gap: 2rem;
 }
 
 .showcase-card {
@@ -1706,19 +1707,145 @@ body.is-win .hero-name-modern {
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 3rem;
+  /* The whole project module is ONE rounded card (copy + media + metrics). */
+  background: var(--apple-card);
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+.dark .showcase-card {
+  box-shadow: none;
+}
+
+/* Featured (RAG/JAVIS) card: single column — demo + description row on top,
+   then a single horizontal metrics row, then notes. */
+.showcase-card--featured {
+  display: block;
+}
+
+/* Top: demo (left) + description (right). */
+.javis-top {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+.javis-copy {
+  text-align: left;
+}
+
+/* Single horizontal row of compact metric modules. */
+.javis-metrics__title {
+  font-family: var(--modern-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--construct-text);
+  margin: 2rem 0 0.9rem;
+}
+.javis-metrics-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.6rem;
+  overflow-x: auto;
+  padding-bottom: 0.3rem;
+}
+.javis-metric {
+  flex: 1 1 0;
+  min-width: 7.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.85rem 0.8rem;
+  border-radius: 0.7rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+.dark .javis-metric {
+  background: #2a2a2d;
+  box-shadow: none;
+}
+.javis-metric__icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  stroke-width: 2;
+}
+.javis-metric__value {
+  font-family: var(--modern-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.javis-metric__label {
+  font-size: 0.66rem;
+  line-height: 1.35;
+  color: #1d1d1f;
+}
+.dark .javis-metric__label {
+  color: #e8e8ea;
+}
+
+.javis-notes {
+  padding-top: 1.2rem;
+  font-size: 0.78rem;
+  color: var(--construct-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.javis-notes__sub { opacity: 0.8; }
+
+@media (max-width: 768px) {
+  .javis-top {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .javis-metrics-row {
+    flex-wrap: wrap;
+  }
+  .javis-metric {
+    min-width: calc(50% - 0.3rem);
+  }
 }
 
 .showcase-card.is-reversed .showcase-card__copy {
   order: 2;
 }
 
+/* Media sits ON the card surface — no second card background, just a rounded
+   inset frame so images/video read as part of the one project module. */
+.showcase-card__media {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Coupon / blog images keep their natural size — don't blow them up as the
+   container widens; center them in their media cell. */
+.showcase-card:not(.showcase-card--featured) .showcase-card__media {
+  aspect-ratio: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.showcase-card:not(.showcase-card--featured) .showcase-card__img {
+  width: auto;
+  height: auto;
+  max-width: min(100%, 22rem);
+  max-height: 16rem;
+  object-fit: contain;
+  border-radius: 0.85rem;
+}
+
 @media (max-width: 768px) {
   .showcase {
-    gap: 3rem;
+    gap: 3.5rem;
   }
-  .showcase-card {
+  .showcase-card,
+  .showcase-card--featured {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    padding: 1.6rem;
   }
   .showcase-card.is-reversed .showcase-card__copy {
     order: 0;
@@ -1777,14 +1904,14 @@ body.is-win .hero-name-modern {
   position: relative;
   border-radius: 0.85rem;
   overflow: hidden;
-  background: var(--apple-card);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  background: transparent;
+  box-shadow: none;
   aspect-ratio: 16 / 11;
 }
 
 .dark[data-skin="glass"] .showcase-card__media,
 [data-skin="glass"] .dark .showcase-card__media {
-  background: var(--apple-card);
+  background: transparent;
   box-shadow: none;
 }
 
@@ -1837,15 +1964,15 @@ body.is-win .hero-name-modern {
   position: relative;
   border-radius: 0.85rem;
   overflow: hidden;
-  background: var(--apple-card);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.05);
   aspect-ratio: 4 / 3;
 }
 
 .dark[data-skin="glass"] .showcase-carousel,
 [data-skin="glass"] .dark .showcase-carousel {
-  background: var(--apple-card);
-  box-shadow: none;
+  background: #0e0e10;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
 .showcase-carousel__slide {
@@ -1859,10 +1986,60 @@ body.is-win .hero-name-modern {
   object-fit: cover;
 }
 
+/* Carousel controls row BELOW the demo (no overlap with the input bar). */
+.showcase-carousel__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+}
+
+.showcase-carousel__bar-left {
+  display: flex;
+  align-items: center;
+}
+
+/* Replay / expand action — parallel (left of) the nav arrows. */
+.showcase-carousel__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2.1rem;
+  padding: 0 0.9rem;
+  border-radius: 999px;
+  font-family: var(--modern-mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--construct-text);
+  background: color-mix(in srgb, var(--construct-line) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--construct-line) 50%, transparent);
+  transition: background 200ms ease, transform 200ms ease;
+}
+.showcase-carousel__action:hover {
+  background: color-mix(in srgb, var(--construct-line) 55%, transparent);
+  transform: translateY(-1px);
+}
+.showcase-carousel__action:focus-visible {
+  outline: 2px solid var(--klein);
+  outline-offset: 2px;
+}
+.dark .showcase-carousel__action {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.dark .showcase-carousel__action:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.showcase-carousel__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
 .showcase-carousel__nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1870,36 +2047,29 @@ body.is-win .hero-name-modern {
   height: 2.1rem;
   border-radius: 999px;
   color: var(--construct-text);
-  background: color-mix(in srgb, var(--marble) 70%, transparent);
+  background: color-mix(in srgb, var(--construct-line) 30%, transparent);
   border: 1px solid color-mix(in srgb, var(--construct-line) 50%, transparent);
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
   transition: background 200ms ease, transform 200ms ease;
 }
 .showcase-carousel__nav:hover {
-  background: var(--marble);
-  transform: translateY(-50%) scale(1.06);
+  background: color-mix(in srgb, var(--construct-line) 55%, transparent);
+  transform: scale(1.08);
 }
 .showcase-carousel__nav:focus-visible {
   outline: 2px solid var(--klein);
   outline-offset: 2px;
 }
-.showcase-carousel__nav--prev { left: 0.6rem; }
-.showcase-carousel__nav--next { right: 0.6rem; }
 
 .dark .showcase-carousel__nav {
   color: #fff;
-  background: rgba(20, 20, 22, 0.7);
+  background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.12);
 }
 .dark .showcase-carousel__nav:hover {
-  background: rgba(30, 30, 34, 0.92);
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .showcase-carousel__dots {
-  position: absolute;
-  left: 50%;
-  bottom: 0.7rem;
-  transform: translateX(-50%);
   display: flex;
   gap: 0.4rem;
 }
@@ -1950,10 +2120,14 @@ body.is-win .hero-name-modern {
   max-width: 78%;
   padding: 0.55rem 0.85rem;
   border-radius: 0.9rem 0.9rem 0.2rem 0.9rem;
-  background: var(--klein);
+  background: #1d1d1f;
   color: #fff;
   font-weight: 600;
   line-height: 1.5;
+}
+.dark .rag-demo__bubble {
+  background: #f5f5f7;
+  color: #161618;
 }
 
 .rag-demo__answer {
@@ -1966,9 +2140,9 @@ body.is-win .hero-name-modern {
   margin-top: 0.7rem;
   font-weight: 700;
   font-size: 0.9rem;
-  color: var(--klein);
+  color: #1d1d1f;
 }
-.dark .rag-demo__block--h3 { color: var(--klein-bright, #5b7bff); }
+.dark .rag-demo__block--h3 { color: #f2f2f4; }
 .rag-demo__block--li {
   padding-left: 0.95rem;
   position: relative;
@@ -2002,10 +2176,11 @@ body.is-win .hero-name-modern {
   width: 0.5rem;
   height: 0.95rem;
   vertical-align: -0.15rem;
-  background: var(--klein);
+  background: #1d1d1f;
   border-radius: 1px;
   animation: blinkCaret 1s steps(2) infinite;
 }
+.dark .rag-demo__caret { background: #f2f2f4; }
 @keyframes blinkCaret { 50% { opacity: 0; } }
 
 .rag-demo__replay {
@@ -2021,11 +2196,12 @@ body.is-win .hero-name-modern {
   font-size: 0.72rem;
   font-weight: 600;
   color: #fff;
-  background: var(--klein);
+  background: #1d1d1f;
   transition: transform 200ms ease, filter 200ms ease;
 }
+.dark .rag-demo__replay { background: #f5f5f7; color: #161618; }
 .rag-demo__replay:hover { transform: translateY(-1px); filter: brightness(1.08); }
-.rag-demo__replay:focus-visible { outline: 2px solid var(--klein); outline-offset: 2px; }
+.rag-demo__replay:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
 /* ---- Input bar (types the query, then sends) ---- */
 .rag-demo__inputbar {
@@ -2075,9 +2251,10 @@ body.is-win .hero-name-modern {
   height: 1.85rem;
   border-radius: 999px;
   color: #fff;
-  background: var(--klein);
+  background: #1d1d1f;
   transition: transform 200ms ease, filter 200ms ease;
 }
+.dark .rag-demo__send { background: #f5f5f7; color: #161618; }
 .rag-demo__send.is-armed {
   transform: scale(0.86);
   filter: brightness(1.15);
@@ -2100,10 +2277,11 @@ body.is-win .hero-name-modern {
   width: 0.85rem;
   height: 0.85rem;
   border-radius: 999px;
-  border: 2px solid color-mix(in srgb, var(--klein) 35%, transparent);
-  border-top-color: var(--klein);
+  border: 2px solid rgba(120, 120, 128, 0.3);
+  border-top-color: #1d1d1f;
   animation: ragSpin 0.7s linear infinite;
 }
+.dark .rag-demo__spinner { border-top-color: #f2f2f4; }
 @keyframes ragSpin { to { transform: rotate(1turn); } }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2111,6 +2289,76 @@ body.is-win .hero-name-modern {
   .rag-demo__feed { scroll-behavior: auto; }
   .rag-demo__spinner { animation: none; }
 }
+
+/* ============================================================
+   RAG EVALUATION — Apple "environment"-style metrics, shown
+   below the JAVIS demo (full width). Per-metric icon + colour,
+   black label text.
+   ============================================================ */
+.rag-eval {
+  margin-top: 2.5rem;
+}
+/* Span the full width of the featured project card grid. */
+.showcase-card__metrics {
+  grid-column: 1 / -1;
+}
+.rag-eval__heading {
+  font-family: var(--modern-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--construct-text);
+  margin-bottom: 1.4rem;
+}
+.rag-eval__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  gap: 1rem;
+}
+.rag-eval__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1.25rem 1.2rem;
+  border-radius: 1.1rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+.dark .rag-eval__card {
+  background: #2a2a2d;
+  box-shadow: none;
+}
+.rag-eval__icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  stroke-width: 2;
+}
+.rag-eval__value {
+  font-family: var(--modern-display);
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.rag-eval__label {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: #1d1d1f; /* black label text (per reference) */
+}
+.dark .rag-eval__label {
+  color: #e8e8ea;
+}
+.rag-eval__note {
+  margin-top: 1.3rem;
+  font-size: 0.78rem;
+  color: var(--construct-muted);
+}
+.rag-eval__note--sub {
+  margin-top: 0.3rem;
+  opacity: 0.8;
+}
+
+
 
 
 

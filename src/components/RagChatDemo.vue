@@ -52,9 +52,9 @@
       </button>
     </div>
 
-    <!-- Replay control once the stream finishes -->
+    <!-- Replay control once the stream finishes (hidden when host provides one) -->
     <button
-      v-if="done"
+      v-if="done && showReplay"
       type="button"
       class="rag-demo__replay"
       :aria-label="locale === 'zh' ? '重新播放演示' : 'Replay demo'"
@@ -73,6 +73,7 @@ import { ArrowUp, RotateCcw } from "lucide-vue-next"
 const props = defineProps({
   locale: { type: String, default: "zh" },
   autostart: { type: Boolean, default: true },
+  showReplay: { type: Boolean, default: true },
 })
 
 const question = "java中基础数据类型介绍一下"
@@ -195,6 +196,7 @@ function typeQuery() {
   phase.value = "sending"
   timer = window.setTimeout(() => {
     phase.value = "retrieving" // question bubble appears + KB retrieval spinner
+    typedQuery.value = "" // clear the input once sent, like a real chat app
     nextTick(scrollToEnd)
     timer = window.setTimeout(() => {
       phase.value = "answering"

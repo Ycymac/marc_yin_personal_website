@@ -76,27 +76,10 @@
           rel="noreferrer"
           class="blog-card group flex flex-col overflow-hidden rounded-lg"
         >
-          <div v-if="post.cover" class="blog-card__media relative overflow-hidden">
-            <img
-              :src="post.cover"
-              :alt="post.title"
-              class="blog-card__img h-36 w-full object-cover"
-              loading="lazy"
-              referrerpolicy="no-referrer"
-            />
-            <span
-              v-if="post.top"
-              class="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-[var(--construct-gold)] px-2 py-0.5 text-[0.65rem] font-black text-[#07142d]"
-            >
-              <Pin class="h-3 w-3" />
-              {{ locale === "zh" ? "置顶" : "Top" }}
-            </span>
-          </div>
-
           <div class="flex flex-1 flex-col gap-2 px-4 py-4">
             <div class="flex items-start gap-2">
               <Pin
-                v-if="post.top && !post.cover"
+                v-if="post.top"
                 class="mt-1 h-4 w-4 shrink-0 text-[var(--construct-gold-strong)]"
               />
               <h4

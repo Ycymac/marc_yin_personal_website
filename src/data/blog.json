@@ -1,10 +1,10 @@
 {
   "profileUrl": "https://blog.csdn.net/Ycy06721",
   "username": "Ycy06721",
-  "fetchedAt": "2026-06-16T14:12:01.640Z",
+  "fetchedAt": "2026-06-17T06:13:53.532Z",
   "stats": {
     "articleCount": 34,
-    "totalViews": 25760,
+    "totalViews": 25762,
     "totalDigg": 353,
     "followers": 68
   },
@@ -218,7 +218,7 @@
       "title": "JVM学习笔记：第七章——对象实例化、内存布局&访问定位",
       "description": "我们先通过Constructor拿到对应的构造器，之后通过setAccessble设置允许使用，之后通过private构造器创建对象。最大优点：引用（reference）地址稳定，当GC移动对象（例如压缩整理）时，只需要修改句柄当中的实例指针。在一些设计模式当中，例如通过单例模式或者工厂模式，对象创建依然会在内部使用。没有句柄访问当中的类型指针，只能通过对象的对象头当中的类型指针指向类元数据。，随着对象在JVM运行过程中运行时状态改变，存储不同的数据信息。",
       "url": "https://blog.csdn.net/Ycy06721/article/details/158744128",
-      "viewCount": 478,
+      "viewCount": 479,
       "diggCount": 11,
       "collectCount": 7,
       "commentCount": 0,
@@ -320,7 +320,7 @@
       "title": "JVM学习笔记：第二章——类加载子系统",
       "description": "简图：Class files：字节码文件详细图：注意： 方法区是JVM规范，而永久代和元空间是实现。hotspot在JDK8之前用的是永久代实现，JDK8及之后移除了永久代，用元空间实现方法区。（尚硅谷课程当中说只有hotspot有是错误的）Quest：如果自己想手写一个Java虚拟机的话，主要考虑哪些结构呢？类加载器执行引擎System.out.println(\"你的大恩大德，我下辈子再报！\");",
       "url": "https://blog.csdn.net/Ycy06721/article/details/158012760",
-      "viewCount": 664,
+      "viewCount": 665,
       "diggCount": 19,
       "collectCount": 14,
       "commentCount": 0,
