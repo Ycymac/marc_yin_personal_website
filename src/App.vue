@@ -7,6 +7,7 @@
     </div>
 
     <Header
+      v-if="skin !== 'glass'"
       :active-section="activeSection"
       :locale="locale"
       @navigate="handleNavigate"
