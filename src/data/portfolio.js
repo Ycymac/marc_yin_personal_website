@@ -132,7 +132,7 @@ export const experiencesDataZh = [
     title: "JAVIS智能面试知识库平台",
     location: "Codex 辅助开发项目",
     description:
-      "2026 年 2 月至 4 月，结合 GitHub 开源项目经验，使用 Codex 进行辅助，开发个人第二个项目 JAVIS智能面试知识库平台。",
+      "2026 年 2 月至 4 月，结合 GitHub 开源项目，使用 Codex 进行辅助，开发个人第二个项目 JAVIS智能面试知识库平台。",
     iconUrl: javisIcon,
     date: "2026.2 - 2026.4",
   },
@@ -163,9 +163,9 @@ export const projectsData = [
     title_zh: "JAVIS智能面试知识库平台",
     period: "2026.02 — 2026.04",
     description:
-      "My second personal project, developed from February to April 2026. It was built with reference to GitHub open-source projects and assisted by Codex, with RAG-related function materials included on this site.",
+      "My second personal project, developed from February to April 2026. It was built with reference to GitHub open-source projects and assisted by Codex.",
     desc_zh:
-      "个人第二个项目，开发时间为 2026 年 2 月至 4 月。项目结合 GitHub 开源项目经验，并使用 Codex 辅助开发，当前网站中展示了其 RAG 相关功能素材。",
+      "个人第二个项目，开发时间为 2026 年 2 月至 4 月。项目结合 GitHub 开源项目经验，并使用 Codex 辅助开发。",
     tags: ["Java", "RAG", "AI", "Codex", "RocketMQ"],
     imageUrl: javisIcon,
     gallery: [javisFunction1, javisFunction2],
@@ -176,10 +176,10 @@ export const projectsData = [
     title_zh: "个人介绍网站",
     period: "2026.05",
     description:
-      "The current personal introduction website, developed in May 2026 with Codex assistance to present my profile, backend learning path, projects, skills and timeline.",
+      "The current personal introduction website, developed in May 2026 with Codex and Claude Code assistance to present my profile, backend learning path, projects, skills and timeline.",
     desc_zh:
-      "当前个人介绍网站，2026 年 5 月使用 Codex 辅助开发，用于展示个人介绍、后端学习路径、项目、技能与时间线内容。",
-    tags: ["Codex", "Vue", "Tailwind CSS"],
+      "当前个人介绍网站，2026 年 5 月使用 Codex 和 Claude Code 辅助开发，用于展示个人介绍、后端学习路径、项目、技能与时间线内容。",
+    tags: ["Codex","Claude Code", "Vue", "Tailwind CSS"],
     iconUrl: avatarImage,
     imageUrl: portfolioImage,
   },
