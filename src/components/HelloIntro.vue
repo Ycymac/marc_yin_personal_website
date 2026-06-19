@@ -3,6 +3,7 @@
     v-if="active"
     ref="stageRef"
     class="hello-stage"
+    :style="stageStyle"
     aria-hidden="true"
   >
     <div ref="lottieRef" class="hello-stage__art" />
@@ -34,9 +35,12 @@ let ticking = false
 const isGlass = computed(() => skin?.value === "glass")
 const hint = computed(() => (locale.value === "zh" ? "向下滚动" : "Scroll"))
 const hintOpacity = computed(() => Math.max(0, 1 - progress.value * 2.4))
+const stageStyle = computed(() => ({
+  "--hero-progress": progress.value,
+}))
 
 function computeProgress() {
-  const span = window.innerHeight * 0.72
+  const span = stageHeight()
   const p = span > 0 ? window.scrollY / span : 1
   setProgress(Math.min(1, Math.max(0, p)))
   ticking = false
@@ -73,6 +77,9 @@ function maybeSnap(direction) {
   const h = stageHeight()
   const y = window.scrollY
   if (direction > 0 && y < h - 8) {
+    // Keep the nav hidden while the smooth snap is traveling down through the
+    // curtain; scroll progress will reveal it only after the intro is reached.
+    reset()
     snapTo(h) // down → intro
     return true
   }
@@ -149,6 +156,7 @@ onMounted(() => {
   if (active.value) {
     if (reduced) {
       // Reduced motion: skip the curtain entirely, reveal hero + nav at once.
+      active.value = false
       clear()
     } else {
       reset()

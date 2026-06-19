@@ -2,7 +2,8 @@
   <section
     id="home"
     ref="sectionRef"
-    class="relative isolate flex min-h-[calc(100svh-3.5rem)] max-w-[62rem] scroll-mt-28 flex-col items-center justify-center pb-6 pt-28 text-center sm:pb-10 sm:pt-32"
+    class="hero-stage-content relative isolate flex min-h-[calc(100svh-3.5rem)] max-w-[62rem] scroll-mt-28 flex-col items-center justify-center pb-6 pt-28 text-center sm:pb-10 sm:pt-32"
+    :style="heroRevealStyle"
   >
     <div class="relative flex items-center justify-center">
       <div class="profile-orbit" aria-hidden="true" />
@@ -131,7 +132,7 @@
 </template>
 
 <script setup>
-import { inject, onBeforeUnmount, onMounted, ref, watch } from "vue"
+import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import {
   BookOpenText,
@@ -144,6 +145,7 @@ import {
 import avatarImage from "@/photos/avatar.jpg"
 import { assetUrl } from "@/data/assets"
 import { useSectionObserver } from "@/composables/useInView"
+import { useHeroStage } from "@/composables/useHeroStage"
 
 const props = defineProps({
   onVisible: {
@@ -155,6 +157,11 @@ const props = defineProps({
 const { t, locale } = useI18n()
 const skin = inject("skin")
 const sectionRef = useSectionObserver("Home", 0.75, props.onVisible)
+const { progress } = useHeroStage()
+const heroRevealStyle = computed(() => {
+  const reveal = skin?.value === "glass" ? Math.min(1, Math.max(0, (progress.value - 0.38) / 0.52)) : 1
+  return { "--hero-reveal": reveal }
+})
 const resumeHref = assetUrl("resume.pdf")
 const rolesByLocale = {
   zh: ["我是一位后端开发者", "我是一名 Java 学习者", "我正在探索 AI 实践"],

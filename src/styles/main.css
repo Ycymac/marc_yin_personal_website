@@ -1383,6 +1383,8 @@ body.is-win [data-skin="glass"] .section-heading-construct {
    scrolls away like ordinary content, fully ABOVE and SEPARATE
    from the hero (no overlay, never covers the avatar/intro).
    Light mode: black hello on white; dark mode: white on black.
+   Its artwork is progress-driven so it dissolves into the hero
+   instead of feeling like an abrupt page jump.
    ============================================================ */
 .hello-stage {
   position: relative;
@@ -1392,11 +1394,16 @@ body.is-win [data-skin="glass"] .section-heading-construct {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   background: #ffffff;
 }
 
 .dark .hello-stage {
-  background: #050507;
+  background: color-mix(
+    in srgb,
+    #050507 calc((1 - var(--hero-progress, 0)) * 100%),
+    #0a0a0b
+  );
 }
 
 .hello-stage.is-gone {
@@ -1407,12 +1414,16 @@ body.is-win [data-skin="glass"] .section-heading-construct {
   width: min(70vw, 38rem);
   max-height: 60vh;
   transform-origin: center;
-  /* Light mode: invert the white-stroke art to black-on-white. */
-  filter: invert(1);
+  transform:
+    translateY(calc(-4vh + var(--hero-progress, 0) * -7vh))
+    scale(calc(1 - var(--hero-progress, 0) * 0.12));
+  opacity: clamp(0, calc(1 - var(--hero-progress, 0) * 1.35), 1);
+  filter: invert(1) blur(calc(var(--hero-progress, 0) * 6px));
+  will-change: opacity, transform, filter;
 }
 
 .dark .hello-stage__art {
-  filter: none;
+  filter: blur(calc(var(--hero-progress, 0) * 6px));
 }
 
 .hello-stage__art svg {
@@ -1473,6 +1484,16 @@ body.is-win [data-skin="glass"] .section-heading-construct {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hello-stage__art,
+  .hero-stage-content,
+  [data-skin="glass"] .hero-stage-content > * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .dark .hello-stage__art {
+    filter: none !important;
+  }
   .site-header {
     transition: opacity 200ms ease;
   }
@@ -1521,8 +1542,37 @@ body.is-win .hero-name-modern {
 
 /* Hero content eases in with the curtain lift (driven by inline style). */
 .hero-stage-content {
+  --hero-reveal: 1;
+  opacity: var(--hero-reveal);
+  transform:
+    translateY(calc((1 - var(--hero-reveal)) * 3rem))
+    scale(calc(0.98 + var(--hero-reveal) * 0.02));
   transition: opacity 360ms ease, transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
+}
+
+[data-skin="glass"] .hero-stage-content > * {
+  opacity: var(--hero-reveal);
+  transform: translateY(calc((1 - var(--hero-reveal)) * 1.4rem));
+  transition:
+    opacity 520ms ease,
+    transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-skin="glass"] .hero-stage-content > *:nth-child(1) {
+  transition-delay: 0ms;
+}
+
+[data-skin="glass"] .hero-stage-content > *:nth-child(2) {
+  transition-delay: 80ms;
+}
+
+[data-skin="glass"] .hero-stage-content > *:nth-child(3) {
+  transition-delay: 150ms;
+}
+
+[data-skin="glass"] .hero-stage-content > *:nth-child(4) {
+  transition-delay: 220ms;
 }
 
 /* Apple-style module: distinguished by a solid surface tone (not glass),

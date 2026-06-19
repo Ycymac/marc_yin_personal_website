@@ -6,9 +6,9 @@ import { computed, ref } from "vue"
 // nav stays hidden until the curtain clears and the hero can hand off smoothly.
 const progress = ref(1) // default 1 so non-glass skins behave as "already revealed"
 
-// Curtain is considered cleared a hair before 1 so the nav doesn't wait on
-// sub-pixel scroll residue.
-const isRevealed = computed(() => progress.value >= 0.985)
+// Curtain is considered cleared once the hero has mostly taken over, so the nav
+// springs in before the scroll lands perfectly on the next section.
+const isRevealed = computed(() => progress.value >= 0.82)
 
 export function useHeroStage() {
   function setProgress(value) {
