@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx vite *)",
+      "Bash(node -e \"try{require\\('playwright'\\);console.log\\('playwright-ok'\\)}catch\\(e\\){try{require\\('playwright-core'\\);console.log\\('playwright-core-ok'\\)}catch\\(e2\\){console.log\\('no-playwright'\\)}}\")",
+      "Bash(command -v playwright chromium chromium-browser google-chrome)",
+      "Read(//c/Users/32539/.cache/**)"
+    ]
+  }
+}
