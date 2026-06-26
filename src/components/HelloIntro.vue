@@ -6,6 +6,11 @@
     :style="stageStyle"
     aria-hidden="true"
   >
+    <RoseBouquetDecoration
+      placement="hello"
+      :progress="helloFlowersProgress"
+      :fade="helloFlowersFade"
+    />
     <div ref="lottieRef" class="hello-stage__art" />
     <div class="hello-stage__hint" :style="{ opacity: hintOpacity }">
       <span class="hello-stage__hint-text">{{ hint }}</span>
@@ -19,6 +24,7 @@ import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import animationData from "@/assets/hello.lottie.json"
 import { useHeroStage } from "@/composables/useHeroStage"
+import RoseBouquetDecoration from "@/components/RoseBouquetDecoration.vue"
 
 const skin = inject("skin")
 const { locale } = useI18n()
@@ -27,6 +33,9 @@ const { progress, setProgress, reset, clear } = useHeroStage()
 const stageRef = ref(null)
 const lottieRef = ref(null)
 const active = ref(true)
+// Bloom is driven by the hello drawing itself: 0 while undrawn, ramping to 1
+// as the Lottie plays so the bouquet opens in sync with the "hello" strokes.
+const drawProgress = ref(0)
 let anim = null
 let reduced = false
 let ticking = false
@@ -35,6 +44,10 @@ let ticking = false
 const isGlass = computed(() => skin?.value === "glass")
 const hint = computed(() => (locale.value === "zh" ? "向下滚动" : "Scroll"))
 const hintOpacity = computed(() => Math.max(0, 1 - progress.value * 2.4))
+// Flowers bloom together with the hello drawing, then dissolve with the
+// curtain so they only ever linger on the hello screen.
+const helloFlowersProgress = computed(() => drawProgress.value)
+const helloFlowersFade = computed(() => Math.max(0, 1 - progress.value * 1.35))
 const stageStyle = computed(() => ({
   "--hero-progress": progress.value,
 }))
@@ -42,7 +55,8 @@ const stageStyle = computed(() => ({
 function computeProgress() {
   const span = stageHeight()
   const p = span > 0 ? window.scrollY / span : 1
-  setProgress(Math.min(1, Math.max(0, p)))
+  const nextProgress = Math.min(1, Math.max(0, p))
+  setProgress(nextProgress)
   ticking = false
 }
 
@@ -130,7 +144,20 @@ async function mountLottie() {
     autoplay: !reduced,
     animationData: data,
   })
-  if (reduced) anim.goToAndStop(data.op - 1, true)
+  if (reduced) {
+    // Reduced motion: hello is drawn instantly, so the bouquet is fully open.
+    anim.goToAndStop(data.op - 1, true)
+    drawProgress.value = 1
+  } else {
+    // Ramp the bloom alongside the hello strokes as the animation plays.
+    anim.addEventListener("enterFrame", () => {
+      const total = anim.totalFrames || 1
+      drawProgress.value = Math.min(1, anim.currentFrame / total)
+    })
+    anim.addEventListener("complete", () => {
+      drawProgress.value = 1
+    })
+  }
 }
 
 function teardownLottie() {
@@ -141,6 +168,7 @@ function teardownLottie() {
 watch(isGlass, (glass) => {
   active.value = glass
   if (glass) {
+    drawProgress.value = 0
     reset()
     window.scrollTo({ top: 0 })
     requestAnimationFrame(mountLottie)
@@ -159,6 +187,7 @@ onMounted(() => {
       active.value = false
       clear()
     } else {
+      drawProgress.value = 0
       reset()
       mountLottie()
       computeProgress()

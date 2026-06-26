@@ -6,8 +6,9 @@
     :style="heroRevealStyle"
   >
     <div class="relative flex items-center justify-center">
-      <div class="profile-orbit" aria-hidden="true" />
-      <div class="animate-[popIn_0.45s_cubic-bezier(0.22,1,0.36,1)_both]">
+      <RoseBouquetDecoration placement="hero" />
+      <div v-if="skin !== 'glass'" class="profile-orbit" aria-hidden="true" />
+      <div class="relative z-10 animate-[popIn_0.45s_cubic-bezier(0.22,1,0.36,1)_both]">
         <img
           :src="avatarImage"
           alt="Marc avatar"
@@ -17,7 +18,7 @@
         />
       </div>
       <span
-        class="absolute -right-1 bottom-2 rounded-full bg-white/90 px-2 py-1 text-3xl shadow-lg shadow-black/10 transition-transform hover:rotate-12 hover:scale-125 dark:bg-slate-950/85 sm:right-1 sm:text-4xl"
+        class="absolute -right-1 bottom-2 z-20 rounded-full bg-white/90 px-2 py-1 text-3xl shadow-lg shadow-black/10 transition-transform hover:rotate-12 hover:scale-125 dark:bg-slate-950/85 sm:right-1 sm:text-4xl"
         @mouseenter="playBubble"
       >
         👋
@@ -146,6 +147,7 @@ import avatarImage from "@/photos/avatar.jpg"
 import { assetUrl } from "@/data/assets"
 import { useSectionObserver } from "@/composables/useInView"
 import { useHeroStage } from "@/composables/useHeroStage"
+import RoseBouquetDecoration from "@/components/RoseBouquetDecoration.vue"
 
 const props = defineProps({
   onVisible: {

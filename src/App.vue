@@ -62,6 +62,7 @@ const { locale } = useI18n()
 
 // Expose the active skin so sections can branch their layout (modern vs literary).
 provide("skin", skin)
+provide("theme", theme)
 
 function handleNavigate(sectionName) {
   activeSection.value = sectionName

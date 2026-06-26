@@ -256,6 +256,12 @@ body {
     color: var(--construct-muted);
   }
 
+  [data-skin="glass"] .bio-section .section-heading-construct,
+  [data-skin="glass"] .bio-section .bio-copy {
+    position: relative;
+    z-index: 1;
+  }
+
   .bio-copy {
     @apply space-y-4 pl-5 text-[1.03rem] font-semibold sm:pl-7 sm:text-lg;
     border-left: 2px solid rgba(242, 210, 122, 0.55);
@@ -265,7 +271,7 @@ body {
     position: relative;
     padding: 1.25rem 1.35rem 1.3rem 1.45rem;
     border: 1px solid rgba(255, 255, 255, 0.18);
-    border-left: 2px solid rgba(91, 123, 255, 0.62);
+    border-left: 2px solid color-mix(in srgb, var(--construct-gold) 62%, transparent);
     border-radius: 1rem;
     background:
       linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.34)),
@@ -868,22 +874,22 @@ body {
 }
 
 /* ============================================================
-   MODERN SKIN (glass) — three-font system + Klein Blue accent.
+   MODERN SKIN (glass) — three-font system + theme-aware rose accent.
    Display = Space Grotesk, micro-labels/mono = Space Mono,
-   body stays Inter. Swiss/Carbon language: IKB #002FA7 is the
-   single accent; marble white (light) / near-black (dark) base.
+   body stays Inter. Light mode uses a pale-yellow rose accent;
+   dark mode keeps the blue rose / Klein-blue accent.
    Scoped to [data-skin="glass"] so literary is untouched.
    ============================================================ */
 :root[data-skin="glass"] {
-  --construct-gold: #002fa7;        /* Klein Blue (IKB) */
-  --construct-gold-strong: #002fa7;
-  --klein: #002fa7;
-  --klein-bright: #5b7bff;          /* on dark: brightened IKB */
-  --klein-on: #ffffff;              /* text on a Klein-filled surface */
+  --construct-gold: #d7a820;        /* pale-yellow rose accent */
+  --construct-gold-strong: #b88700;
+  --klein: #d7a820;                 /* legacy variable: active modern accent */
+  --klein-bright: #f4c846;
+  --klein-on: #271a00;              /* text on a yellow-filled surface */
   --marble: #fafaf8;                /* cool neutral high-grey white base */
   --apple-card: #f2f2f4;            /* solid card, a touch off the page */
-  --particle: rgba(0, 47, 167, 0.55);  /* ASCII field on light = blue-ish */
-  --particle-accent: rgba(0, 47, 167, 0.55);
+  --particle: rgba(215, 168, 32, 0.42);
+  --particle-accent: rgba(184, 135, 0, 0.5);
 }
 
 :root[data-skin="glass"].dark {
@@ -970,7 +976,7 @@ body {
   opacity: 0.5;
 }
 
-/* Klein crosshair ticks around the ring */
+/* Accent crosshair ticks around the legacy ring. Hidden in modern hero by the rose sprig. */
 [data-skin="glass"] .profile-orbit::before {
   content: "";
   position: absolute;
@@ -1320,7 +1326,7 @@ body.is-win [data-skin="glass"] .section-heading-construct {
   }
 }
 
-/* Glass: primary button (e.g. CSDN "Open Blog") — Klein blue, no gold */
+/* Glass: primary button (e.g. CSDN "Open Blog") follows the active rose accent. */
 [data-skin="glass"] .construct-button {
   border: 1px solid var(--klein);
   background: var(--klein);
@@ -1396,6 +1402,7 @@ body.is-win [data-skin="glass"] .section-heading-construct {
   justify-content: center;
   overflow: hidden;
   background: #ffffff;
+  isolation: isolate;
 }
 
 .dark .hello-stage {
@@ -1411,6 +1418,8 @@ body.is-win [data-skin="glass"] .section-heading-construct {
 }
 
 .hello-stage__art {
+  position: relative;
+  z-index: 1;
   width: min(70vw, 38rem);
   max-height: 60vh;
   transform-origin: center;
@@ -1434,6 +1443,7 @@ body.is-win [data-skin="glass"] .section-heading-construct {
 
 .hello-stage__hint {
   position: absolute;
+  z-index: 1;
   bottom: 2.4rem;
   left: 50%;
   transform: translateX(-50%);
@@ -1658,6 +1668,15 @@ body.is-win .hero-name-modern {
    ============================================================ */
 
 /* Side-aware entrance: panels slide in from their own column. */
+[data-skin="glass"] .experience-section {
+  padding-bottom: clamp(5rem, 8vw, 7rem);
+}
+
+[data-skin="glass"] .experience-section > :not(.rose-decoration) {
+  position: relative;
+  z-index: 1;
+}
+
 [data-skin="glass"] .tl-panel {
   transition:
     opacity 700ms ease,
@@ -2455,9 +2474,9 @@ body.is-win .hero-name-modern {
   box-shadow: 0 20px 48px -18px rgba(0, 0, 0, 0.6);
 }
 
-/* Klein-blue text selection — a quiet brand micro-detail. */
+/* Rose-accent text selection — a quiet brand micro-detail. */
 [data-skin="glass"] ::selection {
-  background: rgba(0, 47, 167, 0.16);
+  background: color-mix(in srgb, var(--construct-gold) 18%, transparent);
 }
 .dark[data-skin="glass"] ::selection {
   background: rgba(91, 123, 255, 0.32);
@@ -2499,12 +2518,6 @@ body.is-win .hero-name-modern {
     transform: none;
   }
 }
-
-
-
-
-
-
 
 
 

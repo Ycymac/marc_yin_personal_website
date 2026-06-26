@@ -1,5 +1,5 @@
 <template>
-  <section class="relative mb-20 sm:mb-40">
+  <section class="experience-section relative isolate mb-20 sm:mb-40">
     <section
       id="experience"
       ref="sectionRef"
@@ -123,6 +123,7 @@
         </div>
       </div>
     </div>
+    <RoseBouquetDecoration placement="timeline" />
   </section>
 </template>
 
@@ -137,6 +138,7 @@ import {
 } from "@/data/portfolio"
 import { useSectionObserver } from "@/composables/useInView"
 import SectionHeading from "./SectionHeading.vue"
+import RoseBouquetDecoration from "@/components/RoseBouquetDecoration.vue"
 
 const props = defineProps({
   onVisible: {
