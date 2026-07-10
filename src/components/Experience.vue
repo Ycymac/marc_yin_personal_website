@@ -123,7 +123,6 @@
         </div>
       </div>
     </div>
-    <RoseBouquetDecoration placement="timeline" />
   </section>
 </template>
 
@@ -138,7 +137,6 @@ import {
 } from "@/data/portfolio"
 import { useSectionObserver } from "@/composables/useInView"
 import SectionHeading from "./SectionHeading.vue"
-import RoseBouquetDecoration from "@/components/RoseBouquetDecoration.vue"
 
 const props = defineProps({
   onVisible: {

@@ -222,10 +222,10 @@ const { target: sectionRef, isVisible } = useObservedSection(
 .blog-card:hover,
 .blog-card:focus-visible {
   transform: translateY(-3px);
-  border-color: rgba(242, 210, 122, 0.72);
+  border-color: var(--construct-gold-strong);
   box-shadow:
-    0 0 0 1px rgba(242, 210, 122, 0.34),
-    0 18px 44px rgba(242, 210, 122, 0.12);
+    0 0 0 1px color-mix(in srgb, var(--construct-gold) 34%, transparent),
+    0 18px 44px color-mix(in srgb, var(--construct-gold) 12%, transparent);
   outline: none;
 }
 

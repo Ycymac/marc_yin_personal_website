@@ -1,6 +1,10 @@
 <template>
   <div class="site-shell relative min-h-screen overflow-x-hidden font-sans text-slate-950 antialiased dark:text-white">
     <div class="ambient-background" aria-hidden="true">
+      <div
+        class="ambient-background__wallpaper"
+        :class="{ 'is-visible': wallpaperVisible }"
+      />
       <div class="ambient-background__veil" />
       <div class="ambient-background__mesh" />
       <div class="ambient-background__grid" />
@@ -13,9 +17,9 @@
       @navigate="handleNavigate"
     />
 
-    <HelloIntro />
+    <HelloIntro @complete="wallpaperVisible = true" />
 
-    <main class="relative z-10 flex flex-col items-center justify-center overflow-x-hidden px-4">
+    <main class="site-content relative z-10 mx-auto flex w-full max-w-[76rem] flex-col items-center justify-center overflow-x-hidden px-4">
       <Intro :on-visible="handleSectionVisible" />
       <SectionDivider />
       <About :on-visible="handleSectionVisible" />
@@ -58,6 +62,7 @@ const activeSection = ref("Home")
 const timeOfLastClick = ref(0)
 const theme = ref("dark")
 const skin = ref("glass")
+const wallpaperVisible = ref(false)
 const { locale } = useI18n()
 
 // Expose the active skin so sections can branch their layout (modern vs literary).
@@ -99,6 +104,7 @@ function toggleTheme() {
 
 function applySkin(nextSkin) {
   skin.value = nextSkin
+  if (nextSkin !== "glass") wallpaperVisible.value = false
   document.documentElement.setAttribute("data-skin", nextSkin)
   window.localStorage.setItem("skin", nextSkin)
 }

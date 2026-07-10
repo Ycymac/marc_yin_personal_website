@@ -2,12 +2,14 @@
   <section
     id="about"
     ref="sectionRef"
-    class="motion-surface bio-section relative isolate mb-28 max-w-[47rem] scroll-mt-28 text-start leading-8 sm:mb-40"
+    class="motion-surface bio-section relative isolate mb-28 w-full max-w-[58rem] scroll-mt-28 text-start leading-8 sm:mb-40"
     :class="{ 'is-visible': isVisible }"
   >
     <SectionHeading>{{ t("SectionName.about") }}</SectionHeading>
-    <RoseBouquetDecoration placement="about" />
-
+    <div class="bio-kicker" aria-hidden="true">
+      <span>PROFILE / MARC YIN</span>
+      <span>BACKEND × AI / 2026</span>
+    </div>
     <div v-if="locale === 'zh'" class="bio-copy">
       <p class="bio-lead">
         <strong>大家好!我是殷晨晏，也可以叫我 Marc。</strong>
@@ -94,7 +96,6 @@
 <script setup>
 import { useI18n } from "vue-i18n"
 import SectionHeading from "./SectionHeading.vue"
-import RoseBouquetDecoration from "@/components/RoseBouquetDecoration.vue"
 import { useObservedSection } from "@/composables/useInView"
 
 const props = defineProps({

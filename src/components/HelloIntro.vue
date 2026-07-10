@@ -3,14 +3,10 @@
     v-if="active"
     ref="stageRef"
     class="hello-stage"
+    :class="{ 'is-complete': animationComplete }"
     :style="stageStyle"
     aria-hidden="true"
   >
-    <RoseBouquetDecoration
-      placement="hello"
-      :progress="helloFlowersProgress"
-      :fade="helloFlowersFade"
-    />
     <div ref="lottieRef" class="hello-stage__art" />
     <div class="hello-stage__hint" :style="{ opacity: hintOpacity }">
       <span class="hello-stage__hint-text">{{ hint }}</span>
@@ -24,18 +20,18 @@ import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import animationData from "@/assets/hello.lottie.json"
 import { useHeroStage } from "@/composables/useHeroStage"
-import RoseBouquetDecoration from "@/components/RoseBouquetDecoration.vue"
+
+const emit = defineEmits(["complete"])
 
 const skin = inject("skin")
+const theme = inject("theme")
 const { locale } = useI18n()
 const { progress, setProgress, reset, clear } = useHeroStage()
 
 const stageRef = ref(null)
 const lottieRef = ref(null)
 const active = ref(true)
-// Bloom is driven by the hello drawing itself: 0 while undrawn, ramping to 1
-// as the Lottie plays so the bouquet opens in sync with the "hello" strokes.
-const drawProgress = ref(0)
+const animationComplete = ref(false)
 let anim = null
 let reduced = false
 let ticking = false
@@ -44,10 +40,6 @@ let ticking = false
 const isGlass = computed(() => skin?.value === "glass")
 const hint = computed(() => (locale.value === "zh" ? "向下滚动" : "Scroll"))
 const hintOpacity = computed(() => Math.max(0, 1 - progress.value * 2.4))
-// Flowers bloom together with the hello drawing, then dissolve with the
-// curtain so they only ever linger on the hello screen.
-const helloFlowersProgress = computed(() => drawProgress.value)
-const helloFlowersFade = computed(() => Math.max(0, 1 - progress.value * 1.35))
 const stageStyle = computed(() => ({
   "--hero-progress": progress.value,
 }))
@@ -133,10 +125,10 @@ function onTouchMove(event) {
 async function mountLottie() {
   if (anim || !lottieRef.value) return
   const lottie = (await import("lottie-web")).default
-  // Strip the baked black background layer — the CSS stage provides it,
-  // so the rainbow floats full-bleed over the curtain.
   const data = JSON.parse(JSON.stringify(animationData))
   data.layers = data.layers.filter((l) => l.nm !== "background")
+  const tone = theme?.value === "dark" ? 1 : 0
+  data.layers.forEach((layer) => recolorGradientStrokes(layer.shapes, tone))
   anim = lottie.loadAnimation({
     container: lottieRef.value,
     renderer: "svg",
@@ -145,18 +137,26 @@ async function mountLottie() {
     animationData: data,
   })
   if (reduced) {
-    // Reduced motion: hello is drawn instantly, so the bouquet is fully open.
     anim.goToAndStop(data.op - 1, true)
-    drawProgress.value = 1
   } else {
-    // Ramp the bloom alongside the hello strokes as the animation plays.
-    anim.addEventListener("enterFrame", () => {
-      const total = anim.totalFrames || 1
-      drawProgress.value = Math.min(1, anim.currentFrame / total)
-    })
     anim.addEventListener("complete", () => {
-      drawProgress.value = 1
+      animationComplete.value = true
+      emit("complete")
     })
+  }
+}
+
+function recolorGradientStrokes(items, tone) {
+  for (const item of items ?? []) {
+    if (item.ty === "gs" && Array.isArray(item.g?.k?.k)) {
+      const stops = item.g.k.k
+      for (let index = 0; index < stops.length; index += 4) {
+        stops[index + 1] = tone
+        stops[index + 2] = tone
+        stops[index + 3] = tone
+      }
+    }
+    recolorGradientStrokes(item.it, tone)
   }
 }
 
@@ -168,7 +168,7 @@ function teardownLottie() {
 watch(isGlass, (glass) => {
   active.value = glass
   if (glass) {
-    drawProgress.value = 0
+    animationComplete.value = false
     reset()
     window.scrollTo({ top: 0 })
     requestAnimationFrame(mountLottie)
@@ -176,6 +176,12 @@ watch(isGlass, (glass) => {
     clear() // non-glass: hero is always revealed, nav always visible
     teardownLottie()
   }
+})
+
+watch(theme, () => {
+  if (!active.value || animationComplete.value) return
+  teardownLottie()
+  requestAnimationFrame(mountLottie)
 })
 
 onMounted(() => {
@@ -186,8 +192,10 @@ onMounted(() => {
       // Reduced motion: skip the curtain entirely, reveal hero + nav at once.
       active.value = false
       clear()
+      animationComplete.value = true
+      emit("complete")
     } else {
-      drawProgress.value = 0
+      animationComplete.value = false
       reset()
       mountLottie()
       computeProgress()

@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "VCR OSD Mono";
+  src: url("../assets/fonts/VCR_OSD_MONO.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -22,6 +30,7 @@
   --construct-serif: "Fraunces Variable", "Noto Serif SC", "Songti SC", "SimSun", Georgia, "Times New Roman", serif;
   --modern-display: "Space Grotesk", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
   --modern-mono: "Space Mono", ui-monospace, "SFMono-Regular", "Cascadia Code", "Noto Sans SC", monospace;
+  --editorial-display: "VCR OSD Mono", var(--modern-mono);
 }
 
 :root.dark {
@@ -115,6 +124,23 @@ body {
   .ambient-background__mesh,
   .ambient-background__grid {
     @apply absolute inset-0;
+  }
+
+  .ambient-background__wallpaper {
+    @apply absolute inset-0;
+    background: #000 url("../photos/modern_wallpaper.png") center / cover no-repeat;
+    opacity: 0;
+    filter: none;
+    transform: scale(1.015);
+    transition:
+      opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 1600ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 700ms ease;
+  }
+
+  .ambient-background__wallpaper.is-visible {
+    opacity: 1;
+    transform: scale(1);
   }
 
   .ambient-background__veil {
@@ -256,8 +282,13 @@ body {
     color: var(--construct-muted);
   }
 
+  .bio-kicker {
+    display: none;
+  }
+
   [data-skin="glass"] .bio-section .section-heading-construct,
-  [data-skin="glass"] .bio-section .bio-copy {
+  [data-skin="glass"] .bio-section .bio-copy,
+  [data-skin="glass"] .bio-kicker {
     position: relative;
     z-index: 1;
   }
@@ -268,31 +299,87 @@ body {
   }
 
   [data-skin="glass"] .bio-copy {
-    position: relative;
-    padding: 1.25rem 1.35rem 1.3rem 1.45rem;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-left: 2px solid color-mix(in srgb, var(--construct-gold) 62%, transparent);
-    border-radius: 1rem;
-    background:
-      linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.34)),
-      rgba(255, 255, 255, 0.34);
-    box-shadow:
-      0 20px 60px rgba(15, 23, 42, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.58);
-    -webkit-backdrop-filter: blur(18px) saturate(1.35);
-    backdrop-filter: blur(18px) saturate(1.35);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 0;
+    border: 0;
+    border-top: 1px solid var(--construct-line);
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    counter-reset: bio-item;
   }
 
   .dark[data-skin="glass"] .bio-copy,
   [data-skin="glass"] .dark .bio-copy {
-    border-color: rgba(255, 255, 255, 0.12);
-    border-left-color: rgba(123, 150, 255, 0.72);
-    background:
-      linear-gradient(135deg, rgba(18, 24, 38, 0.74), rgba(7, 11, 20, 0.48)),
-      rgba(10, 13, 22, 0.52);
-    box-shadow:
-      0 24px 70px rgba(0, 0, 0, 0.34),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-color: var(--construct-line);
+    background: none;
+    box-shadow: none;
+  }
+
+  [data-skin="glass"] .bio-kicker {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.85rem;
+    color: var(--construct-gold-strong);
+    font-family: var(--editorial-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+  }
+
+  [data-skin="glass"] .bio-copy > p {
+    margin-top: 0 !important;
+  }
+
+  [data-skin="glass"] .bio-copy > .bio-lead {
+    grid-column: 1 / -1;
+    padding: clamp(2rem, 5vw, 4rem) 0;
+    border-bottom: 1px solid var(--construct-line);
+    font-size: clamp(1.75rem, 4.6vw, 3.65rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+  }
+
+  [data-skin="glass"] .bio-lead strong {
+    display: block;
+    margin-bottom: 0.3em;
+    font-weight: 700;
+  }
+
+  [data-skin="glass"] .bio-copy > p:not(.bio-lead) {
+    position: relative;
+    min-height: 12rem;
+    padding: 1.55rem 1.5rem 1.75rem 3.25rem;
+    border-bottom: 1px solid var(--construct-line);
+    color: var(--construct-muted);
+    font-size: 0.98rem;
+    font-weight: 500;
+    line-height: 1.75;
+    counter-increment: bio-item;
+  }
+
+  [data-skin="glass"] .bio-copy > p:not(.bio-lead)::before {
+    position: absolute;
+    top: 1.62rem;
+    left: 0;
+    content: "0" counter(bio-item);
+    color: var(--construct-gold-strong);
+    font-family: var(--editorial-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+  }
+
+  [data-skin="glass"] .bio-copy > p:not(.bio-lead):nth-child(odd) {
+    border-left: 1px solid var(--construct-line);
+    padding-left: 4.75rem;
+  }
+
+  [data-skin="glass"] .bio-copy > p:not(.bio-lead):nth-child(odd)::before {
+    left: 1.5rem;
   }
 
   .bio-copy strong {
@@ -303,6 +390,28 @@ body {
   .bio-lead {
     @apply text-xl font-extrabold leading-9 sm:text-2xl;
     color: var(--construct-text);
+  }
+
+  @media (max-width: 639px) {
+    [data-skin="glass"] .bio-copy {
+      grid-template-columns: 1fr;
+    }
+
+    [data-skin="glass"] .bio-kicker {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    [data-skin="glass"] .bio-copy > p:not(.bio-lead),
+    [data-skin="glass"] .bio-copy > p:not(.bio-lead):nth-child(odd) {
+      min-height: 0;
+      padding-left: 3.25rem;
+      border-left: 0;
+    }
+
+    [data-skin="glass"] .bio-copy > p:not(.bio-lead):nth-child(odd)::before {
+      left: 0;
+    }
   }
 
   .project-card {
@@ -874,33 +983,33 @@ body {
 }
 
 /* ============================================================
-   MODERN SKIN (glass) — three-font system + theme-aware rose accent.
+   MODERN SKIN (glass) — monochrome editorial system + theme-aware accent.
    Display = Space Grotesk, micro-labels/mono = Space Mono,
-   body stays Inter. Light mode uses a pale sakura-pink accent;
-   dark mode keeps the blue rose / Klein-blue accent.
+   body stays unchanged. Light mode uses Klein blue;
+   dark mode uses bright silver.
    Scoped to [data-skin="glass"] so literary is untouched.
    ============================================================ */
 :root[data-skin="glass"] {
-  --construct-gold: #eaa5b9;        /* pale sakura-pink accent */
-  --construct-gold-strong: #d97f9b;
-  --klein: #eaa5b9;                 /* legacy variable: active modern accent */
-  --klein-bright: #f6c4d2;
-  --klein-on: #3a1723;              /* text on a pink-filled surface */
+  --construct-gold: #002fa7;
+  --construct-gold-strong: #002fa7;
+  --klein: #002fa7;
+  --klein-bright: #174bd0;
+  --klein-on: #ffffff;
   --marble: #fafaf8;                /* cool neutral high-grey white base */
   --apple-card: #f2f2f4;            /* solid card, a touch off the page */
-  --particle: rgba(234, 165, 185, 0.42);
-  --particle-accent: rgba(217, 127, 155, 0.5);
+  --particle: rgba(0, 47, 167, 0.34);
+  --particle-accent: rgba(0, 47, 167, 0.52);
 }
 
 :root[data-skin="glass"].dark {
-  --construct-gold: #5b7bff;
-  --construct-gold-strong: #5b7bff;
-  --klein: #5b7bff;
-  --klein-bright: #5b7bff;
-  --klein-on: #ffffff;
+  --construct-gold: #d9dce3;
+  --construct-gold-strong: #ffffff;
+  --klein: #e7e9ee;
+  --klein-bright: #ffffff;
+  --klein-on: #0a0a0b;
   --apple-card: #1c1c1e;            /* solid card, a touch above near-black */
-  --particle: rgba(91, 123, 255, 0.6);        /* dark = all Klein blue */
-  --particle-accent: rgba(123, 150, 255, 0.72); /* slightly brighter blue dots */
+  --particle: rgba(231, 233, 238, 0.42);
+  --particle-accent: rgba(255, 255, 255, 0.62);
 }
 
 /* Display typography — section headings, hero name, project titles */
@@ -916,6 +1025,18 @@ body {
 [data-skin="glass"] .project-card__tag,
 [data-skin="glass"] .construct-chip {
   font-family: var(--modern-mono);
+}
+
+/* VCR OSD Mono is display-only. Body copy deliberately stays untouched. */
+[data-skin="glass"]:lang(en) .hero-name-modern,
+[data-skin="glass"]:lang(en) .section-heading-construct,
+[data-skin="glass"]:lang(en) .showcase-card__title,
+[data-skin="glass"]:lang(en) .focus-row__title,
+[data-skin="glass"] .focus-row__no,
+[data-skin="glass"] .tl-date,
+[data-skin="glass"] .nav-link-construct,
+[data-skin="glass"] .project-card__tag {
+  font-family: var(--editorial-display);
 }
 
 /* Swiss base surfaces — marble white (light) / near-black (dark) */
@@ -938,8 +1059,27 @@ body {
 }
 
 [data-skin="glass"] .ambient-background__grid {
-  opacity: 0.08;
+  opacity: 0.12;
   animation: none;
+}
+
+:root[data-skin="glass"]:not(.dark) .ambient-background__wallpaper {
+  filter: invert(1) contrast(0.82) brightness(1.05);
+}
+
+[data-skin="glass"] .site-content {
+  background:
+    radial-gradient(circle at 18% 14%, rgba(0, 0, 0, 0.025) 0 0.7px, transparent 0.8px) 0 0 / 6px 6px,
+    color-mix(in srgb, var(--marble) 96%, transparent);
+  border-inline: 1px solid color-mix(in srgb, var(--construct-text) 10%, transparent);
+  box-shadow: 0 0 64px rgba(0, 0, 0, 0.28);
+}
+
+.dark[data-skin="glass"] .site-content {
+  background:
+    radial-gradient(circle at 18% 14%, rgba(255, 255, 255, 0.035) 0 0.7px, transparent 0.8px) 0 0 / 6px 6px,
+    rgba(10, 10, 11, 0.96);
+  border-inline-color: rgba(255, 255, 255, 0.1);
 }
 
 /* ---- Glass: lighter display weights + italic accent (Swiss feel) ---- */
@@ -1402,6 +1542,7 @@ body.is-win [data-skin="glass"] .section-heading-construct {
   justify-content: center;
   overflow: hidden;
   background: #ffffff;
+  transition: background-color 900ms ease;
   isolation: isolate;
 }
 
@@ -1411,6 +1552,14 @@ body.is-win [data-skin="glass"] .section-heading-construct {
     #050507 calc((1 - var(--hero-progress, 0)) * 100%),
     #0a0a0b
   );
+}
+
+[data-skin="glass"] .hello-stage.is-complete {
+  background: transparent;
+}
+
+.hello-stage.is-complete .hello-stage__hint {
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .hello-stage.is-gone {
@@ -1427,12 +1576,8 @@ body.is-win [data-skin="glass"] .section-heading-construct {
     translateY(calc(-4vh + var(--hero-progress, 0) * -7vh))
     scale(calc(1 - var(--hero-progress, 0) * 0.12));
   opacity: clamp(0, calc(1 - var(--hero-progress, 0) * 1.35), 1);
-  filter: invert(1) blur(calc(var(--hero-progress, 0) * 6px));
-  will-change: opacity, transform, filter;
-}
-
-.dark .hello-stage__art {
   filter: blur(calc(var(--hero-progress, 0) * 6px));
+  will-change: opacity, transform, filter;
 }
 
 .hello-stage__art svg {
@@ -1531,7 +1676,40 @@ body.is-win [data-skin="glass"] .section-heading-construct {
   background-clip: text;
   color: transparent;
   letter-spacing: -0.02em;
+  text-transform: uppercase;
 }
+
+/* Editorial folio numbers: labels, never body text. */
+[data-skin="glass"] #home,
+[data-skin="glass"] #about,
+[data-skin="glass"] #projects,
+[data-skin="glass"] #blog,
+[data-skin="glass"] #skills,
+[data-skin="glass"] .experience-section {
+  position: relative;
+}
+
+[data-skin="glass"] #home::before,
+[data-skin="glass"] #about::before,
+[data-skin="glass"] #projects::before,
+[data-skin="glass"] #blog::before,
+[data-skin="glass"] #skills::before,
+[data-skin="glass"] .experience-section::before {
+  position: absolute;
+  top: 1.5rem;
+  left: 0;
+  color: var(--construct-gold-strong);
+  font-family: var(--editorial-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+}
+
+[data-skin="glass"] #home::before { content: "01 / HOME"; }
+[data-skin="glass"] #about::before { content: "02 / ABOUT"; }
+[data-skin="glass"] #projects::before { content: "03 / PROJECTS"; }
+[data-skin="glass"] #blog::before { content: "04 / BLOG"; }
+[data-skin="glass"] #skills::before { content: "05 / SKILLS"; }
+[data-skin="glass"] .experience-section::before { content: "06 / TIMELINE"; }
 
 /* Soften the underline accent so headings read calm/Apple-clean. */
 [data-skin="glass"] .section-heading-construct::after {
@@ -1650,6 +1828,12 @@ body.is-win .hero-name-modern {
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
+}
+
+[data-skin="glass"] .showcase-card,
+[data-skin="glass"] .blog-card,
+[data-skin="glass"] .construct-panel {
+  border-radius: 0.25rem;
 }
 
 .dark[data-skin="glass"] .construct-panel,
@@ -2547,13 +2731,34 @@ body.is-win .hero-name-modern {
   box-shadow: 0 20px 48px -18px rgba(0, 0, 0, 0.6);
 }
 
-/* Rose-accent text selection — a quiet brand micro-detail. */
+/* Theme-accent text selection — a quiet brand micro-detail. */
 [data-skin="glass"] ::selection {
   background: color-mix(in srgb, var(--construct-gold) 18%, transparent);
 }
 .dark[data-skin="glass"] ::selection {
-  background: rgba(91, 123, 255, 0.32);
+  background: color-mix(in srgb, var(--construct-gold) 30%, transparent);
 }
+
+/* Final editorial type pass: headings/labels only; body text is untouched. */
+html[data-skin="glass"]:lang(en) .hero-name-modern,
+html[data-skin="glass"]:lang(en) .section-heading-construct,
+html[data-skin="glass"]:lang(en) .showcase-card__title,
+html[data-skin="glass"]:lang(en) .focus-row__title,
+html[data-skin="glass"]:lang(en) .blog-card__title,
+html[data-skin="glass"]:lang(en) .experience-section h3,
+html[data-skin="glass"]:lang(en) #name,
+html[data-skin="glass"] .bio-kicker,
+html[data-skin="glass"] .javis-metrics__title {
+  font-family: var(--editorial-display);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+}
+
+html[data-skin="glass"]:lang(en) #home .hero-name-modern {
+  font-style: normal;
+}
+
 
 /* Thin, unobtrusive Apple-style scrollbar in the modern skin. */
 [data-skin="glass"] * {
@@ -2591,11 +2796,6 @@ body.is-win .hero-name-modern {
     transform: none;
   }
 }
-
-
-
-
-
 
 
 

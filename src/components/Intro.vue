@@ -6,7 +6,6 @@
     :style="heroRevealStyle"
   >
     <div class="relative flex items-center justify-center">
-      <RoseBouquetDecoration placement="hero" />
       <div v-if="skin !== 'glass'" class="profile-orbit" aria-hidden="true" />
       <div class="relative z-10 animate-[popIn_0.45s_cubic-bezier(0.22,1,0.36,1)_both]">
         <img
@@ -147,7 +146,6 @@ import avatarImage from "@/photos/avatar.jpg"
 import { assetUrl } from "@/data/assets"
 import { useSectionObserver } from "@/composables/useInView"
 import { useHeroStage } from "@/composables/useHeroStage"
-import RoseBouquetDecoration from "@/components/RoseBouquetDecoration.vue"
 
 const props = defineProps({
   onVisible: {
