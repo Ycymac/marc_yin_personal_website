@@ -10,10 +10,10 @@
   >
     <g v-if="isHero" class="rose-avatar">
       <g class="rose-avatar__rose-corner">
-        <ellipse cx="52" cy="56" rx="38" ry="32" :fill="colors.shadow" opacity="0.12" filter="blur(7px)" />
         <rect
           v-for="petal in miniRosePetals"
           :key="petal.id"
+          class="rose-petal"
           :x="petal.x"
           :y="petal.y"
           :width="petal.w"
@@ -26,6 +26,7 @@
         <ellipse
           v-for="petal in miniRoseInner"
           :key="petal.id"
+          class="rose-petal"
           :cx="54 + (petal.dx || 0)"
           :cy="54 + (petal.dy || 0)"
           :rx="petal.rx"
@@ -52,7 +53,7 @@
             opacity="0.72"
             :transform="`rotate(${angle})`"
           />
-          <circle r="4.2" fill="#F6C629" opacity="0.94" />
+          <circle r="4.2" :fill="colors.centerInner" opacity="0.94" />
           <circle r="8" fill="#83B979" opacity="0.24" />
         </g>
         <g transform="translate(185 182) scale(0.82)">
@@ -65,7 +66,7 @@
             fill="#FFFFFF"
             opacity="0.82"
           />
-          <circle r="3.5" fill="#F6C629" opacity="0.94" />
+          <circle r="3.5" :fill="colors.centerInner" opacity="0.94" />
         </g>
         <circle cx="174" cy="145" r="4.5" fill="#72B88A" opacity="0.45" />
         <circle cx="196" cy="164" r="3.6" :fill="colors.soft" opacity="0.42" />
@@ -80,10 +81,10 @@
       >
         <g class="rose-hello__cluster" :style="clusterBloomStyle(cluster.delay)">
           <template v-if="cluster.type === 'rose'">
-            <ellipse cx="55" cy="58" rx="44" ry="36" :fill="colors.shadow" opacity="0.11" filter="blur(8px)" />
             <rect
               v-for="petal in miniRosePetals"
               :key="`${cluster.id}-${petal.id}`"
+              class="rose-petal"
               :x="petal.x"
               :y="petal.y"
               :width="petal.w"
@@ -96,6 +97,7 @@
             <ellipse
               v-for="petal in miniRoseInner"
               :key="`${cluster.id}-${petal.id}`"
+              class="rose-petal"
               :cx="54 + (petal.dx || 0)"
               :cy="54 + (petal.dy || 0)"
               :rx="petal.rx"
@@ -121,7 +123,7 @@
               opacity="0.7"
               :transform="`rotate(${angle})`"
             />
-            <circle r="6" fill="#F6C629" opacity="0.94" />
+            <circle r="6" :fill="colors.centerInner" opacity="0.94" />
             <circle r="12" fill="#83B979" opacity="0.22" />
           </template>
 
@@ -136,7 +138,7 @@
                 fill="#FFFFFF"
                 opacity="0.78"
               />
-              <circle r="4.2" fill="#F6C629" opacity="0.94" />
+              <circle r="4.2" :fill="colors.centerInner" opacity="0.94" />
             </g>
           </template>
         </g>
@@ -245,7 +247,7 @@
             fill="#FFFFFF"
             :opacity="flower.opacity"
           />
-          <circle :cx="flower.cx" :cy="flower.cy" :r="flower.centerR" fill="#F6C629" opacity="0.92" />
+          <circle :cx="flower.cx" :cy="flower.cy" :r="flower.centerR" :fill="colors.centerInner" opacity="0.92" />
         </g>
       </g>
 
@@ -263,7 +265,7 @@
             :opacity="flower.opacity"
             :transform="`rotate(${angle} ${flower.cx} ${flower.cy})`"
           />
-          <circle :cx="flower.cx" :cy="flower.cy" :r="flower.centerR" fill="#F6C629" opacity="0.92" />
+          <circle :cx="flower.cx" :cy="flower.cy" :r="flower.centerR" :fill="colors.centerInner" opacity="0.92" />
           <circle :cx="flower.cx" :cy="flower.cy" :r="flower.centerR + 7" fill="#83B979" opacity="0.24" />
         </g>
       </g>
@@ -287,6 +289,7 @@
           <rect
             v-for="petal in rose.outer"
             :key="petal.id"
+            class="rose-petal"
             :x="petal.x"
             :y="petal.y"
             :width="petal.w"
@@ -299,6 +302,7 @@
           <rect
             v-for="petal in rose.middle"
             :key="petal.id"
+            class="rose-petal"
             :x="petal.x"
             :y="petal.y"
             :width="petal.w"
@@ -311,6 +315,7 @@
           <ellipse
             v-for="petal in rose.inner"
             :key="petal.id"
+            class="rose-petal"
             :cx="rose.cx + (petal.dx || 0)"
             :cy="rose.cy + (petal.dy || 0)"
             :rx="petal.rx"
@@ -381,8 +386,8 @@ const accentAngles = [0, 60, 120, 180, 240, 300]
 
 const isVisible = computed(() => skin?.value === "glass")
 const activeTheme = computed(() => (theme?.value === "light" ? "light" : "dark"))
-const spec = computed(() => (activeTheme.value === "light" ? yellowSpec : blueSpec))
-const colors = computed(() => (activeTheme.value === "light" ? yellow : blue))
+const spec = computed(() => (activeTheme.value === "light" ? pinkSpec : blueSpec))
+const colors = computed(() => (activeTheme.value === "light" ? pink : blue))
 const isHero = computed(() => props.placement === "hero")
 const isHello = computed(() => props.placement === "hello")
 const bloomProgress = computed(() => clamp(props.progress, 0, 1))
@@ -403,29 +408,35 @@ const decorationClasses = computed(() => [
 const miniRosePetals = computed(() => {
   const color = colors.value
   return [
-    rectPetal("mini-o-01", 24, 24, 54, 42, 0, color.pale, 0.62, 18),
-    rectPetal("mini-o-02", 45, 28, 52, 40, 42, color.soft, 0.56, 18),
-    rectPetal("mini-o-03", 43, 58, 52, 40, 96, color.pale, 0.56, 18),
-    rectPetal("mini-o-04", 18, 61, 52, 40, 154, color.main, 0.48, 18),
-    rectPetal("mini-o-05", 10, 36, 54, 40, 226, color.soft, 0.52, 18),
-    rectPetal("mini-m-01", 32, 39, 43, 30, 8, color.main, 0.7, 14),
-    rectPetal("mini-m-02", 49, 44, 36, 29, 58, color.deep, 0.58, 13),
-    rectPetal("mini-m-03", 38, 57, 38, 29, 126, color.pale, 0.66, 13),
+    rectPetal("mini-o-01", 25, 17, 58, 44, 0, color.pale, 0.72, 21),
+    rectPetal("mini-o-02", 48, 24, 55, 42, 45, color.soft, 0.68, 20),
+    rectPetal("mini-o-03", 48, 54, 55, 42, 100, color.pale, 0.7, 20),
+    rectPetal("mini-o-04", 15, 58, 60, 43, 160, color.soft, 0.68, 20),
+    rectPetal("mini-o-05", 7, 32, 58, 44, 225, color.pale, 0.72, 21),
+    rectPetal("mini-m-01", 33, 30, 44, 34, 0, color.main, 0.78, 16),
+    rectPetal("mini-m-02", 47, 37, 43, 33, 55, color.deep, 0.76, 16),
+    rectPetal("mini-m-03", 40, 54, 43, 33, 118, color.main, 0.8, 16),
+    rectPetal("mini-m-04", 22, 48, 45, 34, 175, color.deep, 0.74, 16),
+    rectPetal("mini-m-05", 20, 33, 43, 33, 235, color.main, 0.78, 16),
+    rectPetal("mini-c-01", 40, 39, 30, 22, 10, color.deep, 0.86, 11),
+    rectPetal("mini-c-02", 48, 44, 28, 21, 75, color.main, 0.86, 10),
+    rectPetal("mini-c-03", 37, 51, 30, 22, 145, color.deep, 0.84, 11),
+    rectPetal("mini-c-04", 31, 43, 29, 22, 220, color.main, 0.86, 11),
   ]
 })
 const miniRoseInner = computed(() => {
   const color = colors.value
   return [
-    ellipsePetal("mini-i-01", 18, 11, 0, color.deep, 0.82),
-    ellipsePetal("mini-i-02", 14, 9, 62, color.main, 0.8, 1),
-    ellipsePetal("mini-i-03", 10, 7, 132, color.pale, 0.82, -1),
+    ellipsePetal("mini-i-01", 13, 8.5, 0, color.deep, 0.84),
+    ellipsePetal("mini-i-02", 9, 6, 65, color.main, 0.86, 1),
+    ellipsePetal("mini-i-03", 6, 4.2, 138, color.pale, 0.9, -1),
   ]
 })
 const helloClusters = [
-  { id: "hello-tl", type: "rose", delay: 0.08, transform: "translate(86 145) scale(1.04) rotate(-12)" },
+  { id: "hello-tl", type: "rose", delay: 0.08, transform: "translate(62 120) scale(1.62) rotate(-12)" },
   { id: "hello-tr", type: "accent", delay: 0.18, transform: "translate(860 190) scale(1.18) rotate(14)" },
   { id: "hello-bl", type: "white", delay: 0.28, transform: "translate(92 788) scale(0.96) rotate(7)" },
-  { id: "hello-br", type: "rose", delay: 0.38, transform: "translate(815 780) scale(0.86) rotate(16)" },
+  { id: "hello-br", type: "rose", delay: 0.38, transform: "translate(790 755) scale(1.42) rotate(16)" },
 ]
 
 function degToRad(deg) {
@@ -481,15 +492,15 @@ const blue = {
   centerInner: "#FFE05C",
 }
 
-const yellow = {
-  deep: "#F4BE36",
-  main: "#FFD75C",
-  soft: "#FFE88F",
-  pale: "#FFF3B8",
-  light: "#FFF8DA",
-  shadow: "#D8BE78",
-  centerOuter: "#FFE681",
-  centerInner: "#F3B321",
+const pink = {
+  deep: "#D982A0",
+  main: "#EBABC0",
+  soft: "#F7CFDA",
+  pale: "#FBE5EB",
+  light: "#FFF3F6",
+  shadow: "#DBB8C3",
+  centerOuter: "#FFF5F7",
+  centerInner: "#EFA5BA",
 }
 
 function rectPetal(id, x, y, w, h, rotate, fill, opacity, rx = 44) {
@@ -667,13 +678,13 @@ const blueSpec = {
   ],
 }
 
-const yellowSpec = {
-  mode: "yellow",
-  centerOuter: yellow.centerOuter,
-  centerInner: yellow.centerInner,
+const pinkSpec = {
+  mode: "pink",
+  centerOuter: pink.centerOuter,
+  centerInner: pink.centerInner,
   shadows: [
     { id: "base", cx: 512, cy: 1130, rx: 120, ry: 24, fill: "#8FA4BF", opacity: 0.12, blur: 12 },
-    { id: "body", cx: 515, cy: 545, rx: 340, ry: 315, fill: yellow.shadow, opacity: 0.08, blur: 24 },
+    { id: "body", cx: 515, cy: 545, rx: 340, ry: 315, fill: pink.shadow, opacity: 0.08, blur: 24 },
   ],
   stems: [
     { id: "stem-left", d: "M500 1100 C465 910 420 700 370 500", stroke: "#5F9F62", width: 12, opacity: 0.62 },
@@ -721,74 +732,74 @@ const yellowSpec = {
       id: "rose-a",
       cx: 390,
       cy: 465,
-      shadow: { dx: 18, dy: 20, rx: 132, ry: 112, fill: yellow.shadow, opacity: 0.14 },
+      shadow: { dx: 18, dy: 20, rx: 132, ry: 112, fill: pink.shadow, opacity: 0.14 },
       centerOuter: 10,
       centerInner: 5,
       outer: [
-        rectPetal("a-o-01", 315, 355, 150, 112, 0, yellow.pale, 0.64, 44),
-        rectPetal("a-o-02", 370, 370, 140, 108, 38, yellow.soft, 0.58, 42),
-        rectPetal("a-o-03", 370, 455, 142, 108, 95, yellow.pale, 0.58, 42),
-        rectPetal("a-o-04", 300, 475, 150, 110, 150, yellow.main, 0.45, 42),
-        rectPetal("a-o-05", 265, 410, 150, 110, 220, yellow.pale, 0.55, 42),
+        rectPetal("a-o-01", 315, 355, 150, 112, 0, pink.pale, 0.64, 44),
+        rectPetal("a-o-02", 370, 370, 140, 108, 38, pink.soft, 0.58, 42),
+        rectPetal("a-o-03", 370, 455, 142, 108, 95, pink.pale, 0.58, 42),
+        rectPetal("a-o-04", 300, 475, 150, 110, 150, pink.main, 0.45, 42),
+        rectPetal("a-o-05", 265, 410, 150, 110, 220, pink.pale, 0.55, 42),
       ],
       middle: [
-        rectPetal("a-m-01", 340, 405, 115, 82, 0, yellow.soft, 0.76, 34),
-        rectPetal("a-m-02", 380, 420, 105, 80, 48, yellow.main, 0.62, 32),
-        rectPetal("a-m-03", 360, 465, 110, 80, 110, yellow.pale, 0.68, 32),
-        rectPetal("a-m-04", 315, 455, 112, 82, 170, yellow.main, 0.58, 34),
+        rectPetal("a-m-01", 340, 405, 115, 82, 0, pink.soft, 0.76, 34),
+        rectPetal("a-m-02", 380, 420, 105, 80, 48, pink.main, 0.62, 32),
+        rectPetal("a-m-03", 360, 465, 110, 80, 110, pink.pale, 0.68, 32),
+        rectPetal("a-m-04", 315, 455, 112, 82, 170, pink.main, 0.58, 34),
       ],
       inner: [
-        ellipsePetal("a-i-01", 48, 30, 0, yellow.deep, 0.8),
-        ellipsePetal("a-i-02", 38, 26, 60, yellow.main, 0.82, 2),
-        ellipsePetal("a-i-03", 28, 20, 130, yellow.pale, 0.84, -2),
-        ellipsePetal("a-i-04", 18, 14, 220, yellow.centerInner, 0.82),
+        ellipsePetal("a-i-01", 48, 30, 0, pink.deep, 0.8),
+        ellipsePetal("a-i-02", 38, 26, 60, pink.main, 0.82, 2),
+        ellipsePetal("a-i-03", 28, 20, 130, pink.pale, 0.84, -2),
+        ellipsePetal("a-i-04", 18, 14, 220, pink.centerInner, 0.82),
       ],
     },
     {
       id: "rose-b",
       cx: 635,
       cy: 455,
-      shadow: { dx: 17, dy: 20, rx: 128, ry: 110, fill: yellow.shadow, opacity: 0.13 },
+      shadow: { dx: 17, dy: 20, rx: 128, ry: 110, fill: pink.shadow, opacity: 0.13 },
       centerOuter: 10,
       centerInner: 5,
       outer: [
-        rectPetal("b-o-01", 560, 345, 150, 110, 0, yellow.pale, 0.64, 42),
-        rectPetal("b-o-02", 615, 365, 140, 106, 40, yellow.soft, 0.58, 40),
-        rectPetal("b-o-03", 615, 445, 140, 106, 95, yellow.pale, 0.58, 40),
-        rectPetal("b-o-04", 545, 465, 150, 110, 150, yellow.main, 0.45, 42),
-        rectPetal("b-o-05", 515, 400, 150, 110, 220, yellow.pale, 0.55, 42),
+        rectPetal("b-o-01", 560, 345, 150, 110, 0, pink.pale, 0.64, 42),
+        rectPetal("b-o-02", 615, 365, 140, 106, 40, pink.soft, 0.58, 40),
+        rectPetal("b-o-03", 615, 445, 140, 106, 95, pink.pale, 0.58, 40),
+        rectPetal("b-o-04", 545, 465, 150, 110, 150, pink.main, 0.45, 42),
+        rectPetal("b-o-05", 515, 400, 150, 110, 220, pink.pale, 0.55, 42),
       ],
       middle: [
-        rectPetal("b-m-01", 585, 395, 115, 82, 0, yellow.soft, 0.76, 34),
-        rectPetal("b-m-02", 625, 410, 105, 80, 48, yellow.main, 0.62, 32),
-        rectPetal("b-m-03", 605, 455, 110, 80, 110, yellow.pale, 0.68, 32),
-        rectPetal("b-m-04", 560, 445, 112, 82, 170, yellow.main, 0.58, 34),
+        rectPetal("b-m-01", 585, 395, 115, 82, 0, pink.soft, 0.76, 34),
+        rectPetal("b-m-02", 625, 410, 105, 80, 48, pink.main, 0.62, 32),
+        rectPetal("b-m-03", 605, 455, 110, 80, 110, pink.pale, 0.68, 32),
+        rectPetal("b-m-04", 560, 445, 112, 82, 170, pink.main, 0.58, 34),
       ],
       inner: [
-        ellipsePetal("b-i-01", 48, 30, 0, yellow.deep, 0.8),
-        ellipsePetal("b-i-02", 38, 26, 60, yellow.main, 0.82, 2),
-        ellipsePetal("b-i-03", 28, 20, 130, yellow.pale, 0.84, -2),
-        ellipsePetal("b-i-04", 18, 14, 220, yellow.centerInner, 0.82),
+        ellipsePetal("b-i-01", 48, 30, 0, pink.deep, 0.8),
+        ellipsePetal("b-i-02", 38, 26, 60, pink.main, 0.82, 2),
+        ellipsePetal("b-i-03", 28, 20, 130, pink.pale, 0.84, -2),
+        ellipsePetal("b-i-04", 18, 14, 220, pink.centerInner, 0.82),
       ],
     },
     {
       id: "rose-c",
       cx: 505,
       cy: 700,
-      shadow: { dx: 12, dy: 14, rx: 78, ry: 66, fill: yellow.shadow, opacity: 0.12 },
+      shadow: { dx: 12, dy: 14, rx: 78, ry: 66, fill: pink.shadow, opacity: 0.12 },
       centerOuter: 8,
       centerInner: 4,
       outer: [
-        rectPetal("c-o-01", 450, 645, 110, 78, 0, yellow.pale, 0.62, 32),
-        rectPetal("c-o-02", 490, 660, 96, 72, 55, yellow.soft, 0.58, 30),
-        rectPetal("c-o-03", 475, 705, 100, 72, 120, yellow.main, 0.48, 30),
-        rectPetal("c-o-04", 430, 690, 96, 72, 210, yellow.light, 0.64, 30),
+        rectPetal("c-o-01", 450, 645, 110, 78, 0, pink.pale, 0.62, 32),
+        rectPetal("c-o-02", 490, 660, 96, 72, 55, pink.soft, 0.58, 30),
+        rectPetal("c-o-03", 475, 705, 100, 72, 120, pink.main, 0.48, 30),
+        rectPetal("c-o-04", 430, 690, 96, 72, 210, pink.light, 0.64, 30),
       ],
       middle: [],
       inner: [
-        ellipsePetal("c-i-01", 38, 24, 0, yellow.deep, 0.78),
-        ellipsePetal("c-i-02", 30, 21, 70, yellow.main, 0.8),
-        ellipsePetal("c-i-03", 20, 16, 150, yellow.pale, 0.82),
+        ellipsePetal("c-i-01", 38, 24, 0, pink.deep, 0.78),
+        ellipsePetal("c-i-02", 30, 21, 70, pink.main, 0.8),
+        ellipsePetal("c-i-03", 20, 16, 150, pink.pale, 0.82),
       ],
     },
   ],
@@ -857,11 +868,11 @@ const yellowSpec = {
   transform: translateZ(0);
 }
 
-.rose-decoration--yellow.rose-decoration--hero {
+.rose-decoration--pink.rose-decoration--hero {
   opacity: 0.94;
 }
 
-.rose-decoration--yellow.rose-decoration--about {
+.rose-decoration--pink.rose-decoration--about {
   opacity: 0.28;
 }
 
@@ -888,6 +899,10 @@ const yellowSpec = {
   transform-box: view-box;
 }
 
+.rose-petal {
+  filter: saturate(1.03);
+}
+
 .rose-bouquet__rose-a {
   animation: rose-a-bloom 9.2s ease-in-out infinite;
 }
@@ -906,7 +921,7 @@ const yellowSpec = {
 }
 
 .rose-avatar__rose-corner {
-  animation: rose-a-bloom 9.4s ease-in-out infinite;
+  animation: rose-avatar-bloom 9.4s ease-in-out infinite;
   transform-box: fill-box;
   transform-origin: center;
 }
@@ -967,6 +982,16 @@ const yellowSpec = {
   }
   48% {
     transform: rotate(0.55deg) scale(1.012);
+  }
+}
+
+@keyframes rose-avatar-bloom {
+  0%,
+  100% {
+    transform: rotate(-0.25deg) scale(1.18);
+  }
+  48% {
+    transform: rotate(0.55deg) scale(1.194);
   }
 }
 

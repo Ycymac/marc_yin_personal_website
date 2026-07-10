@@ -19,10 +19,18 @@
           <!-- Demo on the left -->
           <div class="javis-demo">
             <div class="showcase-carousel">
-              <div v-show="slideFor(index) === 0" class="showcase-carousel__slide">
+              <div
+                class="showcase-carousel__slide"
+                :class="{ 'is-active': slideFor(index) === 0 }"
+                :aria-hidden="slideFor(index) !== 0"
+              >
                 <RagChatDemo :locale="locale" :autostart="false" :show-replay="false" :ref="(el) => setRagRef(el, index)" />
               </div>
-              <div v-show="slideFor(index) === 1" class="showcase-carousel__slide">
+              <div
+                class="showcase-carousel__slide"
+                :class="{ 'is-active': slideFor(index) === 1 }"
+                :aria-hidden="slideFor(index) !== 1"
+              >
                 <video
                   :ref="(el) => setVideoRef(el, index)"
                   :src="project.videoUrl"
