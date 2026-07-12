@@ -2,7 +2,10 @@
   <div
     ref="target"
     class="project-card group mb-6 transition-all duration-700 ease-out last:mb-0 sm:mb-8"
-    :class="isVisible ? 'scale-100 opacity-100' : 'scale-[0.92] opacity-60'"
+    :class="[
+      isVisible ? 'scale-100 opacity-100' : 'scale-[0.92] opacity-60',
+      { 'is-visible': isVisible },
+    ]"
   >
     <section
       class="project-card__surface relative grid max-w-[58rem] overflow-hidden rounded-lg border border-white/60 bg-white/70 shadow-xl shadow-slate-950/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-white dark:shadow-black/20 md:grid-cols-[0.95fr_1.05fr]"
@@ -37,8 +40,12 @@
       </div>
 
       <div class="project-card__media-wrap relative min-h-[16rem] overflow-hidden bg-slate-950/5 dark:bg-slate-950/30">
+        <PersonalSitePreview
+          v-if="project.animatedPreview"
+          :locale="locale"
+        />
         <video
-          v-if="project.videoUrl"
+          v-else-if="project.videoUrl"
           :src="project.videoUrl"
           :poster="project.gallery?.[0] || project.imageUrl"
           class="project-card__media project-card__media--video h-full min-h-[16rem] w-full object-cover"
@@ -75,6 +82,7 @@
 <script setup>
 import { computed } from "vue"
 import { useReveal } from "@/composables/useInView"
+import PersonalSitePreview from "./PersonalSitePreview.vue"
 
 const props = defineProps({
   project: {

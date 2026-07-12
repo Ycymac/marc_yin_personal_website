@@ -2,7 +2,8 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 
-OUT = Path(r"C:\Users\32539\.codex\visualizations\2026\07\10\019f4cec-940e-7da2-b4c7-76dbd840350c")
+OUT = Path(r"C:\Users\32539\.codex\visualizations\2026\07\11\019f5110-3d7d-79e1-a5d1-124113ae55a5")
+OUT.mkdir(parents=True, exist_ok=True)
 
 
 with sync_playwright() as p:
@@ -30,6 +31,17 @@ with sync_playwright() as p:
     page.evaluate("scrollTo(0, innerHeight)")
     page.wait_for_timeout(900)
     page.screenshot(path=str(OUT / "modern-dark-home.png"), full_page=False)
+    page.locator("#projects").scroll_into_view_if_needed()
+    page.wait_for_timeout(1400)
+    dark_preview = {
+        "background": page.locator(".site-preview").evaluate(
+            "node => getComputedStyle(node).backgroundColor"
+        ),
+        "color": page.locator(".site-preview").evaluate(
+            "node => getComputedStyle(node).color"
+        ),
+    }
+    page.locator(".site-preview").screenshot(path=str(OUT / "modern-dark-site-preview.png"))
 
     page.evaluate("localStorage.setItem('theme', 'light'); scrollTo(0, 0)")
     page.reload(wait_until="networkidle")
@@ -60,7 +72,34 @@ with sync_playwright() as p:
     metric_colors = page.locator(".javis-metric__value").evaluate_all(
         "nodes => [...new Set(nodes.map(node => getComputedStyle(node).color))]"
     )
+    preview = page.locator(".site-preview")
+    modern_preview = {
+        "count": preview.count(),
+        "greeting_visible": page.locator(".site-preview__greeting").is_visible(),
+        "module_columns": page.locator(".site-preview__modules").evaluate(
+            "node => getComputedStyle(node).gridTemplateColumns"
+        ),
+        "legacy_image_count": page.locator('img[src*="portfolio"]').count(),
+    }
+    preview.screenshot(path=str(OUT / "modern-light-site-preview.png"))
     page.screenshot(path=str(OUT / "modern-light-projects.png"), full_page=False)
+
+    page.evaluate("localStorage.setItem('skin', 'literary')")
+    page.reload(wait_until="networkidle")
+    page.locator("#projects").scroll_into_view_if_needed()
+    page.wait_for_timeout(900)
+    literary_preview = {
+        "count": page.locator(".site-preview").count(),
+        "greeting_visible": page.locator(".site-preview__greeting").is_visible(),
+        "routes_visible": page.locator(".site-preview__routes").is_visible(),
+        "module_columns": page.locator(".site-preview__modules").evaluate(
+            "node => getComputedStyle(node).gridTemplateColumns"
+        ),
+    }
+    page.locator(".site-preview").screenshot(path=str(OUT / "literary-light-site-preview.png"))
+    page.screenshot(path=str(OUT / "literary-light-projects.png"), full_page=False)
+
+    page.evaluate("localStorage.setItem('skin', 'glass')")
     page.locator("#blog").scroll_into_view_if_needed()
     page.wait_for_timeout(900)
     page.screenshot(path=str(OUT / "modern-light-blog.png"), full_page=False)
@@ -75,7 +114,10 @@ with sync_playwright() as p:
         "vcr_loaded": vcr_loaded,
         "about_columns": about_columns,
         "metric_colors": metric_colors,
+        "modern_preview": modern_preview,
+        "literary_preview": literary_preview,
         "dark_accent": dark_accent,
+        "dark_preview": dark_preview,
         "light_accent": light_accent,
         "flower_nodes": flowers,
         "console_errors": errors,

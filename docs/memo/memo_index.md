@@ -13,6 +13,12 @@ Read this file first, then open only the memo whose title, keywords, or Use when
 
 ## Memos
 
+### personal_site_project_preview_animation
+- File: `docs/memo/personal_site_project_preview_animation.md`
+- Keywords: project preview, animatedPreview, modern dark, literary skin, ProjectShowcase, ProjectCard
+- Use when: changing the personal-site project card media, its animation, or either skin's project rendering path.
+- Last updated: 2026-07-11T12:00:00+08:00
+
 ### hero_prompt_fusion_concepts_and_sora_preview_notes
 - File: `docs/memo/hero_prompt_fusion_concepts_and_sora_preview_notes.md`
 - Keywords: hero prompt fusion, sora, cinematic hero, glass skin, preview images, video blocker

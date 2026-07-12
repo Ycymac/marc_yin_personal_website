@@ -156,8 +156,12 @@
           </ul>
         </div>
         <div class="showcase-card__media">
+          <PersonalSitePreview
+            v-if="project.animatedPreview"
+            :locale="locale"
+          />
           <img
-            v-if="project.imageUrl"
+            v-else-if="project.imageUrl"
             :src="project.imageUrl"
             :alt="`${project.title} preview`"
             class="showcase-card__img"
@@ -203,6 +207,7 @@
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { ChevronLeft, ChevronRight, Maximize2, RotateCcw, X } from "lucide-vue-next"
 import RagChatDemo from "./RagChatDemo.vue"
+import PersonalSitePreview from "./PersonalSitePreview.vue"
 import { ragMetrics } from "@/data/ragMetrics"
 
 defineProps({

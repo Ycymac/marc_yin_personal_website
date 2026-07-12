@@ -2232,6 +2232,237 @@ body.is-win .hero-name-modern {
   display: block;
 }
 
+/* Personal-site project preview: a tiny information architecture, not a stale
+   screenshot. Its entrance piggybacks on the card's existing in-view state. */
+.site-preview {
+  position: relative;
+  width: min(100%, 28rem);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  padding: 1.25rem;
+  border: 1px solid var(--construct-line);
+  border-radius: 0.35rem;
+  color: var(--construct-text);
+  background:
+    linear-gradient(var(--construct-line) 1px, transparent 1px) 0 0 / 100% 25%,
+    linear-gradient(90deg, var(--construct-line) 1px, transparent 1px) 0 0 / 25% 100%,
+    var(--construct-panel);
+}
+
+.site-preview__folio,
+.site-preview__status,
+.site-preview__modules {
+  font-family: var(--editorial-display);
+  letter-spacing: 0.09em;
+}
+
+.site-preview__folio {
+  font-size: 0.58rem;
+  color: var(--construct-gold-strong);
+}
+
+.site-preview__greeting {
+  margin-top: 1.35rem;
+  font-size: clamp(0.65rem, 1.5vw, 0.78rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  opacity: 0;
+  transform: translateY(0.5rem);
+}
+
+.site-preview__identity {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.25rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--construct-text);
+  opacity: 0;
+  transform: translateY(0.5rem);
+}
+
+.site-preview__identity span {
+  font-family: var(--editorial-display);
+  font-size: clamp(1.4rem, 4.2vw, 2.6rem);
+  line-height: 1;
+}
+
+.site-preview__identity small {
+  font-family: var(--modern-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  color: var(--construct-muted);
+}
+
+.site-preview__routes {
+  position: absolute;
+  inset: 43% 5% auto;
+  width: 90%;
+  height: 38%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.site-preview__routes path {
+  fill: none;
+  stroke: var(--construct-gold-strong);
+  stroke-width: 1.5;
+  stroke-dasharray: 980;
+  stroke-dashoffset: 980;
+  vector-effect: non-scaling-stroke;
+}
+
+.site-preview__modules {
+  position: absolute;
+  inset: 58% 1.25rem auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.45rem 0.7rem;
+  font-size: clamp(0.46rem, 1.1vw, 0.62rem);
+  list-style: none;
+}
+
+.site-preview__modules li {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid var(--construct-line);
+  background: var(--construct-panel-strong);
+  opacity: 0;
+  transform: translateY(0.45rem);
+}
+
+.site-preview__modules span {
+  color: var(--construct-gold-strong);
+}
+
+.site-preview__status {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 0.75rem;
+  font-size: 0.48rem;
+  color: var(--construct-muted);
+  opacity: 0;
+}
+
+.is-visible .site-preview__greeting,
+.is-visible .site-preview__identity {
+  animation: site-preview-rise 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.is-visible .site-preview__identity { animation-delay: 180ms; }
+.is-visible .site-preview__routes path {
+  animation: site-preview-draw 900ms 430ms ease forwards;
+}
+.is-visible .site-preview__modules li {
+  animation: site-preview-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.is-visible .site-preview__modules li:nth-child(1) { animation-delay: 650ms; }
+.is-visible .site-preview__modules li:nth-child(2) { animation-delay: 730ms; }
+.is-visible .site-preview__modules li:nth-child(3) { animation-delay: 810ms; }
+.is-visible .site-preview__modules li:nth-child(4) { animation-delay: 890ms; }
+.is-visible .site-preview__modules li:nth-child(5) { animation-delay: 970ms; }
+.is-visible .site-preview__modules li:nth-child(6) { animation-delay: 1050ms; }
+.is-visible .site-preview__status {
+  animation: site-preview-fade 400ms 1180ms ease forwards;
+}
+
+/* Literary mode skips HELLO and reads like a quiet printed contents page. */
+[data-skin="literary"] .site-preview {
+  border-width: 1px 0;
+  border-radius: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 2.35rem, var(--construct-line) 2.35rem calc(2.35rem + 1px)),
+    var(--construct-panel);
+}
+
+[data-skin="literary"] .project-card__media-wrap .site-preview {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 16rem;
+  aspect-ratio: auto;
+  border: 0;
+}
+
+[data-skin="literary"] .site-preview__greeting,
+[data-skin="literary"] .site-preview__routes {
+  display: none;
+}
+
+[data-skin="literary"] .site-preview__identity {
+  margin-top: 1.5rem;
+  font-family: var(--construct-serif);
+  border-bottom-color: var(--construct-text);
+  animation-delay: 0ms;
+}
+
+[data-skin="literary"] .site-preview__identity span {
+  font-family: var(--construct-serif);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+[data-skin="literary"] .site-preview__modules {
+  inset: 48% 1.25rem auto;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  font-family: var(--construct-serif);
+  font-size: clamp(0.52rem, 1.2vw, 0.68rem);
+  letter-spacing: 0.04em;
+}
+
+[data-skin="literary"] .site-preview__modules li {
+  justify-content: space-between;
+  padding: 0.42rem 0.2rem;
+  border: 0;
+  border-bottom: 1px solid var(--construct-line);
+  background: transparent;
+}
+
+[data-skin="literary"] .site-preview__modules li:nth-child(odd) {
+  margin-right: 0.75rem;
+}
+
+[data-skin="literary"] .site-preview__modules li:nth-child(even) {
+  margin-left: 0.75rem;
+}
+
+@keyframes site-preview-rise {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes site-preview-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes site-preview-fade {
+  to { opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .site-preview { padding: 1rem; }
+  .site-preview__modules { inset-inline: 1rem; }
+  .site-preview__status { right: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-preview__greeting,
+  .site-preview__identity,
+  .site-preview__modules li,
+  .site-preview__status {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .site-preview__routes path {
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+  }
+}
+
 .showcase-card__expand {
   position: absolute;
   right: 0.7rem;
