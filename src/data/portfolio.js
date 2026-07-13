@@ -164,7 +164,7 @@ export const projectsData = [
     description:
       "My second personal project, developed from February to April 2026. It was built with reference to GitHub open-source projects and assisted by Codex.",
     desc_zh:
-      "个人第二个项目，开发时间为 2026 年 2 月至 4 月。项目结合 GitHub 开源项目经验，并使用 Codex 辅助开发。",
+      "个人第二个项目，开发时间为 2026 年 2 月至 4 月。项目结合 GitHub 开源项目，并使用 Codex 辅助开发。",
     tags: ["Java", "RAG", "AI", "Codex", "RocketMQ"],
     imageUrl: javisIcon,
     gallery: [javisFunction1, javisFunction2],
