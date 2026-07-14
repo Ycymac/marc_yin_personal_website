@@ -103,6 +103,10 @@ with sync_playwright() as p:
     page.locator("#blog").scroll_into_view_if_needed()
     page.wait_for_timeout(900)
     page.screenshot(path=str(OUT / "modern-light-blog.png"), full_page=False)
+    timeline_heading_gap = page.locator(".experience-section").evaluate(
+        "node => node.querySelector('.section-heading-construct').getBoundingClientRect().top - node.getBoundingClientRect().top"
+    )
+    assert timeline_heading_gap < 100, f"Timeline heading gap regressed: {timeline_heading_gap}px"
 
     print({
         "dark_wallpaper_ready": dark_ready,
@@ -120,6 +124,7 @@ with sync_playwright() as p:
         "dark_preview": dark_preview,
         "light_accent": light_accent,
         "flower_nodes": flowers,
+        "timeline_heading_gap": timeline_heading_gap,
         "console_errors": errors,
     })
     browser.close()

@@ -1912,7 +1912,7 @@ body.is-win .hero-name-modern {
   padding-bottom: clamp(5rem, 8vw, 7rem);
 }
 
-[data-skin="glass"] .experience-section > :not(.rose-decoration) {
+[data-skin="glass"] .experience-section > :not(.rose-decoration):not(#experience) {
   position: relative;
   z-index: 1;
 }
