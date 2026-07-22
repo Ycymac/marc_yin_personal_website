@@ -13,6 +13,12 @@ Read this file first, then open only the memo whose title, keywords, or Use when
 
 ## Memos
 
+### project_content_and_evaluation_copy
+- File: `docs/memo/project_content_and_evaluation_copy.md`
+- Keywords: GetCoupon, JAVIS, project description, March-June 2026, 5x24 evaluation, content-only
+- Use when: changing project names, dates, descriptions, or JAVIS evaluation copy without changing the site's visual design.
+- Last updated: 2026-07-22T16:44:45+08:00
+
 ### personal_site_project_preview_animation
 - File: `docs/memo/personal_site_project_preview_animation.md`
 - Keywords: project preview, animatedPreview, modern dark, literary skin, ProjectShowcase, ProjectCard

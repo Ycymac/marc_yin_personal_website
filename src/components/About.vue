@@ -30,8 +30,8 @@
       <p>
         我始终觉得，只看资料还不够，真正能沉淀能力的是“动手做出来”💪。2025.11 至 2026.1，我开发了第一个个人项目
         <strong>GetCoupon 捷券优惠券管理系统</strong>
-        ；2026.2 至 2026.4，我结合 GitHub 开源项目，并使用 Codex 辅助开发了第二个项目
-        <strong>JAVIS</strong>
+        ；2026.3 至 2026.6，我结合 GitHub 开源项目，并使用 Codex 辅助开发了第二个项目
+        <strong>JAVIS智能面试知识库平台</strong>
         。从需求梳理到功能落地，每一步都在帮我缩短“看懂技术”和“做出项目”之间的距离✌。
       </p>
       <p>
@@ -69,8 +69,8 @@
       <p>
         I believe practice is the best way to connect scattered knowledge. From November 2025 to January 2026, I built
         <strong>GetCoupon</strong>
-        as my first personal project. From February to April 2026, I developed
-        <strong>JAVIS</strong>
+        as my first personal project. From March to June 2026, I developed
+        <strong>JAVIS Intelligent Interview Knowledge Base Platform</strong>
         with reference to GitHub open-source projects and Codex-assisted development.
       </p>
       <p>

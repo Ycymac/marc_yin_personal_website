@@ -132,7 +132,7 @@
         </div>
 
         <p class="javis-notes">
-          <span>{{ locale === "zh" ? "最近 1 轮测试" : "Latest test run" }}</span>
+          <span>{{ locale === "zh" ? "最近执行 5 轮测试，每轮 24 条问题" : "Latest: 5 test rounds, 24 questions per round" }}</span>
           <span class="javis-notes__sub">
             {{ locale === "zh"
               ? "命中率与分块策略、测试集质量高度相关"

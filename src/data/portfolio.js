@@ -77,12 +77,12 @@ export const experiencesData = [
     date: "Nov 2025 - Jan 2026",
   },
   {
-    title: "JAVIS",
+    title: "JAVIS Intelligent Interview Knowledge Base Platform",
     location: "Personal project with Codex assistance",
     description:
-      "Developed my second personal project, JAVIS, from February to April 2026 by combining GitHub open-source project experience with Codex-assisted development.",
+      "Developed my second personal project, JAVIS Intelligent Interview Knowledge Base Platform, from March to June 2026 by combining GitHub open-source project experience with Codex-assisted development.",
     iconUrl: javisIcon,
-    date: "Feb 2026 - Apr 2026",
+    date: "Mar 2026 - Jun 2026",
   },
   {
     title: "Personal Introduction Website",
@@ -131,9 +131,9 @@ export const experiencesDataZh = [
     title: "JAVIS智能面试知识库平台",
     location: "Codex 辅助开发项目",
     description:
-      "2026 年 2 月至 4 月，结合 GitHub 开源项目，使用 Codex 进行辅助，开发个人第二个项目 JAVIS智能面试知识库平台。",
+      "2026 年 3 月至 6 月，结合 GitHub 开源项目，使用 Codex 进行辅助，开发个人第二个项目 JAVIS智能面试知识库平台。",
     iconUrl: javisIcon,
-    date: "2026.2 - 2026.4",
+    date: "2026.3 - 2026.6",
   },
   {
     title: "个人介绍网站",
@@ -151,20 +151,20 @@ export const projectsData = [
     title_zh: "GetCoupon 捷券优惠券管理系统",
     period: "2025.11 — 2026.01",
     description:
-      "My first personal project, developed between November 2025 and January 2026. The project focuses on coupon management and marks my first complete project practice.",
+      "GetCoupon is a coupon platform for store owners and users, covering coupon flash sales, distribution, settlement, search, and other core business workflows.",
     desc_zh:
-      "个人第一个项目，开发时间为 2025 年 11 月至 2026 年 1 月。项目主题是优惠券管理，也是我第一次完成较完整的个人项目实践。",
+      "GetCoupon 是面向店铺所有者和用户的优惠券平台，覆盖优惠券秒杀、分发、结算、搜索等核心业务。",
     tags: ["Java", "SpringBoot", "MyBatis", "MySQL", "Redis"],
     imageUrl: getCouponIcon,
   },
   {
     title: "JAVIS Intelligent Interview Knowledge Base Platform",
     title_zh: "JAVIS智能面试知识库平台",
-    period: "2026.02 — 2026.04",
+    period: "2026.03 — 2026.06",
     description:
-      "My second personal project, developed from February to April 2026. It was built with reference to GitHub open-source projects and assisted by Codex.",
+      "Designed for internal study groups to retrieve learning materials and policies, JAVIS is a RAG-based document Q&A system with multi-format document parsing, semantic retrieval, and LLM-generated answers. It also uses users' online resumes to generate interview questions, evaluate responses, and provide suggestions.",
     desc_zh:
-      "个人第二个项目，开发时间为 2026 年 2 月至 4 月。项目结合 GitHub 开源项目，并使用 Codex 辅助开发。",
+      "项目面向学习小组内部学习资料、制度等知识检索场景，设计并实现基于 RAG 的文档问答系统，支持多格式文档解析、语义检索和大模型生成式回答，提升内部知识获取效率。同时可基于用户在线简历生成面试问题，并提供回答判定与建议。",
     tags: ["Java", "RAG", "AI", "Codex", "RocketMQ"],
     imageUrl: javisIcon,
     gallery: [javisFunction1, javisFunction2],
