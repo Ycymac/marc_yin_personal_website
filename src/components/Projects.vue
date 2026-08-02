@@ -11,13 +11,14 @@
       :locale="locale"
     />
 
-    <!-- Literary skin: stacked cards -->
+    <!-- Terminal / classic skin: stacked cards -->
     <div v-else>
       <ProjectCard
-        v-for="project in projectsData"
+        v-for="(project, idx) in projectsData"
         :key="project.title"
         :project="project"
         :locale="locale"
+        :index="idx"
       />
     </div>
 

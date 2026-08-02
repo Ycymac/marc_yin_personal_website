@@ -252,16 +252,16 @@ const { target: sectionRef, isVisible } = useObservedSection(
   overflow: hidden;
 }
 
-/* Literary skin: ink/bone emphasis, no gold glow — mirrors project-card */
-:global([data-skin="literary"]) .blog-card {
+/* Terminal skin: green border accent, no gold glow — mirrors project-card */
+:global([data-skin="terminal"]) .blog-card {
   background: var(--construct-panel) !important;
   box-shadow: none !important;
 }
 
-:global([data-skin="literary"]) .blog-card:hover,
-:global([data-skin="literary"]) .blog-card:focus-visible {
-  border-color: var(--construct-text) !important;
-  box-shadow: none !important;
+:global([data-skin="terminal"]) .blog-card:hover,
+:global([data-skin="terminal"]) .blog-card:focus-visible {
+  border-color: var(--construct-gold) !important;
+  box-shadow: 0 0 6px color-mix(in srgb, var(--construct-gold) 25%, transparent) !important;
   background: var(--construct-panel-strong) !important;
 }
 </style>

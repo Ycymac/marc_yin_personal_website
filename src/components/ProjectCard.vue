@@ -40,8 +40,14 @@
       </div>
 
       <div class="project-card__media-wrap relative min-h-[16rem] overflow-hidden bg-slate-950/5 dark:bg-slate-950/30">
+        <!-- Terminal mode: command-line demo replaces video/image -->
+        <TerminalDemo
+          v-if="skin === 'terminal'"
+          :project-index="index"
+          :locale="locale"
+        />
         <PersonalSitePreview
-          v-if="project.animatedPreview"
+          v-else-if="project.animatedPreview"
           :locale="locale"
         />
         <video
@@ -62,7 +68,7 @@
         />
 
         <div
-          v-if="project.gallery?.length"
+          v-if="project.gallery?.length && skin !== 'terminal'"
           class="absolute bottom-3 left-3 right-3 flex gap-3"
         >
           <img
@@ -80,9 +86,10 @@
 </template>
 
 <script setup>
-import { computed } from "vue"
+import { computed, inject } from "vue"
 import { useReveal } from "@/composables/useInView"
 import PersonalSitePreview from "./PersonalSitePreview.vue"
+import TerminalDemo from "./TerminalDemo.vue"
 
 const props = defineProps({
   project: {
@@ -93,7 +100,13 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  index: {
+    type: Number,
+    default: 0,
+  },
 })
+
+const skin = inject("skin")
 
 const title = computed(() =>
   props.locale === "zh" ? props.project.title_zh : props.project.title,

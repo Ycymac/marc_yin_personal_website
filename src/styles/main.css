@@ -44,35 +44,36 @@
 }
 
 /* ============================================================
-   LITERARY SKIN — monochrome paper/ink, retires the gold accent.
-   Driven by [data-skin="literary"] on <html>; orthogonal to dark.
+   TERMINAL SKIN — hacker terminal aesthetic, black/white high
+   contrast with green CRT accents. Driven by [data-skin="terminal"]
+   on <html>; orthogonal to dark.
    ============================================================ */
-:root[data-skin="literary"] {
-  /* Light = marble white + ink */
-  --construct-text: #1c1c1f;
-  --construct-muted: #76777c;
-  --construct-gold: #1c1c1f;
-  --construct-gold-strong: #000000;
-  --construct-panel: rgba(255, 255, 255, 0.5);
-  --construct-panel-strong: rgba(255, 255, 255, 0.8);
-  --construct-line: rgba(28, 28, 31, 0.15);
+:root[data-skin="terminal"] {
+  /* Light = white background + black text + dark green accent */
+  --construct-text: #0d0d0d;
+  --construct-muted: #555555;
+  --construct-gold: #00853e;           /* terminal green accent */
+  --construct-gold-strong: #006b32;    /* deeper green */
+  --construct-panel: rgba(255, 255, 255, 0.88);
+  --construct-panel-strong: rgba(255, 255, 255, 0.96);
+  --construct-line: rgba(0, 0, 0, 0.14);
   --construct-shadow: none;
-  /* text color placed on an ink-filled element (button/tag) */
-  --construct-on-ink: #eceae6;
+  /* text color placed on a filled element (button/tag) */
+  --construct-on-ink: #ffffff;
 }
 
-:root[data-skin="literary"].dark {
-  /* Dark = deep black-gray + bone white */
-  --construct-text: #e9e9e7;
-  --construct-muted: #93949a;
-  --construct-gold: #e9e9e7;
-  --construct-gold-strong: #ffffff;
-  --construct-panel: rgba(255, 255, 255, 0.035);
-  --construct-panel-strong: rgba(255, 255, 255, 0.07);
-  --construct-line: rgba(233, 233, 231, 0.16);
+:root[data-skin="terminal"].dark {
+  /* Dark = black background + white text + matrix green accent */
+  --construct-text: #e6e6e6;
+  --construct-muted: #888888;
+  --construct-gold: #00ff41;           /* classic terminal green */
+  --construct-gold-strong: #00ff41;
+  --construct-panel: rgba(0, 0, 0, 0.72);
+  --construct-panel-strong: rgba(10, 10, 10, 0.88);
+  --construct-line: rgba(0, 255, 65, 0.18);
   --construct-shadow: none;
-  /* text color placed on a bone-filled element (button/tag) */
-  --construct-on-ink: #141416;
+  /* text color placed on a filled element (button/tag) */
+  --construct-on-ink: #0a0a0a;
 }
 
 html {
@@ -652,6 +653,63 @@ body {
   }
 }
 
+/* ---- Terminal skin animations ---- */
+
+/* Subtle CRT screen brightness flicker */
+@keyframes crtFlicker {
+  0%, 100% { opacity: 1; }
+  3% { opacity: 0.96; }
+  3.5% { opacity: 1; }
+  48% { opacity: 1; }
+  49% { opacity: 0.97; }
+  49.5% { opacity: 1; }
+  94% { opacity: 1; }
+  94.5% { opacity: 0.98; }
+  95% { opacity: 1; }
+}
+
+/* Block-style terminal cursor blink */
+@keyframes terminalCursorBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Glitch pixel-shift on hover */
+@keyframes terminalGlitch {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 0.5px); }
+  40% { transform: translate(1.5px, -0.5px); }
+  60% { transform: translate(-0.5px, -0.5px); }
+  80% { transform: translate(0.5px, 0.5px); }
+}
+
+/* Glitch clip-path slice on hover */
+@keyframes terminalGlitchClip {
+  0%, 100% { clip-path: inset(0 0 0 0); }
+  20% { clip-path: inset(25% -2px 55% -2px); }
+  40% { clip-path: inset(45% -2px 25% -2px); }
+  60% { clip-path: inset(55% -2px 25% -2px); }
+  80% { clip-path: inset(15% -2px 65% -2px); }
+}
+
+/* Green border line scanning around card on hover */
+@keyframes terminalBorderScan {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+/* Falling green data points (matrix rain lite) — background-position scroll */
+@keyframes dataRain {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 48px; }
+}
+
+/* Subtle green border pulse on panels (dark mode) */
+@keyframes terminalBorderBreath {
+  0%, 100% { border-color: rgba(0, 255, 65, 0.18); }
+  50% { border-color: rgba(0, 255, 65, 0.32); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -664,322 +722,153 @@ body {
 }
 
 /* ============================================================
-   LITERARY SKIN — structural overrides (kept out of @layer so
+   TERMINAL SKIN — structural overrides (kept out of @layer so
    they win over the baked component classes via [data-skin]).
    ============================================================ */
-/* Backgrounds: marble white / deep black-gray, no gradients */
-[data-skin="literary"] .site-shell {
-  background: #eceae6;
+/* Backgrounds: pure white / pure black, no gradients */
+[data-skin="terminal"] .site-shell {
+  background: #fafafa;
 }
 
-.dark[data-skin="literary"] .site-shell,
-[data-skin="literary"] .dark .site-shell {
-  background: #141416;
+.dark[data-skin="terminal"] .site-shell,
+[data-skin="terminal"] .dark .site-shell {
+  background: #0a0a0a;
 }
 
-/* Quiet the ambient layers: kill drift/grid motion + gold mesh */
-[data-skin="literary"] .ambient-background__veil {
-  background:
-    radial-gradient(ellipse at 50% -10%, rgba(0, 0, 0, 0.05), transparent 60%);
+/* Quiet the ambient layers: kill drift/grid motion + mesh */
+[data-skin="terminal"] .ambient-background__veil {
+  background: none;
 }
 
-.dark[data-skin="literary"] .ambient-background__veil,
-[data-skin="literary"] .dark .ambient-background__veil {
-  background:
-    radial-gradient(ellipse at 50% -10%, rgba(255, 255, 255, 0.05), transparent 60%);
+.dark[data-skin="terminal"] .ambient-background__veil,
+[data-skin="terminal"] .dark .ambient-background__veil {
+  background: none;
 }
 
-[data-skin="literary"] .ambient-background__mesh {
+[data-skin="terminal"] .ambient-background__mesh {
   display: none;
 }
 
-[data-skin="literary"] .ambient-background__grid {
+[data-skin="terminal"] .ambient-background__grid {
   animation: none;
-  opacity: 0.16;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent 70%);
+  opacity: 0.08;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), transparent 70%);
 }
 
-/* Faint paper grain for marble/ink texture */
-[data-skin="literary"] .site-shell::before {
+/* CRT scanlines overlay */
+[data-skin="terminal"] .site-shell::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.045;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.07) 2px,
+    rgba(0, 0, 0, 0.07) 3px
+  );
 }
 
-/* Serif editorial typography for headings */
-[data-skin="literary"] h1,
-[data-skin="literary"] h2,
-[data-skin="literary"] .section-heading-construct,
-[data-skin="literary"] .bio-lead {
-  font-family: var(--construct-serif);
-  font-weight: 600;
-  letter-spacing: 0.01em;
+.dark[data-skin="terminal"] .site-shell::before,
+[data-skin="terminal"] .dark .site-shell::before {
+  opacity: 0.08;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 65, 0.04) 2px,
+    rgba(0, 255, 65, 0.04) 3px
+  );
 }
 
-/* Tame the baked-in ultra-bold weights so the serif can breathe */
-[data-skin="literary"] .font-black,
-[data-skin="literary"] .font-extrabold {
-  font-weight: 600;
+/* CRT vignette: darkens edges for convex-screen feel */
+[data-skin="terminal"] .site-shell::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 58%,
+    rgba(0, 0, 0, 0.14) 84%,
+    rgba(0, 0, 0, 0.38) 100%
+  );
 }
 
-/* Panels & nav: drop glass blur + heavy shadow → hairline + paper */
-[data-skin="literary"] .construct-panel,
-[data-skin="literary"] .site-nav-construct,
-[data-skin="literary"] .construct-chip,
-[data-skin="literary"] .project-card__surface {
-  background: var(--construct-panel) !important;
-  box-shadow: none !important;
-  backdrop-filter: blur(6px) !important;
-  -webkit-backdrop-filter: blur(6px) !important;
-  border: 1px solid var(--construct-line) !important;
+.dark[data-skin="terminal"] .site-shell::after,
+[data-skin="terminal"] .dark .site-shell::after {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 52%,
+    rgba(0, 0, 0, 0.28) 80%,
+    rgba(0, 0, 0, 0.58) 100%
+  );
 }
 
-/* Remove the gold top-light sweep on panels */
-[data-skin="literary"] .construct-panel::after,
-[data-skin="literary"] .project-card__surface::after {
-  display: none !important;
+/* Dark mode phosphor text glow on headings */
+.dark[data-skin="terminal"] h1,
+.dark[data-skin="terminal"] .section-heading-construct,
+[data-skin="terminal"] .dark h1,
+[data-skin="terminal"] .dark .section-heading-construct {
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.25), 0 0 16px rgba(0, 255, 65, 0.08);
 }
 
-/* Card hover: ink/bone border emphasis, no gold glow */
-[data-skin="literary"] .project-card:hover .project-card__surface,
-[data-skin="literary"] .project-card__surface:focus-visible,
-[data-skin="literary"] .project-card__surface:focus-within {
-  border-color: var(--construct-text) !important;
-  box-shadow: none !important;
-  background: var(--construct-panel-strong) !important;
+.dark[data-skin="terminal"] .bio-lead,
+[data-skin="terminal"] .dark .bio-lead {
+  text-shadow: 0 0 4px rgba(0, 255, 65, 0.2);
 }
 
-[data-skin="literary"] .project-card:hover .project-card__tag,
-[data-skin="literary"] .project-card__surface:focus-within .project-card__tag {
-  background-color: var(--construct-text) !important;
-  color: var(--construct-on-ink) !important;
-  box-shadow: none !important;
+/* Light mode subtle phosphor */
+[data-skin="terminal"]:not(.dark) h1,
+[data-skin="terminal"]:not(.dark) .section-heading-construct {
+  text-shadow: 0 0 3px rgba(0, 133, 62, 0.12);
 }
 
-/* Section heading underline: gold gradient → fine neutral rule */
-[data-skin="literary"] .section-heading-construct::after {
-  background: var(--construct-line);
-  width: 3rem;
+/* ---- Terminal: CRT + ambient effects ---- */
+
+/* CRT flicker on body */
+[data-skin="terminal"] body {
+  font-family: var(--editorial-display);
+  animation: crtFlicker 8s linear infinite;
 }
 
-/* Hero orbit: retire the gold conic spin → quiet ink ring */
-[data-skin="literary"] .profile-orbit {
-  background: none;
-  border: 1px solid var(--construct-line);
-  filter: none;
-  animation: none;
-  opacity: 1;
+/* Data rain background in dark mode */
+.dark[data-skin="terminal"] .ambient-background__grid,
+[data-skin="terminal"] .dark .ambient-background__grid {
+  background-image:
+    radial-gradient(circle, rgba(0, 255, 65, 0.15) 0.5px, transparent 0.5px);
+  background-size: 28px 28px;
+  animation: dataRain 3s linear infinite;
+  opacity: 0.3;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent 78%);
 }
 
-[data-skin="literary"] .profile-orbit::after {
-  background: transparent;
-}
-
-/* Primary button: gold fill → ink/bone outline */
-[data-skin="literary"] .construct-button {
-  background: var(--construct-text);
-  border: 1px solid var(--construct-text);
-  color: var(--construct-on-ink);
-  box-shadow: none;
-}
-
-[data-skin="literary"] .construct-button:hover {
-  background: transparent;
-  color: var(--construct-text);
-}
-
-/* Hero action buttons: neutral hover instead of gold */
-[data-skin="literary"] .hero-action {
-  box-shadow: none;
-}
-
-[data-skin="literary"] .hero-action:hover {
-  border-color: var(--construct-text);
-  color: var(--construct-text);
-}
-
-/* Scroll chevron uses --construct-gold → now neutral, soften it */
-[data-skin="literary"] .timeline-node-construct {
-  box-shadow: none;
-}
-
-/* Utility control pill: solid + high-contrast so it stays legible */
-[data-skin="literary"] .utility-panel-construct {
+/* Utility pill: solid terminal bar */
+[data-skin="terminal"] .utility-panel-construct {
   background: var(--construct-panel-strong) !important;
   border-color: var(--construct-line) !important;
 }
-
-.dark[data-skin="literary"] .utility-panel-construct,
-[data-skin="literary"] .dark .utility-panel-construct {
-  background: #1f1f22 !important;
-  border-color: rgba(233, 233, 231, 0.22) !important;
+.dark[data-skin="terminal"] .utility-panel-construct,
+[data-skin="terminal"] .dark .utility-panel-construct {
+  background: #111111 !important;
+  border-color: rgba(0, 255, 65, 0.25) !important;
 }
-
-/* Switch icons inside the pill: full text contrast, not muted gray */
-[data-skin="literary"] .utility-panel-construct button {
-  color: var(--construct-text) !important;
+[data-skin="terminal"] .utility-panel-construct button {
+  color: var(--construct-muted) !important;
 }
-
-[data-skin="literary"] .utility-panel-construct button:hover {
+[data-skin="terminal"] .utility-panel-construct button:hover {
   color: var(--construct-gold-strong) !important;
 }
 
-/* Squarer geometry: literary skin favors crisp rectangles over pills.
-   Circles (avatars, icon buttons, orbit, the floating control pill)
-   keep their radius — only soften the boxy rounded-xl/lg/2xl panels. */
-[data-skin="literary"] .rounded-2xl,
-[data-skin="literary"] .rounded-xl,
-[data-skin="literary"] .rounded-lg {
-  border-radius: 0.25rem;
-}
-
-/* Nav bar: tighten the pill into a slim editorial bar */
-[data-skin="literary"] .site-nav-construct {
-  border-radius: 0.3rem;
-}
-
-/* The "Open Blog"-style buttons are rounded-full pills → soften to a tag */
-[data-skin="literary"] .construct-button {
-  border-radius: 0.25rem;
-}
-
-/* ============================================================
-   LITERARY SKIN — line-art engravings (cream-on-ink etchings).
-   Cream paper ≈ marble white, so low opacity hides the paper and
-   leaves only the fine grey linework; dark mode inverts to white
-   lines on the black-gray shell. Desktop-only, behind content.
-   ============================================================ */
-[data-skin="literary"] #home,
-[data-skin="literary"] #about,
-[data-skin="literary"] #projects,
-[data-skin="literary"] #blog,
-[data-skin="literary"] #skills {
-  position: relative;
-}
-
-[data-skin="literary"] #home::before,
-[data-skin="literary"] #home::after,
-[data-skin="literary"] #about::after,
-[data-skin="literary"] #projects::before,
-[data-skin="literary"] #blog::after,
-[data-skin="literary"] #skills::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  pointer-events: none;
-  background-repeat: no-repeat;
-  background-size: contain;
-  opacity: 0.14;
-}
-
-.dark[data-skin="literary"] #home::before,
-.dark[data-skin="literary"] #home::after,
-.dark[data-skin="literary"] #about::after,
-.dark[data-skin="literary"] #projects::before,
-.dark[data-skin="literary"] #blog::after,
-.dark[data-skin="literary"] #skills::before {
-  filter: invert(1);
-  opacity: 0.16;
-}
-
-/* Hero — Hermes winged bust, the signature figure, right side */
-[data-skin="literary"] #home::before {
-  background-image: url("../photos/hermes_half.webp");
-  width: 30rem;
-  height: 40rem;
-  top: 50%;
-  right: -8rem;
-  transform: translateY(-50%);
-  background-position: right center;
-}
-
-/* Hero — daisy balances Hermes on the left, set lower for layered rhythm */
-[data-skin="literary"] #home::after {
-  background-image: url("../photos/daisy_flower_single.webp");
-  width: 10rem;
-  height: 15rem;
-  bottom: 4rem;
-  left: -3rem;
-  background-position: left bottom;
-  opacity: 0.12;
-}
-
-/* About — celestial dancer beside the bio, right margin */
-[data-skin="literary"] #about::after {
-  background-image: url("../photos/dancer_in_the_sky.webp");
-  width: 22rem;
-  height: 30rem;
-  top: 4rem;
-  right: -11rem;
-}
-
-/* Projects — single rose tucked into the top-right corner */
-[data-skin="literary"] #projects::before {
-  background-image: url("../photos/rose_single.webp");
-  width: 12rem;
-  height: 20rem;
-  top: -2rem;
-  right: -3rem;
-  opacity: 0.12;
-}
-
-/* Skills — bouquet as a large faint backdrop, left side */
-[data-skin="literary"] #skills::before {
-  background-image: url("../photos/mixed_flourishing_flower.webp");
-  width: 26rem;
-  height: 34rem;
-  top: 3rem;
-  left: -12rem;
-  opacity: 0.1;
-}
-
-/* Blog — writing hand with quill, bottom-left flourish */
-[data-skin="literary"] #blog::after {
-  background-image: url("../photos/writing_hand.webp");
-  width: 16rem;
-  height: 16rem;
-  bottom: -2rem;
-  left: -7rem;
-}
-
-/* Decorations are desktop-only — they'd crowd text on small screens */
-@media (max-width: 1024px) {
-  [data-skin="literary"] #home::before,
-  [data-skin="literary"] #home::after,
-  [data-skin="literary"] #about::after,
-  [data-skin="literary"] #projects::before,
-  [data-skin="literary"] #blog::after,
-  [data-skin="literary"] #skills::before {
-    display: none;
-  }
-}
-
-/* Footer — laurel branch as a small centered signature flourish */
-[data-skin="literary"] footer {
-  position: relative;
-  padding-top: 4.5rem;
-}
-
-[data-skin="literary"] footer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 3.5rem;
-  height: 3.5rem;
-  pointer-events: none;
-  background: url("../photos/laurel_branch.webp") no-repeat center / contain;
-  opacity: 0.32;
-}
-
-.dark[data-skin="literary"] footer::before {
-  filter: invert(1);
-  opacity: 0.4;
+/* Sharp corners for widget pill */
+[data-skin="terminal"] .rounded-2xl,
+[data-skin="terminal"] .rounded-xl,
+[data-skin="terminal"] .rounded-lg {
+  border-radius: 0.15rem;
 }
 
 /* ============================================================
@@ -1036,6 +925,18 @@ body {
 [data-skin="glass"] .tl-date,
 [data-skin="glass"] .nav-link-construct,
 [data-skin="glass"] .project-card__tag {
+  font-family: var(--editorial-display);
+}
+
+/* Terminal: VCR OSD Mono for English display labels — same pattern as glass. */
+[data-skin="terminal"]:lang(en) .hero-name-modern,
+[data-skin="terminal"]:lang(en) .section-heading-construct,
+[data-skin="terminal"]:lang(en) .showcase-card__title,
+[data-skin="terminal"]:lang(en) .focus-row__title,
+[data-skin="terminal"] .focus-row__no,
+[data-skin="terminal"] .tl-date,
+[data-skin="terminal"] .nav-link-construct,
+[data-skin="terminal"] .project-card__tag {
   font-family: var(--editorial-display);
 }
 
@@ -2369,16 +2270,16 @@ body.is-win .hero-name-modern {
   animation: site-preview-fade 400ms 1180ms ease forwards;
 }
 
-/* Literary mode skips HELLO and reads like a quiet printed contents page. */
-[data-skin="literary"] .site-preview {
-  border-width: 1px 0;
+/* Terminal mode: clean monospace preview with green accent lines */
+[data-skin="terminal"] .site-preview {
+  border-width: 1px;
   border-radius: 0;
   background:
     repeating-linear-gradient(0deg, transparent 0 2.35rem, var(--construct-line) 2.35rem calc(2.35rem + 1px)),
     var(--construct-panel);
 }
 
-[data-skin="literary"] .project-card__media-wrap .site-preview {
+[data-skin="terminal"] .project-card__media-wrap .site-preview {
   width: 100%;
   max-width: none;
   height: 100%;
@@ -2387,34 +2288,34 @@ body.is-win .hero-name-modern {
   border: 0;
 }
 
-[data-skin="literary"] .site-preview__greeting,
-[data-skin="literary"] .site-preview__routes {
+[data-skin="terminal"] .site-preview__greeting,
+[data-skin="terminal"] .site-preview__routes {
   display: none;
 }
 
-[data-skin="literary"] .site-preview__identity {
+[data-skin="terminal"] .site-preview__identity {
   margin-top: 1.5rem;
-  font-family: var(--construct-serif);
-  border-bottom-color: var(--construct-text);
+  font-family: var(--editorial-display);
+  border-bottom-color: var(--construct-gold);
   animation-delay: 0ms;
 }
 
-[data-skin="literary"] .site-preview__identity span {
-  font-family: var(--construct-serif);
-  font-weight: 600;
-  letter-spacing: 0.02em;
+[data-skin="terminal"] .site-preview__identity span {
+  font-family: var(--editorial-display);
+  font-weight: 400;
+  letter-spacing: 0.04em;
 }
 
-[data-skin="literary"] .site-preview__modules {
+[data-skin="terminal"] .site-preview__modules {
   inset: 48% 1.25rem auto;
   grid-template-columns: repeat(2, 1fr);
   gap: 0;
-  font-family: var(--construct-serif);
+  font-family: var(--editorial-display);
   font-size: clamp(0.52rem, 1.2vw, 0.68rem);
   letter-spacing: 0.04em;
 }
 
-[data-skin="literary"] .site-preview__modules li {
+[data-skin="terminal"] .site-preview__modules li {
   justify-content: space-between;
   padding: 0.42rem 0.2rem;
   border: 0;
@@ -2422,11 +2323,11 @@ body.is-win .hero-name-modern {
   background: transparent;
 }
 
-[data-skin="literary"] .site-preview__modules li:nth-child(odd) {
+[data-skin="terminal"] .site-preview__modules li:nth-child(odd) {
   margin-right: 0.75rem;
 }
 
-[data-skin="literary"] .site-preview__modules li:nth-child(even) {
+[data-skin="terminal"] .site-preview__modules li:nth-child(even) {
   margin-left: 0.75rem;
 }
 
@@ -2988,6 +2889,63 @@ html[data-skin="glass"] .javis-metrics__title {
 
 html[data-skin="glass"]:lang(en) #home .hero-name-modern {
   font-style: normal;
+}
+
+/* Terminal skin English: VCR OSD Mono for all heading/label typography.
+   Mirrors the glass skin's editorial pass — body text stays untouched. */
+html[data-skin="terminal"]:lang(en) .hero-name-modern,
+html[data-skin="terminal"]:lang(en) .section-heading-construct,
+html[data-skin="terminal"]:lang(en) .showcase-card__title,
+html[data-skin="terminal"]:lang(en) .focus-row__title,
+html[data-skin="terminal"]:lang(en) .blog-card__title,
+html[data-skin="terminal"]:lang(en) .experience-section h3,
+html[data-skin="terminal"]:lang(en) #name,
+html[data-skin="terminal"] .bio-kicker,
+html[data-skin="terminal"] .javis-metrics__title,
+html[data-skin="terminal"] .nav-link-construct,
+html[data-skin="terminal"] .project-card__tag,
+html[data-skin="terminal"] .construct-chip {
+  font-family: var(--editorial-display);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+html[data-skin="terminal"]:lang(en) #home .hero-name-modern {
+  font-style: normal;
+}
+
+/* Terminal skin: green-tinted text selection */
+[data-skin="terminal"] ::selection {
+  background: color-mix(in srgb, var(--construct-gold) 22%, transparent);
+  color: var(--construct-text);
+}
+.dark[data-skin="terminal"] ::selection {
+  background: rgba(0, 255, 65, 0.2);
+  color: #0a0a0a;
+}
+
+/* Terminal skin: thin dark scrollbar */
+[data-skin="terminal"] * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.22) transparent;
+}
+[data-skin="terminal"] ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+[data-skin="terminal"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 0;
+}
+.dark[data-skin="terminal"] * {
+  scrollbar-color: rgba(0, 255, 65, 0.2) transparent;
+}
+.dark[data-skin="terminal"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 65, 0.15);
+  background-clip: content-box;
 }
 
 

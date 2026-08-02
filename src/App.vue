@@ -11,15 +11,19 @@
     </div>
 
     <Header
-      v-if="skin !== 'glass'"
+      v-if="skin !== 'glass' && skin !== 'terminal'"
       :active-section="activeSection"
       :locale="locale"
       @navigate="handleNavigate"
     />
 
-    <HelloIntro @complete="wallpaperVisible = true" />
+    <HelloIntro v-if="skin !== 'terminal'" @complete="wallpaperVisible = true" />
 
-    <main class="site-content relative z-10 mx-auto flex w-full max-w-[76rem] flex-col items-center justify-center overflow-x-hidden px-4">
+    <!-- Terminal mode: interactive command-line shell -->
+    <TerminalShell v-if="skin === 'terminal'" />
+
+    <!-- Normal mode: scrollable single-page layout -->
+    <main v-else class="site-content relative z-10 mx-auto flex w-full max-w-[76rem] flex-col items-center justify-center overflow-x-hidden px-4">
       <Intro :on-visible="handleSectionVisible" />
       <SectionDivider />
       <About :on-visible="handleSectionVisible" />
@@ -29,7 +33,7 @@
       <Experience :on-visible="handleSectionVisible" />
     </main>
 
-    <Footer />
+    <Footer v-if="skin !== 'terminal'" />
     <WidgetWrapper>
       <ThemeSwitch :theme="theme" @toggle="toggleTheme" />
       <SkinSwitch :skin="skin" @toggle="toggleSkin" />
@@ -53,6 +57,7 @@ import Skills from "@/components/Skills.vue"
 import Experience from "@/components/Experience.vue"
 import Footer from "@/components/Footer.vue"
 import HelloIntro from "@/components/HelloIntro.vue"
+import TerminalShell from "@/components/TerminalShell.vue"
 import WidgetWrapper from "@/components/WidgetWrapper.vue"
 import ThemeSwitch from "@/components/ThemeSwitch.vue"
 import SkinSwitch from "@/components/SkinSwitch.vue"
@@ -110,7 +115,7 @@ function applySkin(nextSkin) {
 }
 
 function toggleSkin() {
-  applySkin(skin.value === "literary" ? "glass" : "literary")
+  applySkin(skin.value === "terminal" ? "glass" : "terminal")
 }
 
 function toggleLocale() {

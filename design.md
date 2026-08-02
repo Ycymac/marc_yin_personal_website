@@ -1,372 +1,656 @@
-# Website Design System
+---
+version: "1.0"
+name: marc-yin-editorial-portfolio
+description: A bilingual personal portfolio that combines an Apple-like quiet product rhythm, Swiss editorial structure, and VCR OSD Mono display character. A handwritten Hello curtain opens onto a fixed monochrome long-shadow poster; the site then reads as a cool paper sheet with numbered folios, low-contrast modules, real project media, and one theme accent.
+status: implemented
+scope: default modern skin (`data-skin="glass"`), including light and dark themes
 
-> Status: implemented and browser-verified on 2026-07-11.  
-> Scope: the default `glass` skin. The `literary` skin remains a compatibility option, but it is not the reference direction for new UI work.
+colors:
+  light:
+    canvas: "#fafaf8"
+    card: "#f2f2f4"
+    inner-surface: "#ffffff"
+    ink: "#07142d"
+    ink-muted: "#5e6876"
+    accent: "#002fa7"
+    accent-bright: "#174bd0"
+    on-accent: "#ffffff"
+    line: "rgba(7, 20, 45, 0.15)"
+    grid: "rgba(7, 20, 45, 0.065)"
+  dark:
+    canvas: "#0a0a0b"
+    card: "#1c1c1e"
+    inner-surface: "#2a2a2d"
+    ink: "#f8fafc"
+    ink-muted: "#b6bfcc"
+    accent: "#e7e9ee"
+    accent-bright: "#ffffff"
+    on-accent: "#0a0a0b"
+    line: "rgba(248, 250, 252, 0.16)"
+    grid: "rgba(248, 250, 252, 0.055)"
 
-## 1. Design identity
+typography:
+  hero-name:
+    fontFamily: "VCR OSD Mono, Space Mono, monospace"
+    fontSize: "60px / 96px"
+    fontWeight: 400
+    lineHeight: 0.95
+    letterSpacing: "0.025em"
+  section-title:
+    fontFamily: "VCR OSD Mono, Space Mono, monospace"
+    fontSize: 30px
+    fontWeight: 400
+    letterSpacing: "0.025em"
+    textTransform: uppercase
+  project-title:
+    fontFamily: "VCR OSD Mono, Space Mono, monospace"
+    fontSize: 27px
+    fontWeight: 400
+    lineHeight: 1.15
+    letterSpacing: "0.025em"
+  hero-role:
+    fontFamily: "VCR OSD Mono, Space Mono, monospace"
+    fontSize: "30px / 48px"
+    fontWeight: 400
+    lineHeight: 1.25
+  body:
+    fontFamily: "Inter, Noto Sans SC, PingFang SC, Microsoft YaHei, system-ui, sans-serif"
+    fontSize: "16px–18px"
+    fontWeight: "500–700"
+    lineHeight: "1.65–2"
+  mono-label:
+    fontFamily: "Space Mono, VCR OSD Mono, monospace"
+    fontSize: "10px–12px"
+    fontWeight: "600–700"
+    letterSpacing: "0.05em–0.18em"
+  fine-print:
+    fontFamily: "Inter, Noto Sans SC, system-ui, sans-serif"
+    fontSize: 12px
+    fontWeight: 500
 
-The current website combines three ideas:
+rounded:
+  sheet: 0px
+  editorial: 4px
+  media-sm: 6px
+  control: 8px
+  inset: 14px
+  data-card: 18px
+  pill: 9999px
+  circle: 50%
 
-1. **Apple-like minimalism** — generous whitespace, direct hierarchy, quiet surfaces, restrained motion.
-2. **Monochrome editorial print** — paper grain, folio numbers, hairline rules, asymmetric typesetting and large cropped statements.
-3. **VCR / OSD character** — pixel-like English display typography used only for short titles and labels.
+spacing:
+  xxs: 4px
+  xs: 8px
+  sm: 12px
+  md: 16px
+  lg: 24px
+  xl: 32px
+  xxl: 48px
+  section-mobile: 112px
+  section-desktop: 160px
 
-The visual signature is the transition from the handwritten Apple Hello animation into the fixed `无可限进步` long-shadow wallpaper. The interface then behaves like a calm editorial sheet placed over that poster.
+layout:
+  page-max: 1216px
+  hero-max: 992px
+  reading-max: 928px
+  project-max: 1152px
+  skills-max: 848px
+  ambient-grid: 48px
+  paper-dots: 6px
 
-The page must feel precise and minimal before it feels decorative.
+motion:
+  standard: "360ms ease"
+  reveal: "720ms cubic-bezier(0.22, 1, 0.36, 1)"
+  spring: "520ms cubic-bezier(0.34, 1.56, 0.64, 1)"
+  wallpaper: "1100ms opacity / 1600ms scale"
 
-## 2. Core principles
+components:
+  hello-curtain:
+    backgroundColor: "{colors.light.inner-surface} / {colors.dark.canvas}"
+    height: 100svh
+    artworkWidth: "min(70vw, 608px)"
+  page-sheet:
+    backgroundColor: "96% theme canvas"
+    maxWidth: "{layout.page-max}"
+    texture: "6px micro-dot"
+    border: "1px inline hairline"
+  section-folio:
+    typography: "{typography.mono-label}"
+    textColor: "theme accent"
+  icon-action:
+    size: 48px
+    rounded: "{rounded.circle}"
+    focusOutline: "2px theme accent"
+  project-showcase:
+    backgroundColor: "theme card"
+    rounded: "{rounded.editorial}"
+    padding: "40px / 26px mobile"
+  metric-card:
+    backgroundColor: "theme inner surface"
+    rounded: "{rounded.data-card}"
+  utility-dock:
+    position: fixed
+    placement: "right 48px / bottom 48px desktop; right 12px / bottom 20px mobile"
+---
 
-- Preserve the real content order: `Hello → Home → About → Projects → Blog → Skills → Timeline → Footer`.
-- Use whitespace, scale and alignment before adding decoration.
-- Keep one interface accent per theme: Klein blue in light mode, bright silver in dark mode.
-- Treat the wallpaper as environmental context, not as a replacement for readable content surfaces.
-- Allow multiple colors only when color carries information, such as JAVIS evaluation metrics.
-- Do not reintroduce flowers, roses, petals, pink accents, glow-heavy glassmorphism or generic gradient decoration into the modern skin.
-- Keep light and dark modes equivalent in hierarchy and behavior, rather than designing one as an afterthought.
+# Marc Yin Editorial Portfolio Design System
 
-## 3. Three non-negotiable specifications
+## Summary
 
-These rules have priority over local component styling. New UI should be checked against all three before implementation.
+This system is the reusable visual source of truth for the site's default modern skin. It is not a generic glassmorphism theme despite the legacy skin name `glass`.
 
-### 3.1 Font usage matrix
+The design combines:
 
-| Content type | Required family | Typical size | Rules |
-| --- | --- | --- | --- |
-| English hero name | `VCR OSD Mono` | `3.75rem–6rem` | Short display line only; normal style, no synthetic italic |
-| English section title | `VCR OSD Mono` | About `1.875rem` | Uppercase is preferred when the label is short |
-| English project title | `VCR OSD Mono` | `1.5rem–2.6rem` | Allow wrapping; do not reduce body readability to preserve one-line titles |
-| Folio / date / kicker | `VCR OSD Mono` | `0.65rem–0.8rem` | Increased letter spacing; use the theme accent |
-| Chinese title | Modern Chinese sans-serif stack | According to hierarchy | Do not force the Latin pixel font onto Chinese glyphs |
-| Body / description | Readable sans-serif system stack | `0.98rem–1.125rem` | Relaxed line height; never use VCR OSD Mono |
-| Technical tag | `Space Mono` or VCR for short Latin-only tags | `0.65rem–0.8rem` | Keep compact; avoid paragraphs inside pills |
-| Literary skin text | `Fraunces Variable` / `Noto Serif SC` | Existing literary scale | Do not mix into the modern skin |
+1. **Apple-like restraint** — quiet surfaces, generous spacing, product-first media and controlled motion.
+2. **Swiss editorial structure** — numbered folios, hairline rules, asymmetric desktop project rhythm and strict typographic roles.
+3. **VCR / OSD character** — a self-hosted pixel display face used for short English identity text, never for long reading.
+4. **A personal opening ritual** — the handwritten Hello animation gives way to the fixed `无可限进步` long-shadow poster.
 
-Font boundary:
+The interface should feel precise and readable before it feels decorative.
+
+## Design DNA
+
+### Signature
+
+The signature sequence is:
 
 ```text
-VCR OSD Mono = identity, index, title, label
-Sans-serif    = reading, explanation, interaction guidance
+Handwritten Hello curtain
+        ↓
+Fixed monochrome long-shadow wallpaper
+        ↓
+Centered editorial paper sheet
+        ↓
+01–06 numbered portfolio narrative
 ```
 
-If a text string needs more than two short lines, it should normally not use VCR OSD Mono.
+This transition is the main memorable moment. New decoration must not compete with it.
 
-### 3.2 Module construction rules
+### Content order
 
-The modern skin is a **flat editorial sheet**, not a collection of glass cards.
-
-| Layer / module | Surface | Geometry | Border and shadow |
-| --- | --- | --- | --- |
-| Page sheet | `--marble` / dark `#0A0A0B` at about 96% opacity | Centered, max `76rem`, no floating-card radius | 1px side hairlines; broad low-opacity separation shadow |
-| Standard module | `--apple-card` | Default radius `0.25rem` | No decorative border; light mode uses a whisper shadow, dark mode stays flat |
-| About module | No card fill | Large lead + ruled two-column grid | Hairline dividers only; no glass blur or rounded container |
-| Project module | Quiet solid surface | Rectangular editorial block | Hierarchy comes from media and type, not shadow depth |
-| Blog module | Quiet solid surface | Compact rectangular index/card | Accent appears on action or focus, not as a colored background wash |
-| Metric card | White/dark compact data cell | Small controlled radius | Color is allowed on icon/value because it carries data meaning |
-| Icon action | Theme surface | Circular | Circles are reserved for icon-only actions and timeline nodes |
-| Tag / chip | Subtle tinted surface | Pill or small radius | Short metadata only; no glow and no blur |
-
-Spacing should follow a restrained `8 / 12 / 16 / 24 / 32 / 48 / 64 / 96px` rhythm. Use larger gaps between sections and smaller gaps inside data groups.
-
-Module prohibitions:
-
-- Do not wrap every section in a rounded rectangle.
-- Do not stack multiple translucent surfaces to simulate depth.
-- Do not use large colored gradients as module backgrounds.
-- Do not use heavy shadows in dark mode.
-- Do not add a new card when a hairline, spacing change or typography hierarchy is sufficient.
-- Do not use circular geometry for normal text containers.
-
-### 3.3 Background grid and layer architecture
-
-The background is built as a controlled print stack. Its layers must remain in this order:
+Preserve the implemented narrative:
 
 ```text
-Layer 0  Theme base color
-Layer 1  Fixed long-shadow wallpaper
-Layer 2  Static 48px ambient grid
-Layer 3  Centered 76rem content sheet
-Layer 4  6px micro-dot paper texture inside the sheet
-Layer 5  Content modules and interactive elements
+Hello → Home → About → Projects → Blog → Skills → Timeline → Footer
 ```
 
-#### Ambient grid
+### Primary skin and compatibility skin
 
-- Grid cell: `48px × 48px`.
-- Line weight: `1px`.
-- Light grid color: `rgba(7, 20, 45, 0.065)`.
-- The grid is centered at the top of the viewport.
-- Modern-skin opacity is reduced to `0.12`.
-- The grid is static in the modern skin; `gridShift` must remain disabled.
-- Legacy ambient mesh and veil are disabled for the modern skin.
-- The grid must never become stronger than body text or module hairlines.
+- The reusable reference is the modern `glass` skin.
+- `literary` is a supported compatibility skin with serif typography and a print-like treatment.
+- Do not mix literary serif rules into modern modules.
+- The default modern skin starts in dark theme unless a saved preference exists.
 
-#### Content-sheet micro texture
+## Colors
 
-- Pattern cell: `6px × 6px`.
-- Dot radius: approximately `0.7px`, fading to transparent around `0.8px`.
-- Light dot: `rgba(0, 0, 0, 0.025)`.
-- Dark dot: `rgba(255, 255, 255, 0.035)`.
-- This texture simulates printed paper; it must remain almost invisible at normal reading distance.
+### Light theme
 
-#### Wallpaper relationship
-
-- Wallpaper is fixed and full viewport with `background-size: cover`.
-- It is revealed only after Hello completes.
-- Light mode inverts and softens it; dark mode keeps the original artwork.
-- The centered content sheet covers it at about 96% opacity, leaving a faint printed echo without sacrificing text contrast.
-- Desktop gutters may reveal the wallpaper more clearly; mobile prioritizes content readability.
-- Do not add a second scenic background, animated gradient or decorative mesh above the wallpaper.
-
-## 4. Theme palette
-
-### Light mode
-
-| Role | Value | Usage |
+| Token | Value | Use |
 | --- | --- | --- |
-| Page / paper | `#FAFAF8` | Main content sheet and large quiet areas |
-| Card | `#F2F2F4` | Project, blog and timeline modules |
-| Primary text | `#07142D` | Titles and body copy |
-| Muted text | `#5E6876` | Metadata and supporting copy |
-| Accent | `#002FA7` | Klein-blue labels, controls, focus states and folios |
-| Accent bright | `#174BD0` | Small active-state emphasis only |
+| `{colors.light.canvas}` | `#fafaf8` | Cool neutral page sheet |
+| `{colors.light.card}` | `#f2f2f4` | Project, blog and timeline modules |
+| `{colors.light.inner-surface}` | `#ffffff` | Metric cells and embedded demo surfaces |
+| `{colors.light.ink}` | `#07142d` | Primary copy and headings |
+| `{colors.light.ink-muted}` | `#5e6876` | Metadata and secondary copy |
+| `{colors.light.accent}` | `#002fa7` | Klein-blue interaction and folio color |
+| `{colors.light.accent-bright}` | `#174bd0` | Small active emphasis |
+| `{colors.light.line}` | `rgba(7, 20, 45, 0.15)` | Hairlines and quiet borders |
 
-The dark wallpaper is transformed with:
+The light wallpaper uses:
 
 ```css
 filter: invert(1) contrast(0.82) brightness(1.05);
 ```
 
-This creates a near-white field, dark-gray headline and pale-gray long shadow.
+### Dark theme
 
-### Dark mode
-
-| Role | Value | Usage |
+| Token | Value | Use |
 | --- | --- | --- |
-| Page | `#0A0A0B` | Main field |
-| Card | `#1C1C1E` | Raised modules |
-| Primary text | `#F8FAFC` | Titles and body copy |
-| Muted text | `#B6BFCC` | Metadata and supporting copy |
-| Accent | `#E7E9EE` | Bright-silver labels and active states |
-| Accent bright | `#FFFFFF` | Strong focus and selected states |
+| `{colors.dark.canvas}` | `#0a0a0b` | Near-black page field |
+| `{colors.dark.card}` | `#1c1c1e` | Primary module surface |
+| `{colors.dark.inner-surface}` | `#2a2a2d` | Metric cells |
+| `{colors.dark.ink}` | `#f8fafc` | Primary copy and headings |
+| `{colors.dark.ink-muted}` | `#b6bfcc` | Metadata and secondary copy |
+| `{colors.dark.accent}` | `#e7e9ee` | Bright-silver controls and folios |
+| `{colors.dark.accent-bright}` | `#ffffff` | Focus and selected emphasis |
+| `{colors.dark.line}` | `rgba(248, 250, 252, 0.16)` | Hairlines and quiet borders |
 
-The original black wallpaper is shown without inversion in dark mode.
+Dark mode shows the original wallpaper without inversion.
 
-### Color exception: JAVIS data
+### Semantic color exception
 
-The JAVIS evaluation area deliberately preserves semantic colors so quantitative data remains distinct from the minimal shell:
+JAVIS evaluation metrics keep their individual colors because color encodes separate measures:
 
-`#7C5CFF`, `#FF7A1A`, `#13B6C9`, `#2BB673`, `#E0457B`, `#3B6CFF`, `#8A6D3B`.
+```text
+#7c5cff · #ff7a1a · #13b6c9 · #2bb673 · #e0457b · #3b6cff · #8a6d3b
+```
 
-Do not globally force these metrics into the theme accent.
+Do not spread these colors into general navigation, headings or decoration.
 
-## 5. Typography
+### Color rules
 
-### Display typography
+- Use one interaction accent per theme.
+- Use surface tone, whitespace and type scale before introducing more color.
+- Keep text readable over the wallpaper through the opaque central sheet.
+- Do not add generic aurora gradients, neon glow or pink floral accents to the modern skin.
 
-`VCR OSD Mono` is self-hosted at:
+## Typography
+
+### Font roles
+
+| Role | Family | Rule |
+| --- | --- | --- |
+| English identity display | `VCR OSD Mono` | Hero name, English section titles, project titles and short labels |
+| Modern fallback display | `Space Grotesk` | Non-VCR headings and platform fallback |
+| Technical utility | `Space Mono` | Tags, controls, dates and compact system text |
+| Chinese and body copy | `Inter`, `Noto Sans SC`, `PingFang SC`, `Microsoft YaHei`, system UI | Reading text and Chinese headings |
+| Literary skin only | `Fraunces Variable`, `Noto Serif SC` | Compatibility skin, never the modern default |
+
+The self-hosted display font lives at:
 
 ```text
 src/assets/fonts/VCR_OSD_MONO.woff
 ```
 
-Use it for:
+### VCR boundary
 
-- English hero and section titles
-- English project titles
-- Short labels and navigation labels
-- Dates, page numbers and folio markers
-- Compact metric or system headings
+```text
+VCR OSD Mono = identity, title, index, date, short label
+Sans-serif    = reading, explanation, instructions, long button copy
+```
 
-Do **not** use it for:
+If a string needs more than two short lines, it should normally not use VCR OSD Mono.
 
-- Paragraphs or article summaries
-- Chinese text
-- Long descriptions
-- Accessibility instructions
-- Dense button copy
+### Hierarchy
 
-VCR OSD Mono is a character accent, not the body typeface.
+- Hero name: `60px` on mobile, `96px` from the small breakpoint.
+- Hero changing role: `30px` mobile, `48px` desktop.
+- Section heading: `30px`, uppercase where the English label is short.
+- Project title: about `27px`, `1.15` line-height.
+- Body and descriptions: `16–18px`, relaxed `1.65–2` line-height.
+- Folio, period and tag text: `10–12px`, tracked and compact.
+- Windows receives a weight compensation because Microsoft YaHei lacks true extra-light weights.
 
-### Supporting typography
+### Two-tone section title
 
-- Modern display fallback: `Space Grotesk`
-- Monospaced fallback: `Space Mono`
-- Chinese UI: `Noto Sans SC`, `PingFang SC`, `Microsoft YaHei`
-- Body copy: the existing readable sans-serif system stack
-- Literary skin only: `Fraunces Variable` and `Noto Serif SC`
+Modern section titles use a text-clipped gradient from the current ink color into a restrained accent tint. This is the only accepted typographic gradient; it expresses hierarchy rather than decorating a background.
 
-### Type hierarchy
+## Layout
 
-- Hero name: oversized, short and high-contrast.
-- Section headings: uppercase English where applicable, with generous surrounding space.
-- Folio labels: `01 / HOME` through `06 / TIMELINE`, small VCR type and theme accent.
-- Body text: moderate weight and relaxed line height; never pixel-styled.
+### Layer architecture
 
-## 6. Hello and wallpaper sequence
+Keep the visual stack in this order:
 
-The entry sequence is a required part of the identity:
+```text
+Layer 0  Theme base color
+Layer 1  Fixed long-shadow wallpaper
+Layer 2  Static 48px ambient grid
+Layer 3  Centered 1216px content sheet
+Layer 4  6px micro-dot paper texture
+Layer 5  Section content and interactive modules
+Layer 6  Fixed utility dock and modal media
+```
 
-1. Render the supplied 500×500, 120fps, 6-second Lottie.
-2. In light mode, normalize all Lottie gradient strokes to black.
-3. In dark mode, normalize all Lottie gradient strokes to white.
-4. Let the animation draw, hold and erase completely.
-5. On the Lottie `complete` event, reveal the fixed wallpaper with an opacity/scale transition.
-6. Keep the wallpaper behind the rest of the site.
+The legacy ambient veil and moving mesh are disabled in the modern skin. The grid remains static at low opacity.
 
-Do not replace the Hello animation with the wallpaper. The wallpaper is the post-animation state.
+### Containers
 
-For `prefers-reduced-motion`, skip the curtain and reveal the content/wallpaper without the long animation.
+| Container | Maximum width | Use |
+| --- | --- | --- |
+| Page sheet | `76rem` / `1216px` | Whole modern narrative |
+| Hero | `62rem` / `992px` | Centered identity block |
+| Reading sections | `58rem` / `928px` | About and blog |
+| Project showcase | `72rem` / `1152px` | Project modules and media |
+| Skills | `53rem` / `848px` | Marquee and skill chips |
 
-Relevant files:
+Desktop gutters reveal the fixed wallpaper. Mobile prioritizes content width and reading contrast.
 
-- `src/components/HelloIntro.vue`
-- `src/assets/hello.lottie.json`
-- `src/photos/modern_wallpaper.png`
-- `src/App.vue`
+### Section rhythm
 
-## 7. Page composition
+- Use `112px` as the common mobile section gap.
+- Use up to `160px` for spacious desktop narrative breaks.
+- Use `24–48px` inside major modules.
+- Use `8–16px` inside compact data groups.
+- Prefer a hairline or spacing change over a nested card.
 
-### Global sheet
+### Responsive structure
 
-- Content sits inside a centered sheet with a maximum width of `76rem`.
-- The sheet uses a very subtle dot/paper texture.
-- Desktop side gutters reveal the fixed wallpaper.
-- Content surfaces remain sufficiently opaque for text contrast.
-- Corners are small and controlled; avoid a page made entirely of rounded cards.
+- Project copy/media changes from two columns to one at `768px`.
+- Featured JAVIS content changes from demo/copy columns to one column at `768px`.
+- Metric rows wrap at `768px`.
+- About changes from a ruled two-column biography to one column below `640px`.
+- Timeline changes from a centered two-column path to stacked cards below `640px`.
+- The project focus-list asymmetry appears only from `1024px`.
+- The English compatibility navigation bar widens from `640px`, but the default modern skin does not render that header.
 
-### Module design baseline
+## Elevation and Depth
 
-- Standard modern modules use `--apple-card`, not translucent glass gradients.
-- Default module radius is `0.25rem`; larger radii require an interaction or media reason.
-- Use a single hairline to divide information groups before reaching for nested cards.
-- Light-mode elevation should be barely perceptible; dark-mode modules should be distinguished mainly by surface tone.
-- Module titles, dates and folios establish the editorial rhythm; body copy remains visually quiet.
-- Interactive feedback may use a small lift, fill or border change, but the resting state must remain calm.
+| Level | Treatment | Use |
+| --- | --- | --- |
+| Flat | No shadow | Dark modules, hairline sections, tags |
+| Paper separation | Inline hairlines + broad low-opacity shadow | Central content sheet |
+| Whisper lift | 1–2px neutral slate shadow | Resting light cards and metric cells |
+| Hover lift | `translateY(-4px)` + neutral shadow | Non-featured project cards |
+| Media modal | Dark veil + `blur(20px)` + deep media shadow | Expanded project video |
 
-### Home
+Depth is functional:
 
-- Centered portrait, name, changing role, short introduction and icon actions.
-- Wallpaper appears as a faint printed echo behind the content sheet after the Hello sequence.
-- English name and role may use VCR OSD Mono; supporting sentences remain normal sans-serif.
-- The hero must remain spacious and vertically balanced.
+- the page sheet separates text from wallpaper;
+- light cards receive slight physical separation;
+- dark cards rely mainly on surface tone;
+- blur is reserved for the video lightbox and a small number of overlay controls.
 
-### About
+Do not turn ordinary modules into translucent glass layers.
 
-The About section is an editorial profile, not a translucent paragraph card:
+## Shapes
 
-- Small top kicker: `PROFILE / MARC YIN` and `BACKEND × AI / 2026`.
-- One large lead statement spanning the full width.
-- Remaining biography is divided into numbered modules.
-- Desktop uses two columns separated by hairlines.
-- Mobile collapses to one column.
-- Strong words provide hierarchy, but paragraphs remain readable sans-serif.
+### Radius grammar
 
-### Projects
+| Token | Value | Use |
+| --- | --- | --- |
+| `{rounded.sheet}` | `0px` | Global editorial sheet |
+| `{rounded.editorial}` | `4px` | Primary modern project/blog surfaces |
+| `{rounded.media-sm}` | about `6px` | Inline media and miniature previews |
+| `{rounded.control}` | `8px` | Compact media controls |
+| `{rounded.inset}` | about `14px` | Embedded media and demo frames |
+| `{rounded.data-card}` | about `18px` | Quantitative data cells |
+| `{rounded.pill}` | `9999px` | Tags, carousel actions and input bars |
+| `{rounded.circle}` | `50%` | Avatar, icon actions, nodes and arrow buttons |
 
-- Project modules use quiet low-contrast surfaces and restrained borders.
-- Project titles and dates may use VCR OSD Mono.
-- Real screenshots, video and RAG interaction remain the primary content.
-- JAVIS metric colors remain multicolor because they encode separate measures.
-- Decorative color must not spread from the metrics into the entire page.
+Small rectangular geometry is the baseline. Pills and circles signal compact interaction, status or identity; they are not general content containers.
 
-### Blog
+### Media geometry
 
-- Blog is structured like a clean editorial index.
-- Titles carry the hierarchy; metadata remains smaller and quieter.
-- Klein blue or silver is reserved for actions and selected states.
-- Dense card decoration, large shadows and colored gradients are not part of this direction.
+- Avatar: circular crop with a white ring and one soft physical shadow.
+- Main project media: `16:11` or source-preserving image frame.
+- RAG carousel: `4:3`.
+- Video lightbox: `16:9`, maximum `72rem`.
+- Personal-site preview: `16:10` editorial miniature with grid lines.
 
-### Skills and timeline
+## Components
 
-- Continue the numbered editorial sequence.
-- Use thin guide lines, controlled node motion and low-contrast surfaces.
-- Avoid ornamental imagery.
+### `hello-curtain`
 
-## 8. Motion language
+A normal `100svh` opening section, not an overlay. It renders the 500×500 Lottie artwork at up to `38rem` wide.
 
-Allowed motion:
+- Light: black stroke on white.
+- Dark: white stroke on near-black.
+- The drawing completes, then the wallpaper fades and scales into place.
+- One downward scroll, wheel, key or swipe intent snaps to the main hero.
+- One upward intent near the hero returns to Hello.
+- Reduced motion skips the long curtain and reveals the page immediately.
 
-- Hello stroke drawing and erasing
-- Wallpaper opacity/scale reveal
-- Section rise-in transitions
-- Project carousel crossfade
-- Small hover fills and active-state movement
-- Timeline line/node reveal
+### `page-sheet`
 
-Motion should use a limited set of smooth curves and should never compete with content.
+The main content plane:
 
-Avoid:
+- maximum width `76rem`;
+- approximately 96% theme-canvas opacity;
+- 6px micro-dot paper texture;
+- one-pixel inline borders;
+- no outer card radius;
+- broad, low-opacity separation shadow.
 
-- Continuous decorative background animation
-- Unnecessary parallax
-- Repeated floating objects
-- Strong blur/glow entrances
-- Animating body text merely for spectacle
+### `section-folio`
 
-Always provide a reduced-motion path.
+Each section receives an editorial marker:
 
-## 9. Accessibility and responsive rules
+```text
+01 / HOME
+02 / ABOUT
+03 / PROJECTS
+04 / BLOG
+05 / SKILLS
+06 / TIMELINE
+```
 
-- Keep visible focus outlines using the active theme accent.
-- Preserve semantic headings and link/button labels.
-- Do not rely on color alone for metric meaning; retain labels and values.
-- Maintain readable contrast over the wallpaper by using the central sheet.
-- Collapse the About grid to one column below `640px`.
-- The wallpaper currently uses `cover`; verify the crop on narrow mobile screens before changing its focal position.
-- The floating utility controls must remain reachable without obscuring primary content.
+Folios use short VCR display text, accent color and wide tracking. They are labels, not headings.
 
-## 10. Implementation boundaries
+### `hero`
 
-When extending the site:
+The hero centers:
 
-- Reuse existing CSS variables and components before introducing new abstractions.
-- Scope modern rules with `[data-skin="glass"]`.
-- Use `--klein` / `--construct-gold-strong` instead of hardcoding new accent blues.
-- Keep VCR OSD Mono selectors limited to titles and labels.
+- circular avatar and greeting emoji;
+- short introduction label;
+- oversized name;
+- locale-aware typewriter role;
+- one strong positioning sentence;
+- six circular icon actions.
+
+The modern skin intentionally has no persistent top navigation. The icon actions and natural document flow provide section access.
+
+### `icon-action`
+
+Circular `48×48px` action for About, Projects, Skills, Timeline, Blog and resume.
+
+- Resting state: quiet theme-card surface.
+- Hover/focus: Klein-blue or silver fill rises from below.
+- Focus: 2px accent outline with 3px offset.
+- Active: compact scale response.
+- Icon-only actions must keep accessible labels and titles.
+
+### `about-editorial`
+
+About is not a card. It uses:
+
+- a two-part profile kicker;
+- one large lead statement;
+- numbered biography paragraphs;
+- ruled two-column layout on desktop;
+- single-column reading flow on mobile.
+
+Hairlines and text hierarchy provide structure.
+
+### `project-showcase`
+
+Projects are always visible in the modern skin.
+
+- One card contains copy, media and metrics.
+- Standard layout is two columns with alternating copy/media order.
+- Featured JAVIS uses demo/copy on top and one horizontal metric row below.
+- Real screenshots, video and the live RAG demonstration remain primary.
+- Non-featured cards may lift `4px`; the interactive featured card stays still.
+
+### `rag-demo`
+
+An embedded light/dark chat surface with:
+
+- user and assistant messages;
+- typewriter response;
+- knowledge-retrieval loading state;
+- pill input bar and circular send action;
+- replay control;
+- inline code, quote and list treatments.
+
+The demo uses neutral black/white message contrast rather than the global accent for every element.
+
+### `metric-card`
+
+A compact semantic data cell:
+
+- white in light mode, `#2a2a2d` in dark mode;
+- colored icon and value;
+- neutral readable label;
+- no decorative gradient;
+- color must remain paired with text.
+
+### `blog-index`
+
+The blog section is a quiet editorial index:
+
+- summary and account metrics at the top;
+- two-column article list from `640px`;
+- title-first hierarchy;
+- compact tags and activity metadata;
+- one accent action for opening the source blog.
+
+### `skills-marquee`
+
+The section has one continuous uppercase keyword rail bounded by hairlines, followed by wrapped skill chips.
+
+- `24s` linear loop.
+- Star separators use the theme accent.
+- Reduced motion freezes the rail.
+
+### `timeline`
+
+Desktop uses a centered guide line, alternating panels, circular nodes and a scroll-drawn progress line. Mobile replaces the two-column composition with stacked cards.
+
+Panel, node and date reveals are coordinated. Reduced motion removes those transitions and hides the animated progress overlay.
+
+### `utility-dock`
+
+A fixed vertical dock at the lower right contains theme, skin and language controls.
+
+- `40×40px` icon targets inside a quiet surface.
+- Desktop placement: `48px` from right and bottom.
+- Mobile placement: `12px` from right, `20px` from bottom.
+- Controls use hover scale and visible keyboard focus.
+
+### `footer`
+
+A deliberately quiet finish with:
+
+- live site clock;
+- copyright;
+- one-line implementation credit;
+- centered `12px` muted copy.
+
+## Motion Language
+
+### Allowed
+
+- Hello stroke drawing and curtain transition.
+- Wallpaper opacity/scale reveal.
+- Section rise-in.
+- Project card hover lift.
+- RAG carousel crossfade.
+- Personal-site miniature route drawing.
+- Skills marquee.
+- Timeline panel, node and progress reveal.
+- Small control scale or one-pixel lift.
+
+### Curves
+
+- Standard state change: `200–360ms ease`.
+- Section reveal: `560–720ms cubic-bezier(0.22, 1, 0.36, 1)`.
+- Node pop: `520ms cubic-bezier(0.34, 1.56, 0.64, 1)`.
+- Wallpaper: `1100ms` opacity and `1600ms` scale.
+
+### Avoid
+
+- Continuous ambient mesh movement.
+- Decorative parallax.
+- Repeated floating objects.
+- Glow-heavy entrances.
+- Animating paragraphs for spectacle.
+
+Every non-essential animation needs a `prefers-reduced-motion` path.
+
+## Do's and Don'ts
+
+### Do
+
+- Use the current theme accent for actions, focus, folios and compact markers.
+- Use VCR OSD Mono only for short identity text.
+- Preserve the cool neutral white and near-black theme relationship.
+- Prefer hairlines, whitespace and type hierarchy over nested cards.
+- Keep real project media and quantitative evidence visually primary.
+- Keep the central sheet opaque enough to protect reading contrast.
+- Reuse existing CSS variables and components.
+- Scope new modern rules with `[data-skin="glass"]`.
+- Keep keyboard focus visible and icon actions labelled.
+
+### Don't
+
+- Do not interpret the legacy `glass` name as permission for heavy glassmorphism.
+- Do not add a persistent modern header unless navigation requirements materially change.
+- Do not wrap every section in a rounded card.
+- Do not use VCR OSD Mono for paragraphs or Chinese body copy.
+- Do not add another brand accent.
+- Do not flatten semantic JAVIS metric colors into one monochrome value.
+- Do not add decorative gradients, flowers, petals, neon glow or scenic layers above the wallpaper.
+- Do not use heavy shadows in dark mode.
+- Do not add a dependency for effects already covered by CSS or the platform.
+
+## Responsive Behavior
+
+| Breakpoint | Current behavior |
+| --- | --- |
+| `< 480px` | Personal-site miniature tightens padding; full single-column reading |
+| `< 640px` | About becomes one column; timeline becomes stacked cards |
+| `≥ 640px` | Hero name reaches desktop scale; blog becomes two columns |
+| `< 768px` | Project and JAVIS layouts stack; metric row wraps |
+| `≥ 1024px` | Project focus rows may use asymmetric left/right alignment |
+| Wide desktop | Content locks at `76rem`; outer gutters reveal wallpaper |
+
+### Touch and focus
+
+- Hero actions are `48×48px`.
+- Video close is `44×44px`.
+- Utility dock buttons are `40×40px`; preserve their accessible labels and visible focus treatment.
+- Do not allow the fixed dock to cover primary content on narrow screens.
+
+## Iteration Guide
+
+1. Identify the existing component closest to the new requirement.
+2. Reuse its tokens, radius and motion before adding a variant.
+3. Use `{token.refs}` from this document instead of inventing inline values.
+4. Keep new VCR text short and English/Latin-oriented.
+5. Check light, dark, Chinese, English and reduced-motion behavior.
+6. Run the production build.
+7. If implementation and this document disagree, verify the browser and current code first, then update this document.
+
+## Implementation Boundaries
+
 - Preserve the `HelloIntro` completion event as the wallpaper trigger.
-- Keep JAVIS metric colors sourced from `src/data/ragMetrics.js`.
-- Do not add a new dependency for effects that CSS already supports.
-- Do not redesign the real section order or replace working project interactions with static mockups.
+- Preserve the default section order.
+- Keep modern rules under `[data-skin="glass"]`.
+- Keep `literary` behavior isolated.
+- Keep JAVIS metric definitions sourced from `src/data/ragMetrics.js`.
+- Do not replace working project interactions with static mockups.
+- Do not introduce a shared abstraction unless at least two real consumers need it.
 
-## 11. Verification
+## Verification
 
-Build gate:
+Production build:
 
 ```powershell
 npm run build
 ```
 
-Runtime regression script:
+Modern-style runtime regression:
 
-```text
-scripts/verify-modern-style.py
+```powershell
+python scripts/verify-modern-style.py
 ```
 
-The regression check verifies:
+The runtime check covers Hello stroke color, wallpaper reveal, theme inversion, VCR loading, About layout, metric colors, absence of modern flower nodes and browser console errors.
 
-- Black Hello strokes in light mode
-- White Hello strokes in dark mode
-- Wallpaper completion in both themes
-- Light wallpaper inversion/filter
-- VCR OSD Mono loading
-- Two-column About layout on desktop
-- Original JAVIS metric colors
-- No modern flower nodes
-- No browser console errors
-
-## 12. Primary source files
+## Primary Source Files
 
 | Concern | File |
 | --- | --- |
-| Application shell and wallpaper state | `src/App.vue` |
-| Hello behavior and theme recoloring | `src/components/HelloIntro.vue` |
-| About structure | `src/components/About.vue` |
-| Project presentation | `src/components/ProjectShowcase.vue` |
-| JAVIS metric definitions | `src/data/ragMetrics.js` |
-| Theme variables and layout styling | `src/styles/main.css` |
-| VCR font | `src/assets/fonts/VCR_OSD_MONO.woff` |
+| Shell, default theme/skin and section order | `src/App.vue` |
+| Core tokens, layout, motion and responsive styling | `src/styles/main.css` |
+| Hello curtain and scroll snap | `src/components/HelloIntro.vue` |
+| Hero structure and typewriter | `src/components/Intro.vue` |
+| Editorial biography | `src/components/About.vue` |
+| Modern project modules | `src/components/ProjectShowcase.vue` |
+| Embedded RAG interaction | `src/components/RagChatDemo.vue` |
+| Blog index | `src/components/BlogPreview.vue` |
+| Skills marquee | `src/components/Skills.vue` |
+| Timeline | `src/components/Experience.vue` |
+| Fixed controls | `src/components/WidgetWrapper.vue` |
+| Semantic metrics | `src/data/ragMetrics.js` |
+| Display font | `src/assets/fonts/VCR_OSD_MONO.woff` |
 | Wallpaper | `src/photos/modern_wallpaper.png` |
-| Runtime regression | `scripts/verify-modern-style.py` |
+| Regression script | `scripts/verify-modern-style.py` |
 
-This document is the reference for future visual changes to the default modern skin. If implementation and this document diverge, verify the current code and browser output first, then update this document to match the validated behavior.
+## Known Gaps
+
+- The modern skin has no persistent top navigation; if the portfolio grows beyond the current single-page narrative, navigation may need reevaluation.
+- The wallpaper uses `background-size: cover`; narrow-screen focal cropping still requires visual regression checks.
+- Utility-dock controls are `40px`, slightly below the common `44px` touch-target recommendation.
+- `literary` is maintained for compatibility but is not fully tokenized in this document.
+- Some CSS class names and comments still carry older `glass`, gold or rose-era terminology; reuse behavior and current tokens, not the legacy names.
