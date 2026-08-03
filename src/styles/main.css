@@ -60,6 +60,13 @@
   --construct-shadow: none;
   /* text color placed on a filled element (button/tag) */
   --construct-on-ink: #ffffff;
+  /* Terminal fonts: Consolas for readable body/headings (real Bold),
+     VCR OSD Mono kept for decorative pixel elements only */
+  --construct-font-mono: "Consolas", "Cascadia Code", ui-monospace, "SFMono-Regular", "JetBrains Mono", "Menlo", "Noto Sans SC", monospace;
+  --construct-font-display: "VCR OSD Mono", var(--construct-font-mono);
+  /* Override the shared editorial var so every terminal-mode reference
+     (body, nav, tags, site-preview, chips) resolves to Consolas */
+  --editorial-display: var(--construct-font-mono);
 }
 
 :root[data-skin="terminal"].dark {
@@ -74,6 +81,10 @@
   --construct-shadow: none;
   /* text color placed on a filled element (button/tag) */
   --construct-on-ink: #0a0a0a;
+  /* Terminal fonts (inherit from light root — same fallback chain) */
+  --construct-font-mono: "Consolas", "Cascadia Code", ui-monospace, "SFMono-Regular", "JetBrains Mono", "Menlo", "Noto Sans SC", monospace;
+  --construct-font-display: "VCR OSD Mono", var(--construct-font-mono);
+  --editorial-display: var(--construct-font-mono);
 }
 
 html {

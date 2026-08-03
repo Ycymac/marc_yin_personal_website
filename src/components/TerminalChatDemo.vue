@@ -288,7 +288,7 @@ onBeforeUnmount(() => { window.clearTimeout(timer) })
   color: rgba(0, 255, 65, 0.8);
 }
 .tdemo__block code {
-  font-family: var(--editorial-display);
+  font-family: var(--construct-font-mono);
   font-size: 0.9em;
   padding: 0.05rem 0.3rem;
   background: rgba(0, 255, 65, 0.12);
@@ -338,7 +338,7 @@ onBeforeUnmount(() => { window.clearTimeout(timer) })
   gap: 0.3rem;
   padding: 0.3rem 0.6rem;
   border-radius: 0.15rem;
-  font-family: var(--editorial-display);
+  font-family: var(--construct-font-mono);
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.04em;
